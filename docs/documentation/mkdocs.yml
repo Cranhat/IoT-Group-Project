@@ -1,0 +1,16 @@
+
+site_name: IoT Group Project Documentation
+
+plugins:
+  - search
+  - plantuml:
+      puml_url: https://www.plantuml.com/plantuml/
+      num_workers: 8
+
+nav:
+  - Info: index.md
+  - Backend: backend.md
+  - Frontend: frontend.md
+  - Contribution: contribution.md
+  - CICD: cicd.md
+  - Tests: tests.md

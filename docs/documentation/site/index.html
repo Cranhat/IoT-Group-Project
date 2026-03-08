@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="None">
+        
+        
+        <link rel="shortcut icon" href="img/favicon.ico">
+        <title>IoT Group Project Documentation</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/font-awesome.min.css" rel="stylesheet">
+        <link href="css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link href="assets/mkdocs_puml/puml.css" rel="stylesheet">
+        <link href="assets/mkdocs_puml/interaction.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body class="homepage">
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href=".">IoT Group Project Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="navitem active">
+                                <a href="." class="nav-link">Info</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="backend/" class="nav-link">Backend</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="frontend/" class="nav-link">Frontend</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="contribution/" class="nav-link">Contribution</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="cicd/" class="nav-link">CICD</a>
+                            </li>
+                            <li class="navitem">
+                                <a href="tests/" class="nav-link">Tests</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ml-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" class="nav-link disabled">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="backend/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-level="1"><a href="#iot-group-project" class="nav-link">IoT Group Project</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-level="2"><a href="#project-roles" class="nav-link">Project roles</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#technology-used" class="nav-link">Technology used</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#project-layout" class="nav-link">Project layout</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-level="2"><a href="#documentation" class="nav-link">Documentation</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="iot-group-project">IoT Group Project</h1>
+<p>Group project with main goal of creating IoT network in order to exchange information between devices safely.</p>
+<h2 id="project-roles">Project roles</h2>
+<pre><code>* Cyprian Burdzy (Cranhat) - Technical Leader
+* Nicole Jarczewska (Naitomi) - Developer
+* Natalia Kułak (Natomkul) - Developer
+* Oleh Marushchak () - Developer
+* Tomek Piaseczny () - Developer
+</code></pre>
+<h2 id="technology-used">Technology used</h2>
+<p>Between devices communication - HTTP(with our own safety features)
+backend - Python Fast API
+database - PostgreSQL database
+frontend - Swelte</p>
+<!-- <div class='puml-container'><div class="puml light" style=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SEQUENCE" height="162.5px" preserveAspectRatio="xMidYMid meet" style="width:320px;height:162px;" version="1.1" viewBox="0 0 320 162" width="320.8333px" zoomAndPan="magnify" class="diagram"><?plantuml 1.2026.3beta4?><defs><linearGradient id="gll4oaa4e82yg0" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#59B6EC"/><stop offset="100%" stop-color="#2FA4E7"/></linearGradient></defs><g><g class="participant-lifeline" data-entity-uid="part1" data-qualified-name="Bob" id="part1-lifeline"><g><title>Bob</title><rect fill="#000000" fill-opacity="0.00000" height="60.3841" width="8.3333" x="77.7039" y="51.0091"/><line style="stroke:#BABDBF;stroke-width:1.0417;stroke-dasharray:5.2083,5.2083;" x1="81.25" x2="81.25" y1="51.0091" y2="111.3932"/></g></g><g class="participant-lifeline" data-entity-uid="part2" data-qualified-name="Alicee" id="part2-lifeline"><g><title>Alicee</title><rect fill="#000000" fill-opacity="0.00000" height="60.3841" width="8.3333" x="227.4078" y="51.0091"/><line style="stroke:#BABDBF;stroke-width:1.0417;stroke-dasharray:5.2083,5.2083;" x1="231.4494" x2="231.4494" y1="51.0091" y2="111.3932"/></g></g><g class="participant participant-head" data-entity-uid="part1" data-qualified-name="Bob" id="part1-head"><rect fill="url(#gll4oaa4e82yg0)" height="39.5508" rx="4.1667" ry="4.1667" style="stroke:#2FA4E7;stroke-width:1.0417;" width="49.1577" x="57.2917" y="10.4167"/><text fill="#FFFFFF" font-family="'Verdana'" font-size="12.5" lengthAdjust="spacing" textLength="24.1577" x="69.7917" y="34.5194">Bob</text></g><g class="participant participant-tail" data-entity-uid="part1" data-qualified-name="Bob" id="part1-tail"><rect fill="url(#gll4oaa4e82yg0)" height="39.5508" rx="4.1667" ry="4.1667" style="stroke:#2FA4E7;stroke-width:1.0417;" width="49.1577" x="57.2917" y="110.3516"/><text fill="#FFFFFF" font-family="'Verdana'" font-size="12.5" lengthAdjust="spacing" textLength="24.1577" x="69.7917" y="134.4543">Bob</text></g><g class="participant participant-head" data-entity-uid="part2" data-qualified-name="Alicee" id="part2-head"><rect fill="url(#gll4oaa4e82yg0)" height="39.5508" rx="4.1667" ry="4.1667" style="stroke:#2FA4E7;stroke-width:1.0417;" width="62.7502" x="200.1994" y="10.4167"/><text fill="#FFFFFF" font-family="'Verdana'" font-size="12.5" lengthAdjust="spacing" textLength="37.7502" x="212.6994" y="34.5194">Alicee</text></g><g class="participant participant-tail" data-entity-uid="part2" data-qualified-name="Alicee" id="part2-tail"><rect fill="url(#gll4oaa4e82yg0)" height="39.5508" rx="4.1667" ry="4.1667" style="stroke:#2FA4E7;stroke-width:1.0417;" width="62.7502" x="200.1994" y="110.3516"/><text fill="#FFFFFF" font-family="'Verdana'" font-size="12.5" lengthAdjust="spacing" textLength="37.7502" x="212.6994" y="134.4543">Alicee</text></g><g class="message" data-entity-1="part1" data-entity-2="part2" id="msg1"><polygon fill="#2FA4E7" points="219.0745,88.4766,229.4912,92.6432,219.0745,96.8099,223.2412,92.6432" style="stroke:#2FA4E7;stroke-width:1.0417;"/><line style="stroke:#2FA4E7;stroke-width:3.125;" x1="81.8705" x2="225.3245" y1="92.6432" y2="92.6432"/><text fill="#343A40" font-family="'Verdana'" font-size="12.5" lengthAdjust="spacing" textLength="31.6833" x="94.3705" y="82.4036">Hello</text></g><?plantuml-src 7Sf13i8W40NGVKz13o2pxy94LoR6CnWwV0lf00qpwFMDhj-RSsKP4IwP7ReGzV3nMxOqrg7etAgXckTMw97t5BBSUtZ3bCeU6-lp64Me13LqieG2fOXN668aUKlcVs6Q_-GOVGX2dQvjFPqlaXbOt0qYxGi0?></g></svg></div><div class="puml dark" style=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="SEQUENCE" height="162.5px" preserveAspectRatio="xMidYMid meet" style="width:320px;height:162px;" version="1.1" viewBox="0 0 320 162" width="320.8333px" zoomAndPan="magnify" class="diagram"><?plantuml 1.2026.3beta4?><defs><linearGradient id="g1hk3fo9k5wq9j0" x1="50%" x2="50%" y1="0%" y2="100%"><stop offset="0%" stop-color="#59B6EC"/><stop offset="100%" stop-color="#2FA4E7"/></linearGradient></defs><g><g class="participant-lifeline" data-entity-uid="part1" data-qualified-name="Bob" id="part1-lifeline"><g><title>Bob</title><rect fill="#000000" fill-opacity="0.00000" height="60.3841" width="8.3333" x="77.7039" y="51.0091"/><line style="stroke:#BABDBF;stroke-width:1.0417;stroke-dasharray:5.2083,5.2083;" x1="81.25" x2="81.25" y1="51.0091" y2="111.3932"/></g></g><g class="participant-lifeline" data-entity-uid="part2" data-qualified-name="Alicee" id="part2-lifeline"><g><title>Alicee</title><rect fill="#000000" fill-opacity="0.00000" height="60.3841" width="8.3333" x="227.4078" y="51.0091"/><line style="stroke:#BABDBF;stroke-width:1.0417;stroke-dasharray:5.2083,5.2083;" x1="231.4494" x2="231.4494" y1="51.0091" y2="111.3932"/></g></g><g class="participant participant-head" data-entity-uid="part1" data-qualified-name="Bob" id="part1-head"><rect fill="url(#g1hk3fo9k5wq9j0)" height="39.5508" rx="4.1667" ry="4.1667" style="stroke:#2FA4E7;stroke-width:1.0417;" width="49.1577" x="57.2917" y="10.4167"/><text fill="#FFFFFF" font-family="'Verdana'" font-size="12.5" lengthAdjust="spacing" textLength="24.1577" x="69.7917" y="34.5194">Bob</text></g><g class="participant participant-tail" data-entity-uid="part1" data-qualified-name="Bob" id="part1-tail"><rect fill="url(#g1hk3fo9k5wq9j0)" height="39.5508" rx="4.1667" ry="4.1667" style="stroke:#2FA4E7;stroke-width:1.0417;" width="49.1577" x="57.2917" y="110.3516"/><text fill="#FFFFFF" font-family="'Verdana'" font-size="12.5" lengthAdjust="spacing" textLength="24.1577" x="69.7917" y="134.4543">Bob</text></g><g class="participant participant-head" data-entity-uid="part2" data-qualified-name="Alicee" id="part2-head"><rect fill="url(#g1hk3fo9k5wq9j0)" height="39.5508" rx="4.1667" ry="4.1667" style="stroke:#2FA4E7;stroke-width:1.0417;" width="62.7502" x="200.1994" y="10.4167"/><text fill="#FFFFFF" font-family="'Verdana'" font-size="12.5" lengthAdjust="spacing" textLength="37.7502" x="212.6994" y="34.5194">Alicee</text></g><g class="participant participant-tail" data-entity-uid="part2" data-qualified-name="Alicee" id="part2-tail"><rect fill="url(#g1hk3fo9k5wq9j0)" height="39.5508" rx="4.1667" ry="4.1667" style="stroke:#2FA4E7;stroke-width:1.0417;" width="62.7502" x="200.1994" y="110.3516"/><text fill="#FFFFFF" font-family="'Verdana'" font-size="12.5" lengthAdjust="spacing" textLength="37.7502" x="212.6994" y="134.4543">Alicee</text></g><g class="message" data-entity-1="part1" data-entity-2="part2" id="msg1"><polygon fill="#2FA4E7" points="219.0745,88.4766,229.4912,92.6432,219.0745,96.8099,223.2412,92.6432" style="stroke:#2FA4E7;stroke-width:1.0417;"/><line style="stroke:#2FA4E7;stroke-width:3.125;" x1="81.8705" x2="225.3245" y1="92.6432" y2="92.6432"/><text fill="#343A40" font-family="'Verdana'" font-size="12.5" lengthAdjust="spacing" textLength="31.6833" x="94.3705" y="82.4036">Hello</text></g><?plantuml-src 7Sb13i8W40NGVKz13o2pxy94LoR6CvWfV8LqW0PcxFMDlksRSmrY4IwfxcCXwdpuTzPagmtqqAgYgW-jq2DlYRFSEt-WWyeMMnZFtOfGuQ7ef0a5Wo9URA8KkM_-zzFy7nVGJS1rkhRrTBv83i3YRX1fNm00?></g></svg></div></div> -->
+<h2 id="project-layout">Project layout</h2>
+<pre><code>backend/
+    api/
+    database/
+docs/
+    documentation/
+        docs/
+            index.md
+        mkdocs.yml
+frontend/
+README.md
+.gitingore
+</code></pre>
+<h2 id="documentation">Documentation</h2>
+<pre><code>MkDocs hosted on github pages
+
+Plugins:
+puml
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="js/jquery-3.6.0.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script>
+            var base_url = ".",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="js/base.js"></script>
+        <script src="search/main.js"></script>
+        <script src="assets/mkdocs_puml/puml.js"></script>
+        <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+        <script src="assets/mkdocs_puml/interaction.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
+
+<!--
+MkDocs version : 1.5.3
+Build Date UTC : 2026-03-08 12:02:46.380294+00:00
+-->
