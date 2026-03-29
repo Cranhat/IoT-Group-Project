@@ -29,7 +29,7 @@ class Task_result_log(BaseModel):
     error_message: str
     timestamp: int
 
-class Task_result_log(BaseModel):
+class HTTP_log(BaseModel):
     request_id: int
     user_id: int
     ip_address: str

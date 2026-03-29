@@ -2,7 +2,7 @@ from unittest.mock import MagicMock
 import pytest
 from backend.database.src.database import *
 from backend.database.src.db_init import * 
-from backend.database.src.db_create import *
+from backend.database.src.db_insert import *
 from backend.database.src.db_update import *
 
 @pytest.fixture

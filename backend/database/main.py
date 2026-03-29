@@ -1,6 +1,6 @@
 from backend.database.src.database import *
 from backend.database.src.db_init import * 
-from backend.database.src.db_create import *
+from backend.database.src.db_insert import *
 
 db = Database()
 db.initializeTables()

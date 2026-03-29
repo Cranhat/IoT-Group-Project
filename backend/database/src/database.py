@@ -1,11 +1,20 @@
 from backend.database.src.db_init import *
-from backend.database.src.db_read import *
-from backend.database.src.db_create import *
+from backend.database.src.db_fetch import *
+from backend.database.src.db_insert import *
+from backend.database.src.db_update import *
 from backend.database.src.objects import *
-from fastapi import FastAPI
-from fastapi import Depends
+from fastapi import FastAPI, Depends, HTTPException
 import psycopg2
 
+ALLOWED_TABLES = {"users", "passwords", "devices", "task_logs", "task_result_logs", "http_logs"}
+TABLE_MODELS = {
+    "user": User,
+    "password": Password,
+    "device": Device,
+    "tast_log": Task_log,
+    "task_result_log": Task_result_log,
+    "HTTP_log": HTTP_log
+}
 
 class Database:
     def __init__(self, host="localhost", dbname="postgres", user="postgres", password="postgres", port=5432):
@@ -33,9 +42,6 @@ class Database:
     def sendQuery(self, query, conn, curr):
         curr.execute(query)
 
-    def commit(self, conn, curr):
-        conn.commit()
-
     def close_conn(self, conn, curr):
         curr.close()
         conn.close()
@@ -58,36 +64,61 @@ class Database:
 
         self.close_conn(conn, curr)
 
-    def fetchData(self, query, conn, curr):
-        curr.execute(query)
-        data = curr.fetchall()
-        return data
- 
+    def validate_table(table: str):
+        if table not in ALLOWED_TABLES:
+            raise HTTPException(status_code=400, detail="Invalid table")
+        
     def _setup_routes(self):
-        @self.app.get("/")
-        def read_root():
-            return {"message": "Welcome!"}
-        
+        @self.app.get("/{table}")
+        def get_table(table: str, db=Depends(self.get_db)):
+            self.validate_table(table)
+            conn, curr = db
+            data = fetch_table(table, curr)
+            return {"table": table, "data": data}
 
-        # --- Users --- 
-        @self.app.get("/users") # get users
-        def get_users(db = Depends(self.get_db)):
+        @self.app.get("/{table}/{id}")
+        def get_row_by_id(table: str, id: int, db=Depends(self.get_db)):
+            self.validate_table(table)
             conn, curr = db
-            query = create_fetch().format(*('*', 'users'))
-            data = self.fetchData(query, conn, curr)
-            return {"data": data} 
-        
-        @self.app.get("/users/{id}") # get user
-        def get_user(id: int, db = Depends(self.get_db)):
+            data = self.fetch_table_where(table, id, curr)
+            if not data:
+                raise HTTPException(status_code=404, detail="Not found")
+            return {"table": table, "id": id, "data": data}
+
+        @self.app.post("/{table}")
+        def insert(table: str, payload: dict, db=Depends(self.get_db)):
+            self.validate_table(table)
+            Model = TABLE_MODELS.get(table)
+            try:
+                validated_data = Model(**payload)
+            except Exception as e:
+                raise HTTPException(status_code=422, detail=str(e))
+
             conn, curr = db
-            query = create_fetch_where().format(*('*', 'users', f'id = {id}'))
-            data = self.fetchData(query, conn, curr)
-            return {"id": id, "data": data} 
-        
-        @self.app.post("/users/") # post user
-        async def create_user(user: User, db = Depends(self.get_db)):
+            try:
+                insert_into_table(curr, table, validated_data)
+                conn.commit()
+            except Exception as e:
+                conn.rollback()
+                raise HTTPException(status_code=500, detail=str(e))
+
+            return {"message": f"{table} inserted successfully"}
+
+        @self.app.put("/{table}/{id}")
+        def update(table: str, id: int, payload: dict, db=Depends(self.get_db)):
+            self.validate_table(table)
+            Model = TABLE_MODELS.get(table)
+            try:
+                validated_data = Model(**payload)
+            except Exception as e:
+                raise HTTPException(status_code=422, detail=str(e))
+
             conn, curr = db
-            insert_into_table(curr, "users", user)
-            self.commit(conn, curr)
-            return {"message": "User added"}
-        
+            try:
+                update_table(curr, table, validated_data, {"id": id})
+                conn.commit()
+            except Exception as e:
+                conn.rollback()
+                raise HTTPException(status_code=500, detail=str(e))
+
+            return {"message": f"{table} updated successfully"}
