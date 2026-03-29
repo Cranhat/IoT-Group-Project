@@ -1,9 +1,10 @@
-from backend.database.src.db_init import *
-from backend.database.src.db_fetch import *
-from backend.database.src.db_insert import *
-from backend.database.src.db_update import *
-from backend.database.src.objects import *
-from fastapi import FastAPI, Depends, HTTPException
+from src.db_init import *
+from src.db_fetch import *
+from src.db_insert import *
+from src.db_update import *
+from src.objects import *
+from fastapi import FastAPI, Depends, HTTPException #shows warnings but works fine
+from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 
 ALLOWED_TABLES = {"users", "passwords", "devices", "task_logs", "task_result_logs", "http_logs"}
@@ -25,6 +26,13 @@ class Database:
         self.port = port
         self.app = FastAPI()
         self._setup_routes()
+        self.app.add_middleware(
+            CORSMiddleware,
+            allow_origins=["http://localhost:5173"],
+            allow_credentials=True,
+            allow_methods=["*"],
+            allow_headers=["*"],
+        )
         
     def __enter__(self):
         return self
@@ -67,8 +75,8 @@ class Database:
     def validate_table(table: str):
         if table not in ALLOWED_TABLES:
             raise HTTPException(status_code=400, detail="Invalid table")
-        
-    def _setup_routes(self):
+
+    def _setup_routes(self):  
         @self.app.get("/{table}")
         def get_table(table: str, db=Depends(self.get_db)):
             self.validate_table(table)
