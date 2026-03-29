@@ -1,6 +1,6 @@
 from psycopg2 import sql
 
-ALLOWED_TABLES = {"users", "passwords", "devices", "task_logs"}
+ALLOWED_TABLES = {"users", "passwords", "devices", "task_logs", "task_result_logs", "http_logs"}
 
 def insert_into_table(cursor, table_name, data):
     if table_name not in ALLOWED_TABLES:

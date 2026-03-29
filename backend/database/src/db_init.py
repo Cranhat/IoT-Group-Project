@@ -9,7 +9,9 @@ users_initialization = """
 passwords_initialization = """
     CREATE TABLE IF NOT EXISTS passwords (
         user_id INT,
-        password TEXT
+        password TEXT,
+
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
 ); """
 
 devices_initialization = """
@@ -25,7 +27,10 @@ task_logs_initialization = """
         user_id INT,
         device_id INT,
         status TEXT,
-        timestamp TIMESTAMP DEFAULT NOW()
+        timestamp TIMESTAMP DEFAULT NOW(),
+
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL,
+        FOREIGN KEY (device_id) REFERENCES devices(device_id) ON DELETE SET NULL
 ); """
 
 task_result_logs_initialization = """
@@ -35,7 +40,10 @@ task_result_logs_initialization = """
         result TEXT,
         success BOOLEAN,
         error_message TEXT,
-        timestamp TIMESTAMP DEFAULT NOW()
+        timestamp TIMESTAMP DEFAULT NOW(),
+
+        FOREIGN KEY (task_id) REFERENCES task_logs(task_id) ON DELETE SET NULL,
+        FOREIGN KEY (device_id) REFERENCES devices(device_id) ON DELETE SET NULL
 ); """
 
 http_logs_initialization = """
@@ -44,5 +52,7 @@ http_logs_initialization = """
         user_id INT,
         ip_address TEXT,
         status TEXT,
-        timestamp TIMESTAMP DEFAULT NOW()
+        timestamp TIMESTAMP DEFAULT NOW(),
+        
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
 ); """

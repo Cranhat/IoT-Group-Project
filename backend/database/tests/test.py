@@ -15,25 +15,24 @@ def mock_db():
 def test_insert_user(mock_db):
     conn, cursor = mock_db
 
-    user = User(id=1, name="Bajojajo", privilege="admin")
+    user = User(id=1, name="user1", privilege="admin")
     insert_into_table(cursor, "users", user)
 
-    # Check that cursor.execute was called once
     assert cursor.execute.call_count == 1
 
-    # Check the query and values
-    query_used = cursor.execute.call_args[0][0].as_string(cursor)  # get SQL as string
-    values_used = cursor.execute.call_args[0][1]  # values passed
+
+    query_used = cursor.execute.call_args[0][0].as_string(cursor) 
+    values_used = cursor.execute.call_args[0][1] 
 
     assert "INSERT INTO" in query_used
-    assert values_used == [1, "Bajojajo", "admin"]
+    assert values_used == [1, "user1", "admin"]
 
 
 def test_update_user(mock_db):
     conn, cursor = mock_db
-    update_table(cursor, "users", {"privilege": "bambik"}, {"id": 1})
+    update_table(cursor, "users", {"privilege": "superadmin"}, {"id": 1})
     assert cursor.execute.call_count == 1
     query_used = cursor.execute.call_args[0][0].as_string(cursor)
     values_used = cursor.execute.call_args[0][1]
     assert "UPDATE" in query_used
-    assert values_used == ["bambik", 1]
+    assert values_used == ["superadmin", 1]
