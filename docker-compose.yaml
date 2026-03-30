@@ -1,0 +1,72 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: iot_postgres
+    restart: unless-stopped
+    environment:
+      # TODO
+      POSTGRES_USER: iot_user
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: ${DB_PASSWORD}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: iot_fastapi
+    restart: unless-stopped
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=${DATABASE_URL}
+    ports:
+      - "8000:8000"
+
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: iot_frontend
+  #   restart: unless-stopped
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - backend
+
+  sensor:
+    build:
+      context: ./sensor
+      dockerfile: Dockerfile
+    container_name: iot_sensors
+    restart: unless-stopped
+    depends_on:
+      - backend
+    devices:
+    # TODO
+      - "/dev/gpiomem:/dev/gpiomem"
+      - "/dev/i2c-1:/dev/i2c-1"
+    privileged: true
+
+  packet_sniffer:
+    build:
+      context: ./packet_sniffer 
+      dockerfile: Dockerfile
+    container_name: iot_sniffer
+    restart: unless-stopped
+    depends_on:
+      - backend
+    network_mode: "host"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+
+# TODO
+# volumes:
+#   pgdata: 
+  
