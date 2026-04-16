@@ -84,3 +84,9 @@ target/
 # IPython
 profile_default/
 ipython_config.py
+
+.env
+
+.vite/
+
+node_modules/
