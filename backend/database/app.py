@@ -1,6 +1,6 @@
-from src.database import *
-from src.db_init import * 
-from src.db_insert import *
+from backend.database.src.database import *
+from backend.database.src.db_init import * 
+from backend.database.src.db_insert import *
 import uvicorn
 
 db = Database()
