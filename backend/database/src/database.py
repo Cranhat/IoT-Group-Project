@@ -1,8 +1,8 @@
-from src.db_init import *
-from src.db_fetch import *
-from src.db_insert import *
-from src.db_update import *
-from src.objects import *
+from backend.database.src.db_init import *
+from backend.database.src.db_fetch import *
+from backend.database.src.db_insert import *
+from backend.database.src.db_update import *
+from backend.database.src.objects import *
 from fastapi import FastAPI, Depends, HTTPException #shows warnings but works fine
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
