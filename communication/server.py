@@ -6,16 +6,15 @@ PORT = 3000
 BACKLOG = 5
 BUF_SIZE = 1024
 
-ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
-ctx.minimum_version = ssl.TLSVersion.TLSv1_3
-ctx.maximum_version = ssl.TLSVersion.TLSv1_3
-
-ctx.load_cert_chain("server.crt", "server.key")
-
-ctx.load_verify_locations("ca.pem")
-ctx.verify_mode = ssl.CERT_NONE
-
 def server():
+    ctx = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+    ctx.minimum_version = ssl.TLSVersion.TLSv1_3
+    ctx.maximum_version = ssl.TLSVersion.TLSv1_3
+    ctx.load_verify_locations("ca.pem")
+    ctx.verify_mode = ssl.CERT_REQUIRED
+
+    ctx.load_cert_chain("server.crt", "server.key")
+
     try:
         sfd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print(f"Server socket = {sfd.fileno()}")

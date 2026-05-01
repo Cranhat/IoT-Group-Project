@@ -8,8 +8,10 @@ BUF_SIZE = 99
 def client():
     host = input("input sever ip:")
     ctx = ssl.create_default_context()
-#    ctx.load_verify_locations("ca.pem")
-    ctx.verify_mode = ssl.CERT_NONE
+    ctx.load_verify_locations("ca.pem")
+    ctx.verify_mode = ssl.CERT_REQUIRED
+
+    ctx.load_cert_chain("client0.crt", "client0.key")
 
     try:
         addr_info = socket.getaddrinfo(host, PORT, socket.AF_INET, socket.SOCK_STREAM)
@@ -24,7 +26,7 @@ def client():
                 print(f"Server socket = {sfd.fileno()}")
 
                 sfd.connect(sockaddr)
-                sfd = ctx.wrap_socket(sfd, server_hostname=host)
+                sfd = ctx.wrap_socket(sfd, server_hostname="serv")
 
                 break
 
