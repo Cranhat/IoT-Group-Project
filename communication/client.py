@@ -1,11 +1,15 @@
 import socket
 import sys
+import ssl
 
 PORT = 3000
 BUF_SIZE = 99
 
 def client():
     host = input("input sever ip:")
+    ctx = ssl.create_default_context()
+#    ctx.load_verify_locations("ca.pem")
+    ctx.verify_mode = ssl.CERT_NONE
 
     try:
         addr_info = socket.getaddrinfo(host, PORT, socket.AF_INET, socket.SOCK_STREAM)
@@ -20,6 +24,8 @@ def client():
                 print(f"Server socket = {sfd.fileno()}")
 
                 sfd.connect(sockaddr)
+                sfd = ctx.wrap_socket(sfd, server_hostname=host)
+
                 break
 
             except Exception as e:
@@ -35,6 +41,7 @@ def client():
         while True:
             try:
                 mesg = input()
+                mesg += "\n"
                 sfd.sendall(mesg.encode())
 
                 data = sfd.recv(BUF_SIZE - 1)
