@@ -71,6 +71,14 @@ def execute(code: str, timeout: int) -> dict:
 
 
 def task_worker(sock):
+    """
+    Sends tasks from task queue for execution. 
+    Sends task's result back to server. 
+    Manages task's and device's states during tasks execution.
+
+    Args:
+        sock (socket.socket): Communication socket.
+    """
     while True:
         if task_queue:
             task = task_queue.popleft()

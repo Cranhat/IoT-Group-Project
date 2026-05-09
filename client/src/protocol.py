@@ -13,9 +13,7 @@ def send_msg(sock, msg: dict):
 
 
 def recv_msg(sock) -> dict:
-    """
-    Read one newline-terminated JSON message from socket.
-    """
+    """Read one newline-terminated JSON message from socket."""
     buf = b""
     while True:
         chunk = sock.recv(4096)
