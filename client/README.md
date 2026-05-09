@@ -16,4 +16,5 @@ Copy this entire `client/` directory to the client machine. The deployable code 
 - `src/client_old.py` - legacy client version kept for reference.
 - `src/config.py` - client-side settings.
 - `src/protocol.py` - shared newline-delimited JSON message helpers.
+- `src/task_exec.py` - code responsible for task queue management and task execution.
 - `src/certs/` - optional TLS certificates if `USE_TLS = True`.
