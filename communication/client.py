@@ -1,63 +1,83 @@
 import socket
-import sys
 import ssl
 
-PORT = 3000
-BUF_SIZE = 99
 
-def client():
-    host = input("input sever ip:")
-    ctx = ssl.create_default_context()
-#    ctx.load_verify_locations("ca.pem")
-    ctx.verify_mode = ssl.CERT_NONE
+class SecureClient:
+    def __init__(self, port=3000, buf_size=99):
+        self.port = port
+        self.buf_size = buf_size
+        self.sfd = None
 
-    try:
-        addr_info = socket.getaddrinfo(host, PORT, socket.AF_INET, socket.SOCK_STREAM)
+        self.ctx = self._create_ssl_context()
 
-        sfd = None
+    def _create_ssl_context(self):
+        ctx = ssl.create_default_context()
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
+        return ctx
 
-        for entry in addr_info:
-            family, socktype, proto, canonname, sockaddr = entry
+    def start(self):
+        host = input("input server ip: ")
 
+        try:
+            self._connect(host)
+            self._chat_loop()
+
+        except Exception as e:
+            print(f"Error: {e}")
+
+        finally:
+            self._cleanup()
+
+    def _connect(self, host):
+        addr_info = socket.getaddrinfo(
+            host,
+            self.port,
+            socket.AF_INET,
+            socket.SOCK_STREAM
+        )
+
+        for family, socktype, proto, canonname, sockaddr in addr_info:
             try:
-                sfd = socket.socket(family, socktype, proto)
-                print(f"Server socket = {sfd.fileno()}")
+                self.sfd = socket.socket(family, socktype, proto)
+                print(f"Server socket = {self.sfd.fileno()}")
 
-                sfd.connect(sockaddr)
-                sfd = ctx.wrap_socket(sfd, server_hostname=host)
+                self.sfd.connect(sockaddr)
+                self.sfd = self.ctx.wrap_socket(
+                    self.sfd,
+                    server_hostname=host
+                )
 
-                break
+                return  # sukces
 
             except Exception as e:
                 print(f"client: connect error: {e}")
-                if sfd:
-                    sfd.close()
-                sfd = None
+                if self.sfd:
+                    self.sfd.close()
+                    self.sfd = None
 
-        if sfd is None:
-            print("client: failed to connect")
-            return
+        raise ConnectionError("client: failed to connect")
 
+    def _chat_loop(self):
         while True:
-            try:
-                mesg = input()
-                mesg += "\n"
-                sfd.sendall(mesg.encode())
+            mesg = input()
+            mesg += "\n"
 
-                data = sfd.recv(BUF_SIZE - 1)
+            self.sfd.sendall(mesg.encode())
 
-                if not data:
-                    print("client recv: connection closed")
-                    break
+            data = self.sfd.recv(self.buf_size - 1)
 
-                print(data.decode())
-
-            except Exception as e:
-                print(f"Error: {e}")
+            if not data:
+                print("client recv: connection closed")
                 break
 
-    finally:
-        if 'sfd' in locals() and sfd:
-            sfd.close()
+            print(data.decode())
 
-client()
+    def _cleanup(self):
+        if self.sfd:
+            self.sfd.close()
+
+
+if __name__ == "__main__":
+    client = SecureClient()
+    client.start()
