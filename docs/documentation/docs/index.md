@@ -10,43 +10,29 @@ Group project with main goal of creating IoT network in order to exchange inform
     * Oleh Marushchak () - Developer
     * Tomek Piaseczny () - Developer
 
-## Technology used
+## Technology Used
+- **Communication Protocol**: HTTP (with custom security features)
+- **Backend**: Python (FastAPI)
+- **Database**: PostgreSQL
+- **Frontend**: Vue.js 3 (Vite)
+- **Network Analysis**: Packet Sniffer (Scapy)
+- **Documentation**: MkDocs with PlantUML
 
-Between devices communication - HTTP(with our own safety features)
-backend - Python Fast API
-database - PostgreSQL database
-frontend - Swelte
-
-
-<!-- ```puml
-@startuml
-!theme cerulean
-Bob->Alicee: Hello
-@enduml
-``` -->
-## Project layout
-
-    backend/
-        api/
-        database/
-    docs/
-        documentation/
-            docs/
-                index.md
-            mkdocs.yml
-    frontend/
-    README.md
-    .gitingore
+## Project Layout
+```text
+IoT-Group-Project/
+├── backend/            # Python FastAPI backend & database logic
+│   ├── api/            # API endpoints
+│   └── database/       # Database models and CRUD logic
+├── frontend/           # Vue.js frontend application
+├── packet_sniffer/     # Scapy-based network monitoring tool
+├── docs/               # Project documentation
+│   └── documentation/  # MkDocs source and config
+├── docker-compose.yml  # Container orchestration
+└── README.md
+```
 
 ## Documentation
-    MkDocs hosted on github pages
-
-    Plugins:
-    puml
-
-
-
-
-
-
-    
+- **Hosted**: GitHub Pages
+- **Generator**: MkDocs
+- **Plugins**: PlantUML, Search
