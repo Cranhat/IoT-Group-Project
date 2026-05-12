@@ -90,3 +90,5 @@ ipython_config.py
 .vite/
 
 node_modules/
+
+venv/
