@@ -1,6 +1,6 @@
 services:
   db:
-    image: postgres:15-alpine
+    image: postgres:16-alpine
     container_name: iot_postgres
     restart: unless-stopped
     env_file:
@@ -34,7 +34,7 @@ services:
       - "${HOST_PORT_BACKEND:-8000}:8000"
     volumes:
       - ./backend:/app
-    command: uvicorn api.main:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app/api
+    command: uvicorn api.app:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app/api
     
   frontend:
     build:

@@ -9,12 +9,12 @@ import psycopg2
 
 ALLOWED_TABLES = {"users", "passwords", "devices", "task_logs", "task_result_logs", "http_logs"}
 TABLE_MODELS = {
-    "user": User,
-    "password": Password,
-    "device": Device,
-    "tast_log": Task_log,
-    "task_result_log": Task_result_log,
-    "HTTP_log": HTTP_log
+    "users": User,
+    "passwords": Password,
+    "devices": Device,
+    "task_logs": Task_log,
+    "task_result_logs": Task_result_log,
+    "http_logs": HTTP_log
 }
 
 class Database:
@@ -72,6 +72,7 @@ class Database:
 
         self.close_conn(conn, curr)
 
+    @staticmethod
     def validate_table(table: str):
         if table not in ALLOWED_TABLES:
             raise HTTPException(status_code=400, detail="Invalid table")
