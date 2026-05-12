@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Packet Sniffer - IoT Group Project Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../assets/mkdocs_puml/puml.css" rel="stylesheet">
+        <link href="../assets/mkdocs_puml/interaction.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">IoT Group Project Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Info</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../backend/" class="nav-link">Backend</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Packet Sniffer</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../frontend/" class="nav-link">Frontend</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../contribution/" class="nav-link">Contribution</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../cicd/" class="nav-link">CICD</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../tests/" class="nav-link">Tests</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../backend/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../frontend/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="2"><a href="#packet-sniffer" class="nav-link">Packet Sniffer</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h2 id="packet-sniffer">Packet Sniffer</h2>
+<p>The packet sniffer is responsible for monitoring network traffic on a specific port and logging relevant data.</p>
+<h3 id="workflow">Workflow</h3>
+<div class='puml-container'><div class="puml light" style=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="ACTIVITY" height="895px" preserveAspectRatio="xMidYMid meet" style="width:496px;height:895px;background:#FFFFFF;" version="1.1" viewBox="0 0 496 895" width="496px" zoomAndPan="magnify" class="diagram"><?plantuml 1.2026.4beta2?><defs/><g><g class="title" data-source-line="6"><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="153.5967" x="170.6509" y="32.9951">Packet Sniffer Flow</text></g><ellipse cx="287.3567" cy="62.2969" fill="#222222" rx="10" ry="10" style="stroke:#222222;stroke-width:0.5;"/><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="113.3574" x="230.678" y="92.2969"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="93.3574" x="240.678" y="113.4355">Initialize Sniffer</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="150.1777" x="212.2678" y="146.2656"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="130.1777" x="222.2678" y="167.4043">Check Root Privileges</text><polygon fill="#E1F5FE" points="241.9307,200.2344,332.7827,200.2344,344.7827,212.2344,332.7827,224.2344,241.9307,224.2344,229.9307,212.2344,241.9307,200.2344" style="stroke:#01579B;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="90.8521" x="241.9307" y="216.0425">Permissions OK?</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.0083" x="210.9224" y="209.6401">yes</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="13.7017" x="344.7827" y="209.6401">no</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="138.793" x="85.8647" y="234.2344"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="118.793" x="95.8647" y="255.373">Start Scapy Sniffing</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="138.7754" x="85.8735" y="332.2031"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="118.7754" x="95.8735" y="353.3418">Capture TCP Packet</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="161.0234" x="74.7495" y="434.5742"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="141.0234" x="84.7495" y="455.7129">Extract IP &amp; TCP Layers</text><polygon fill="#E1F5FE" points="113.6514,488.543,196.8711,488.543,208.8711,500.543,196.8711,512.543,113.6514,512.543,101.6514,500.543,113.6514,488.543" style="stroke:#01579B;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="83.2197" x="113.6514" y="504.3511">Has Raw Data?</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.0083" x="82.6431" y="497.9487">yes</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="13.7017" x="208.8711" y="497.9487">no</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="104.3574" x="30.5811" y="522.543"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="84.3574" x="40.5811" y="543.6816">Decode UTF-8</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="133.5195" x="16" y="576.5117"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="113.5195" x="26" y="597.6504">Log Captured Data</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="116.4863" x="169.5195" y="522.543"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="96.4863" x="179.5195" y="543.6816">Log Binary Data</text><polygon fill="#E1F5FE" points="155.2612,616.4805,167.2612,628.4805,155.2612,640.4805,143.2612,628.4805,155.2612,616.4805" style="stroke:#01579B;stroke-width:0.5;"/><polygon fill="#E1F5FE" points="76.9211,386.1719,233.6013,386.1719,245.6013,398.1719,233.6013,410.1719,76.9211,410.1719,64.9211,398.1719,76.9211,386.1719" style="stroke:#01579B;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.0083" x="159.2612" y="420.3823">yes</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="156.6802" x="76.9211" y="401.98">Port == MONITORED_PORT?</text><polygon fill="#E1F5FE" points="155.2612,660.4805,167.2612,672.4805,155.2612,684.4805,143.2612,672.4805,155.2612,660.4805" style="stroke:#01579B;stroke-width:0.5;"/><polygon fill="#E1F5FE" points="155.2612,288.2031,167.2612,300.2031,155.2612,312.2031,143.2612,300.2031,155.2612,288.2031" style="stroke:#01579B;stroke-width:0.5;"/><polygon fill="#E1F5FE" points="105.5571,704.4805,204.9653,704.4805,216.9653,716.4805,204.9653,728.4805,105.5571,728.4805,93.5571,716.4805,105.5571,704.4805" style="stroke:#01579B;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="99.4082" x="105.5571" y="720.2886">Timeout reached?</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="13.7017" x="216.9653" y="713.8862">no</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="90.418" x="110.0522" y="769.8794"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="70.418" x="120.0522" y="791.0181">Stop Sniffer</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="114.8926" x="362.0059" y="234.2344"/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="94.8926" x="372.0059" y="255.373">Log Error &amp; Exit</text><polygon fill="#E1F5FE" points="287.3567,809.8481,299.3567,821.8481,287.3567,833.8481,275.3567,821.8481,287.3567,809.8481" style="stroke:#01579B;stroke-width:0.5;"/><ellipse cx="287.3567" cy="864.8481" fill="none" rx="11" ry="11" style="stroke:#222222;stroke-width:0.5;"/><ellipse cx="287.3567" cy="864.8481" fill="#222222" rx="6" ry="6" style="stroke:#222222;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="287.3567" x2="287.3567" y1="72.2969" y2="92.2969"/><polygon fill="#181818" points="283.3567,82.2969,287.3567,92.2969,291.3567,82.2969,287.3567,86.2969" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="287.3567" x2="287.3567" y1="126.2656" y2="146.2656"/><polygon fill="#181818" points="283.3567,136.2656,287.3567,146.2656,291.3567,136.2656,287.3567,140.2656" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="82.7598" x2="82.7598" y1="556.5117" y2="576.5117"/><polygon fill="#181818" points="78.7598,566.5117,82.7598,576.5117,86.7598,566.5117,82.7598,570.5117" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="101.6514" x2="82.7598" y1="500.543" y2="500.543"/><line style="stroke:#181818;stroke-width:1;" x1="82.7598" x2="82.7598" y1="500.543" y2="522.543"/><polygon fill="#181818" points="78.7598,512.543,82.7598,522.543,86.7598,512.543,82.7598,516.543" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="208.8711" x2="227.7627" y1="500.543" y2="500.543"/><line style="stroke:#181818;stroke-width:1;" x1="227.7627" x2="227.7627" y1="500.543" y2="522.543"/><polygon fill="#181818" points="223.7627,512.543,227.7627,522.543,231.7627,512.543,227.7627,516.543" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="82.7598" x2="82.7598" y1="610.4805" y2="628.4805"/><line style="stroke:#181818;stroke-width:1;" x1="82.7598" x2="143.2612" y1="628.4805" y2="628.4805"/><polygon fill="#181818" points="133.2612,624.4805,143.2612,628.4805,133.2612,632.4805,137.2612,628.4805" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="227.7627" x2="227.7627" y1="556.5117" y2="628.4805"/><line style="stroke:#181818;stroke-width:1;" x1="227.7627" x2="167.2612" y1="628.4805" y2="628.4805"/><polygon fill="#181818" points="177.2612,624.4805,167.2612,628.4805,177.2612,632.4805,173.2612,628.4805" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="155.2612" y1="468.543" y2="488.543"/><polygon fill="#181818" points="151.2612,478.543,155.2612,488.543,159.2612,478.543,155.2612,482.543" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="155.2612" y1="410.1719" y2="434.5742"/><polygon fill="#181818" points="151.2612,424.5742,155.2612,434.5742,159.2612,424.5742,155.2612,428.5742" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="245.6013" x2="306.0059" y1="398.1719" y2="398.1719"/><polygon fill="#181818" points="302.0059,527.5273,306.0059,537.5273,310.0059,527.5273,306.0059,531.5273" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="306.0059" x2="306.0059" y1="398.1719" y2="672.4805"/><line style="stroke:#181818;stroke-width:1;" x1="306.0059" x2="167.2612" y1="672.4805" y2="672.4805"/><polygon fill="#181818" points="177.2612,668.4805,167.2612,672.4805,177.2612,676.4805,173.2612,672.4805" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="155.2612" y1="640.4805" y2="660.4805"/><polygon fill="#181818" points="151.2612,650.4805,155.2612,660.4805,159.2612,650.4805,155.2612,654.4805" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="155.2612" y1="366.1719" y2="386.1719"/><polygon fill="#181818" points="151.2612,376.1719,155.2612,386.1719,159.2612,376.1719,155.2612,380.1719" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="155.2612" y1="312.2031" y2="332.2031"/><polygon fill="#181818" points="151.2612,322.2031,155.2612,332.2031,159.2612,322.2031,155.2612,326.2031" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="216.9653" x2="330.0059" y1="716.4805" y2="716.4805"/><polygon fill="#181818" points="326.0059,513.043,330.0059,503.043,334.0059,513.043,330.0059,509.043" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="330.0059" x2="330.0059" y1="300.2031" y2="716.4805"/><line style="stroke:#181818;stroke-width:1;" x1="330.0059" x2="167.2612" y1="300.2031" y2="300.2031"/><polygon fill="#181818" points="177.2612,296.2031,167.2612,300.2031,177.2612,304.2031,173.2612,300.2031" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="155.2612" y1="684.4805" y2="704.4805"/><polygon fill="#181818" points="151.2612,694.4805,155.2612,704.4805,159.2612,694.4805,155.2612,698.4805" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="155.2612" y1="268.2031" y2="288.2031"/><polygon fill="#181818" points="151.2612,278.2031,155.2612,288.2031,159.2612,278.2031,155.2612,282.2031" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="155.2612" y1="728.4805" y2="769.8794"/><polygon fill="#181818" points="151.2612,759.8794,155.2612,769.8794,159.2612,759.8794,155.2612,763.8794" style="stroke:#181818;stroke-width:1;"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.0083" x="159.2612" y="749.7852">yes</text><line style="stroke:#181818;stroke-width:1;" x1="229.9307" x2="155.2612" y1="212.2344" y2="212.2344"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="155.2612" y1="212.2344" y2="234.2344"/><polygon fill="#181818" points="151.2612,224.2344,155.2612,234.2344,159.2612,224.2344,155.2612,228.2344" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="344.7827" x2="419.4521" y1="212.2344" y2="212.2344"/><line style="stroke:#181818;stroke-width:1;" x1="419.4521" x2="419.4521" y1="212.2344" y2="234.2344"/><polygon fill="#181818" points="415.4521,224.2344,419.4521,234.2344,423.4521,224.2344,419.4521,228.2344" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="155.2612" y1="803.8481" y2="821.8481"/><line style="stroke:#181818;stroke-width:1;" x1="155.2612" x2="275.3567" y1="821.8481" y2="821.8481"/><polygon fill="#181818" points="265.3567,817.8481,275.3567,821.8481,265.3567,825.8481,269.3567,821.8481" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="419.4521" x2="419.4521" y1="268.2031" y2="821.8481"/><line style="stroke:#181818;stroke-width:1;" x1="419.4521" x2="299.3567" y1="821.8481" y2="821.8481"/><polygon fill="#181818" points="309.3567,817.8481,299.3567,821.8481,309.3567,825.8481,305.3567,821.8481" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="287.3567" x2="287.3567" y1="180.2344" y2="200.2344"/><polygon fill="#181818" points="283.3567,190.2344,287.3567,200.2344,291.3567,190.2344,287.3567,194.2344" style="stroke:#181818;stroke-width:1;"/><line style="stroke:#181818;stroke-width:1;" x1="287.3567" x2="287.3567" y1="833.8481" y2="853.8481"/><polygon fill="#181818" points="283.3567,843.8481,287.3567,853.8481,291.3567,843.8481,287.3567,847.8481" style="stroke:#181818;stroke-width:1;"/><?plantuml-src TP9DRzf048Rl_XLJLOhW4DmSehPOQIN0g2X9iS0vHnDxR8zOxrgxun3trsSnD2c1xcbtvvrdFZ-npbIR4rGYZHk7eSNjg6IfsgVMaSsC5j8ooamTtlEcGbQt5fz9N5XlSfEvnwQjLLYZ4xAXL5IJ2tCgi5KIAYuh6Uq4WTkmRj1Y3K-ORKfhMfrFZJ8MFi_xyuy2C-5dbcxoKHbVpQ_dyJcbiJdPW-hBrVNNxvCW41P5a7W82Qmr5mLPc2kp3G8dQ2KOBpGBe-8_zDSU1UDfHTa6LiO89DRJ5PNaee0B62HaQtQEZNQmlFqv15-lXa57RXY0F-FrZWlh39jkJsHTHht9KaCe_RLNJh6HrXAaq-IGOlHcx4CP3xgvWVlbxqMwNCMpnsIvIaz3lW7Z5x6-7R18uAAdtc57raL7gXtv5pfOuHPcAFX_Ni-SKMRyPZoayyjlqQdvpfHmg2FlSSSQKevWeCtmlEU4DThkd9_EkGXEN_iMmhRo8u51oZMPLlmlPXNblX9sxz4kVtHqgDqFnJJlyptEgiyajjRlpGN4B-odi0_elDCh?></g></svg></div><div class="puml dark" style=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="ACTIVITY" height="895px" preserveAspectRatio="xMidYMid meet" style="width:496px;height:895px;background:#FFFFFF;" version="1.1" viewBox="0 0 496 895" width="496px" zoomAndPan="magnify" class="diagram"><?plantuml 1.2026.4beta2?><defs/><g><g class="title" data-source-line="6"><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="153.5967" x="170.6509" y="32.9951">Packet Sniffer Flow</text></g><ellipse cx="287.3567" cy="62.2969" fill="#DDDDDD" rx="10" ry="10" style="stroke:#DDDDDD;stroke-width:0.5;"/><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="113.3574" x="230.678" y="92.2969"/><text fill="#FFFFFF" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="93.3574" x="240.678" y="113.4355">Initialize Sniffer</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="150.1777" x="212.2678" y="146.2656"/><text fill="#FFFFFF" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="130.1777" x="222.2678" y="167.4043">Check Root Privileges</text><polygon fill="#E1F5FE" points="241.9307,200.2344,332.7827,200.2344,344.7827,212.2344,332.7827,224.2344,241.9307,224.2344,229.9307,212.2344,241.9307,200.2344" style="stroke:#01579B;stroke-width:0.5;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="90.8521" x="241.9307" y="216.0425">Permissions OK?</text><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.0083" x="210.9224" y="209.6401">yes</text><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="13.7017" x="344.7827" y="209.6401">no</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="138.793" x="85.8647" y="234.2344"/><text fill="#FFFFFF" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="118.793" x="95.8647" y="255.373">Start Scapy Sniffing</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="138.7754" x="85.8735" y="332.2031"/><text fill="#FFFFFF" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="118.7754" x="95.8735" y="353.3418">Capture TCP Packet</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="161.0234" x="74.7495" y="434.5742"/><text fill="#FFFFFF" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="141.0234" x="84.7495" y="455.7129">Extract IP &amp; TCP Layers</text><polygon fill="#E1F5FE" points="113.6514,488.543,196.8711,488.543,208.8711,500.543,196.8711,512.543,113.6514,512.543,101.6514,500.543,113.6514,488.543" style="stroke:#01579B;stroke-width:0.5;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="83.2197" x="113.6514" y="504.3511">Has Raw Data?</text><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.0083" x="82.6431" y="497.9487">yes</text><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="13.7017" x="208.8711" y="497.9487">no</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="104.3574" x="30.5811" y="522.543"/><text fill="#FFFFFF" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="84.3574" x="40.5811" y="543.6816">Decode UTF-8</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="133.5195" x="16" y="576.5117"/><text fill="#FFFFFF" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="113.5195" x="26" y="597.6504">Log Captured Data</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="116.4863" x="169.5195" y="522.543"/><text fill="#FFFFFF" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="96.4863" x="179.5195" y="543.6816">Log Binary Data</text><polygon fill="#E1F5FE" points="155.2612,616.4805,167.2612,628.4805,155.2612,640.4805,143.2612,628.4805,155.2612,616.4805" style="stroke:#01579B;stroke-width:0.5;"/><polygon fill="#E1F5FE" points="76.9211,386.1719,233.6013,386.1719,245.6013,398.1719,233.6013,410.1719,76.9211,410.1719,64.9211,398.1719,76.9211,386.1719" style="stroke:#01579B;stroke-width:0.5;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.0083" x="159.2612" y="420.3823">yes</text><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="156.6802" x="76.9211" y="401.98">Port == MONITORED_PORT?</text><polygon fill="#E1F5FE" points="155.2612,660.4805,167.2612,672.4805,155.2612,684.4805,143.2612,672.4805,155.2612,660.4805" style="stroke:#01579B;stroke-width:0.5;"/><polygon fill="#E1F5FE" points="155.2612,288.2031,167.2612,300.2031,155.2612,312.2031,143.2612,300.2031,155.2612,288.2031" style="stroke:#01579B;stroke-width:0.5;"/><polygon fill="#E1F5FE" points="105.5571,704.4805,204.9653,704.4805,216.9653,716.4805,204.9653,728.4805,105.5571,728.4805,93.5571,716.4805,105.5571,704.4805" style="stroke:#01579B;stroke-width:0.5;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="99.4082" x="105.5571" y="720.2886">Timeout reached?</text><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="13.7017" x="216.9653" y="713.8862">no</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="90.418" x="110.0522" y="769.8794"/><text fill="#FFFFFF" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="70.418" x="120.0522" y="791.0181">Stop Sniffer</text><rect fill="#E1F5FE" height="33.9688" rx="12.5" ry="12.5" style="stroke:#01579B;stroke-width:0.5;" width="114.8926" x="362.0059" y="234.2344"/><text fill="#FFFFFF" font-family="sans-serif" font-size="12" lengthAdjust="spacing" textLength="94.8926" x="372.0059" y="255.373">Log Error &amp; Exit</text><polygon fill="#E1F5FE" points="287.3567,809.8481,299.3567,821.8481,287.3567,833.8481,275.3567,821.8481,287.3567,809.8481" style="stroke:#01579B;stroke-width:0.5;"/><ellipse cx="287.3567" cy="864.8481" fill="none" rx="11" ry="11" style="stroke:#DDDDDD;stroke-width:0.5;"/><ellipse cx="287.3567" cy="864.8481" fill="#DDDDDD" rx="6" ry="6" style="stroke:#DDDDDD;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="287.3567" x2="287.3567" y1="72.2969" y2="92.2969"/><polygon fill="#E7E7E7" points="283.3567,82.2969,287.3567,92.2969,291.3567,82.2969,287.3567,86.2969" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="287.3567" x2="287.3567" y1="126.2656" y2="146.2656"/><polygon fill="#E7E7E7" points="283.3567,136.2656,287.3567,146.2656,291.3567,136.2656,287.3567,140.2656" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="82.7598" x2="82.7598" y1="556.5117" y2="576.5117"/><polygon fill="#E7E7E7" points="78.7598,566.5117,82.7598,576.5117,86.7598,566.5117,82.7598,570.5117" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="101.6514" x2="82.7598" y1="500.543" y2="500.543"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="82.7598" x2="82.7598" y1="500.543" y2="522.543"/><polygon fill="#E7E7E7" points="78.7598,512.543,82.7598,522.543,86.7598,512.543,82.7598,516.543" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="208.8711" x2="227.7627" y1="500.543" y2="500.543"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="227.7627" x2="227.7627" y1="500.543" y2="522.543"/><polygon fill="#E7E7E7" points="223.7627,512.543,227.7627,522.543,231.7627,512.543,227.7627,516.543" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="82.7598" x2="82.7598" y1="610.4805" y2="628.4805"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="82.7598" x2="143.2612" y1="628.4805" y2="628.4805"/><polygon fill="#E7E7E7" points="133.2612,624.4805,143.2612,628.4805,133.2612,632.4805,137.2612,628.4805" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="227.7627" x2="227.7627" y1="556.5117" y2="628.4805"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="227.7627" x2="167.2612" y1="628.4805" y2="628.4805"/><polygon fill="#E7E7E7" points="177.2612,624.4805,167.2612,628.4805,177.2612,632.4805,173.2612,628.4805" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="155.2612" y1="468.543" y2="488.543"/><polygon fill="#E7E7E7" points="151.2612,478.543,155.2612,488.543,159.2612,478.543,155.2612,482.543" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="155.2612" y1="410.1719" y2="434.5742"/><polygon fill="#E7E7E7" points="151.2612,424.5742,155.2612,434.5742,159.2612,424.5742,155.2612,428.5742" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="245.6013" x2="306.0059" y1="398.1719" y2="398.1719"/><polygon fill="#E7E7E7" points="302.0059,527.5273,306.0059,537.5273,310.0059,527.5273,306.0059,531.5273" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="306.0059" x2="306.0059" y1="398.1719" y2="672.4805"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="306.0059" x2="167.2612" y1="672.4805" y2="672.4805"/><polygon fill="#E7E7E7" points="177.2612,668.4805,167.2612,672.4805,177.2612,676.4805,173.2612,672.4805" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="155.2612" y1="640.4805" y2="660.4805"/><polygon fill="#E7E7E7" points="151.2612,650.4805,155.2612,660.4805,159.2612,650.4805,155.2612,654.4805" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="155.2612" y1="366.1719" y2="386.1719"/><polygon fill="#E7E7E7" points="151.2612,376.1719,155.2612,386.1719,159.2612,376.1719,155.2612,380.1719" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="155.2612" y1="312.2031" y2="332.2031"/><polygon fill="#E7E7E7" points="151.2612,322.2031,155.2612,332.2031,159.2612,322.2031,155.2612,326.2031" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="216.9653" x2="330.0059" y1="716.4805" y2="716.4805"/><polygon fill="#E7E7E7" points="326.0059,513.043,330.0059,503.043,334.0059,513.043,330.0059,509.043" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="330.0059" x2="330.0059" y1="300.2031" y2="716.4805"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="330.0059" x2="167.2612" y1="300.2031" y2="300.2031"/><polygon fill="#E7E7E7" points="177.2612,296.2031,167.2612,300.2031,177.2612,304.2031,173.2612,300.2031" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="155.2612" y1="684.4805" y2="704.4805"/><polygon fill="#E7E7E7" points="151.2612,694.4805,155.2612,704.4805,159.2612,694.4805,155.2612,698.4805" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="155.2612" y1="268.2031" y2="288.2031"/><polygon fill="#E7E7E7" points="151.2612,278.2031,155.2612,288.2031,159.2612,278.2031,155.2612,282.2031" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="155.2612" y1="728.4805" y2="769.8794"/><polygon fill="#E7E7E7" points="151.2612,759.8794,155.2612,769.8794,159.2612,759.8794,155.2612,763.8794" style="stroke:#E7E7E7;stroke-width:1;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="11" lengthAdjust="spacing" textLength="19.0083" x="159.2612" y="749.7852">yes</text><line style="stroke:#E7E7E7;stroke-width:1;" x1="229.9307" x2="155.2612" y1="212.2344" y2="212.2344"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="155.2612" y1="212.2344" y2="234.2344"/><polygon fill="#E7E7E7" points="151.2612,224.2344,155.2612,234.2344,159.2612,224.2344,155.2612,228.2344" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="344.7827" x2="419.4521" y1="212.2344" y2="212.2344"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="419.4521" x2="419.4521" y1="212.2344" y2="234.2344"/><polygon fill="#E7E7E7" points="415.4521,224.2344,419.4521,234.2344,423.4521,224.2344,419.4521,228.2344" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="155.2612" y1="803.8481" y2="821.8481"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="155.2612" x2="275.3567" y1="821.8481" y2="821.8481"/><polygon fill="#E7E7E7" points="265.3567,817.8481,275.3567,821.8481,265.3567,825.8481,269.3567,821.8481" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="419.4521" x2="419.4521" y1="268.2031" y2="821.8481"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="419.4521" x2="299.3567" y1="821.8481" y2="821.8481"/><polygon fill="#E7E7E7" points="309.3567,817.8481,299.3567,821.8481,309.3567,825.8481,305.3567,821.8481" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="287.3567" x2="287.3567" y1="180.2344" y2="200.2344"/><polygon fill="#E7E7E7" points="283.3567,190.2344,287.3567,200.2344,291.3567,190.2344,287.3567,194.2344" style="stroke:#E7E7E7;stroke-width:1;"/><line style="stroke:#E7E7E7;stroke-width:1;" x1="287.3567" x2="287.3567" y1="833.8481" y2="853.8481"/><polygon fill="#E7E7E7" points="283.3567,843.8481,287.3567,853.8481,291.3567,843.8481,287.3567,847.8481" style="stroke:#E7E7E7;stroke-width:1;"/><?plantuml-src TP9HRzf03CVVyoayJQhWeMHzgBOHTPE0eA6s8mBwNBc98LQIkyZdb6QVlaTWxIZidkxk__VFzla-iKdB9YF8LMit34F1xM33cZTFZID9hL4oEaXj5TvpaIENjuBFf2wiYiocxh5kgZAiq2b9g3bLvCACrjYK6cOenM2d1wvWKwDW1K-O5XknZSd6jhG2dwVT-iU1gV8pQplww8olfjVJ-9pJIaPoS7svklxwVHG4obeI91v22al3wpK9J4kx3GAdA1eCPuQLiUG_z5UFWk4ufxI0XRKAYNXwIHjoKS1hw2Ka5Jl7rZYOt_xiWs_NGAybrm_0h-5onuLbYdMx9xBPH9qaL1Dgj-sSOwor4OBLE3cK6Bs9NIhhGJStS3__FLlD5_7aCPalLgSftu3nYuf_3fWbSD5Hxx0bST6HQqV-XGuMk8K9AlwVrp4db5h_CHvMqyjlqQbyPpTmw2FhSCSUAXr1pzZ--SWH6vJsN9p9U1sSdlPF2DlSZmHwAwx8DkflCSqfyvsmUyzs-QEbG-z-ABP-d-znLLqbiOZ_DnSGlx2VmZwXyq6l?></g></svg></div></div>
+
+<h3 id="key-features">Key Features</h3>
+<ul>
+<li><strong>Scapy Integration</strong>: Uses Scapy for low-level packet capture.</li>
+<li><strong>Filtering</strong>: Specifically monitors the <code>MONITORED_PORT</code>.</li>
+<li><strong>Decoding</strong>: Attempts to decode payloads as UTF-8 for readability.</li>
+<li><strong>Logging</strong>: Provides detailed info about captured packets including source/destination IP and ports.</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+        <script src="../assets/mkdocs_puml/puml.js"></script>
+        <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+        <script src="../assets/mkdocs_puml/interaction.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Backend - IoT Group Project Documentation</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../assets/mkdocs_puml/puml.css" rel="stylesheet">
         <link href="../assets/mkdocs_puml/interaction.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -24,7 +28,7 @@
             <div class="container">
                 <a class="navbar-brand" href="..">IoT Group Project Documentation</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -32,29 +36,32 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href=".." class="nav-link">Info</a>
                             </li>
-                            <li class="navitem active">
-                                <a href="./" class="nav-link">Backend</a>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Backend</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
+                                <a href="../packet_sniffer/" class="nav-link">Packet Sniffer</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="../frontend/" class="nav-link">Frontend</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../contribution/" class="nav-link">Contribution</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../cicd/" class="nav-link">CICD</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../tests/" class="nav-link">Tests</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -64,7 +71,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../frontend/" class="nav-link">
+                                <a rel="next" href="../packet_sniffer/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -75,40 +82,54 @@
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="2"><a href="#backend" class="nav-link">Backend</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
+            
+            
+            
+            
         </ul>
     </div>
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h2 id="backend">Backend</h2>
-<pre><code>Rest API:
-Language: Python
-Framework: FastAPI
-
-Database:
-PostgreSQL
-
-Communication protocol:
-HTTP
-
-Security:
-Encryption
-</code></pre></div>
+<p>The backend is built with <strong>FastAPI</strong> and integrates directly with a <strong>PostgreSQL</strong> database.</p>
+<h3 id="core-components">Core Components</h3>
+<ul>
+<li><strong>FastAPI App</strong>: Provides a RESTful API for managing users, devices, and logs.</li>
+<li><strong>Database Class</strong>: A wrapper around <code>psycopg2</code> that handles connection pooling, table initialization, and CRUD operations.</li>
+<li><strong>Pydantic Models</strong>: Used for data validation and serialization.</li>
+</ul>
+<h3 id="data-models">Data Models</h3>
+<ul>
+<li><strong>User</strong>: ID, Name, Privilege.</li>
+<li><strong>Password</strong>: User association and hashed passwords.</li>
+<li><strong>Device</strong>: ID, Status, IP Address.</li>
+<li><strong>Logs</strong>: Task logs, Task result logs, and HTTP traffic logs.</li>
+</ul>
+<h3 id="api-routes">API Routes</h3>
+<p>The backend exposes the following generic endpoints for each supported table:
+- <code>GET /{table}</code>: Fetch all records.
+- <code>GET /{table}/{id}</code>: Fetch a specific record by ID.
+- <code>POST /{table}</code>: Insert a new record (validated via Pydantic).
+- <code>PUT /{table}/{id}</code>: Update an existing record.</p>
+<h3 id="security">Security</h3>
+<ul>
+<li><strong>CORS</strong>: Configured to allow requests from the frontend (port 5173).</li>
+<li><strong>Validation</strong>: Strict schema validation using Pydantic.</li>
+<li><strong>Environment Config</strong>: Sensitive database credentials are managed via environment variables.</li>
+</ul>
+<h3 id="system-architecture">System Architecture</h3>
+<div class='puml-container'><div class="puml light" style=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="769px" preserveAspectRatio="xMidYMid meet" style="width:631px;height:769px;background:#FFFFFF;" version="1.1" viewBox="0 0 631 769" width="631px" zoomAndPan="magnify" class="diagram"><?plantuml 1.2026.4beta2?><defs/><g><g class="cluster" data-qualified-name="Client Layer" data-source-line="6" id="ent0002"><path d="M234.5,6 L330.2939,6 A3.75,3.75 0 0 1 332.7939,8.5 L339.7939,28.2969 L423.5,28.2969 A2.5,2.5 0 0 1 426,30.7969 L426,100.8 A2.5,2.5 0 0 1 423.5,103.3 L234.5,103.3 A2.5,2.5 0 0 1 232,100.8 L232,8.5 A2.5,2.5 0 0 1 234.5,6" fill="#F9F9F9" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="232" x2="339.7939" y1="28.2969" y2="28.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="94.7939" x="236" y="20.9951">Client Layer</text></g><g class="cluster" data-qualified-name="Backend Layer" data-source-line="10" id="ent0004"><path d="M209.5,152.3 L326.4785,152.3 A3.75,3.75 0 0 1 328.9785,154.8 L335.9785,174.5969 L448.5,174.5969 A2.5,2.5 0 0 1 451,177.0969 L451,382.51 A2.5,2.5 0 0 1 448.5,385.01 L209.5,385.01 A2.5,2.5 0 0 1 207,382.51 L207,154.8 A2.5,2.5 0 0 1 209.5,152.3" fill="#F9F9F9" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="207" x2="335.9785" y1="174.5969" y2="174.5969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="115.9785" x="211" y="167.2951">Backend Layer</text></g><g class="cluster" data-qualified-name="DB" data-source-line="15" id="ent0007"><path d="M6,452.01 C6,442.01 171.5,442.01 171.5,442.01 C171.5,442.01 337,442.01 337,452.01 L337,734.6 C337,744.6 171.5,744.6 171.5,744.6 C171.5,744.6 6,744.6 6,734.6 L6,452.01" fill="#F9F9F9" style="stroke:#181818;stroke-width:1;"/><path d="M6,452.01 C6,462.01 171.5,462.01 171.5,462.01 C171.5,462.01 337,462.01 337,452.01" fill="none" style="stroke:#181818;stroke-width:1;"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="92.2305" x="125.3848" y="477.0051">PostgreSQL</text></g><g class="cluster" data-qualified-name="DB.Tables" data-source-line="16" id="ent0008"><path d="M40.5,508.01 L93.1455,508.01 A3.75,3.75 0 0 1 95.6455,510.51 L102.6455,530.3069 L294.5,530.3069 A2.5,2.5 0 0 1 297,532.8069 L297,710.1 A2.5,2.5 0 0 1 294.5,712.6 L40.5,712.6 A2.5,2.5 0 0 1 38,710.1 L38,510.51 A2.5,2.5 0 0 1 40.5,508.01" fill="#F9F9F9" style="stroke:#000000;stroke-width:1.5;"/><line style="stroke:#000000;stroke-width:1.5;" x1="38" x2="102.6455" y1="530.3069" y2="530.3069"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="51.6455" x="42" y="523.0051">Tables</text></g><g class="entity" data-qualified-name="Client Layer.FE" data-source-line="7" id="ent0003"><rect fill="#F1F1F1" height="46.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="161.1807" x="248.41" y="41"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="389.5907" y="46"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="387.5907" y="48"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="387.5907" y="52"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121.1807" x="263.41" y="73.9951">Frontend (Vue.js)</text></g><g class="entity" data-qualified-name="Backend Layer.API" data-source-line="11" id="ent0005"><rect fill="#F1F1F1" height="46.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="129.0859" x="264.46" y="187.3"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="373.5459" y="192.3"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="371.5459" y="194.3"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="371.5459" y="198.3"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89.0859" x="279.46" y="220.2951">FastAPI (API)</text></g><g class="entity" data-qualified-name="Backend Layer.DB_Logic" data-source-line="12" id="ent0006"><rect fill="#F1F1F1" height="46.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="211.9922" x="223" y="322.71"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="414.9922" y="327.71"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="412.9922" y="329.71"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="412.9922" y="333.71"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="171.9922" x="238" y="355.7051">Database Logic (Python)</text></g><g class="entity" data-qualified-name="DB.Tables.users" data-source-line="17" id="ent0009"><rect fill="#F1F1F1" height="46.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="77.8301" x="54.08" y="543.01"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="111.9101" y="548.01"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="109.9101" y="550.01"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="109.9101" y="554.01"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="37.8301" x="69.08" y="576.0051">users</text></g><g class="entity" data-qualified-name="DB.Tables.passwords" data-source-line="18" id="ent0010"><rect fill="#F1F1F1" height="46.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="114.0059" x="167" y="543.01"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="261.0059" y="548.01"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="259.0059" y="550.01"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="259.0059" y="554.01"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74.0059" x="182" y="576.0051">passwords</text></g><g class="entity" data-qualified-name="DB.Tables.devices" data-source-line="19" id="ent0011"><rect fill="#F1F1F1" height="46.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="93.2793" x="54.36" y="650.3"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="127.6393" y="655.3"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="125.6393" y="657.3"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="125.6393" y="661.3"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="53.2793" x="69.36" y="683.2951">devices</text></g><g class="entity" data-qualified-name="DB.Tables.logs" data-source-line="20" id="ent0012"><rect fill="#F1F1F1" height="46.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="68.6357" x="182.68" y="650.3"/><rect fill="#F1F1F1" height="10" style="stroke:#181818;stroke-width:0.5;" width="15" x="231.3157" y="655.3"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="229.3157" y="657.3"/><rect fill="#F1F1F1" height="2" style="stroke:#181818;stroke-width:0.5;" width="4" x="229.3157" y="661.3"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="28.6357" x="197.68" y="683.2951">logs</text></g><g class="entity" data-qualified-name="GMN16" data-source-line="29" id="ent0017"><path d="M467.5,175.18 L467.5,245.7113 L616.5005,245.7113 L616.5005,185.18 L606.5005,175.18 L467.5,175.18" fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M606.5005,175.18 L606.5005,185.18 L616.5005,185.18 L606.5005,175.18" fill="#FEFFDD" style="stroke:#181818;stroke-width:1;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="56.9956" x="473.5" y="192.2469">Handles:</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="128.0005" x="473.5" y="207.3797">- Table Initialization</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="122.0591" x="473.5" y="222.5125">- CRUD Operations</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="120.4976" x="473.5" y="237.6453">- Object Validation</text></g><g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency" data-source-line="24" id="lnk13"><path d="M329,93.69 C329,120.8 329,154.02 329,181.06" fill="none" id="FE-API" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="329,87.69,325,96.69,329,92.69,333,96.69,329,87.69" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="329,187.06,333,178.06,329,182.06,325,178.06,329,187.06" style="stroke:#181818;stroke-width:1;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="117.6348" x="330" y="132.3669">HTTP/JSON (REST)</text></g><g class="link" data-entity-1="ent0005" data-entity-2="ent0006" data-link-type="dependency" data-source-line="25" id="lnk14"><path d="M329,240.08 C329,264.76 329,292.01 329,316.56" fill="none" id="API-DB_Logic" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="329,234.08,325,243.08,329,239.08,333,243.08,329,234.08" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="329,322.56,333,313.56,329,317.56,325,313.56,329,322.56" style="stroke:#181818;stroke-width:1;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="85.5029" x="330" y="288.7769">Internal Calls</text></g><g class="link" data-entity-1="ent0006" data-entity-2="ent0007" data-link-type="dependency" data-source-line="26" id="lnk15"><path d="M329,375.4 C329,389.125 329,401.95 329,422.5336 C329,427.6795 329,432.9353 329,438.2488 C329,438.913 329,439.5781 329,440.244 C329,440.5769 329,434.9101 329,435.2434" fill="none" id="DB_Logic-DB" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="329,369.4,325,378.4,329,374.4,333,378.4,329,369.4" style="stroke:#181818;stroke-width:1;"/><polygon fill="#181818" points="329,441.2434,333,432.2434,329,436.2434,325,432.2434,329,441.2434" style="stroke:#181818;stroke-width:1;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="102.1846" x="330" y="414.0769">SQL (Psycopg2)</text></g><g class="link" data-entity-1="ent0017" data-entity-2="ent0006" data-link-type="association" data-source-line="29" id="lnk18"><path d="M493.93,246.18 C472.81,261.01 447.5,278.22 424,292.71 C407.34,302.98 388.54,313.51 372.09,322.4" fill="none" id="GMN16-DB_Logic" style="stroke:#181818;stroke-width:1;stroke-dasharray:7,7;"/></g><?plantuml-src PP5TJzim58RlyolEmarxqLhYRjKq2VeXsBgreuMR2Q6J-3GnTUp8FW5rYF-EdRGG3LkAxFC-v-EDloYJwqOIbCordmZXy7bSA2wRhF7aSckO38zpMubVQb-YqZyTFX5xKUsbpVr3tLHQLEYPdE2IAl92qWuRpKAhekHn11A_LwP6XnM4IhKreUQ63veWYESzDSDyNpZR63crsZeuMxIhHzI1m88kFu5VuqwIemxfLAlG1PPu89V2Im9X_Lsurf24mLr3uqS_l0Vqi9WdhxtCM3io_wK6ZnVhQnY4JvSM3fqqGyOCFS7I5Yg7mVh0fJKTDBjyQAEnWpnnwTfwBXnj_YpJ3ZfssLajoK6wnKoJF_LkcyJdyFSVzngzVxPEzcEIdbHE_OYsnV7w6YTOpE7RQFGzZWuJkDfkr-B7PlKR1ZVppNQOn72hdwOEq7NuOSwWXYbgxPDtvSW58hW8dlqXjtLnFamIOvc0RGrszs4Vu0gD3AOcuJY2rc2ehLYXLl-GbJMjCBsvdS6g9jU6V1jRPO-KCzm5KdPaV9xOvWq0?></g></svg></div><div class="puml dark" style=""><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" data-diagram-type="DESCRIPTION" height="769px" preserveAspectRatio="xMidYMid meet" style="width:631px;height:769px;background:#FFFFFF;" version="1.1" viewBox="0 0 631 769" width="631px" zoomAndPan="magnify" class="diagram"><?plantuml 1.2026.4beta2?><defs/><g><g class="cluster" data-qualified-name="Client Layer" data-source-line="6" id="ent0002"><path d="M234.5,6 L330.2939,6 A3.75,3.75 0 0 1 332.7939,8.5 L339.7939,28.2969 L423.5,28.2969 A2.5,2.5 0 0 1 426,30.7969 L426,100.8 A2.5,2.5 0 0 1 423.5,103.3 L234.5,103.3 A2.5,2.5 0 0 1 232,100.8 L232,8.5 A2.5,2.5 0 0 1 234.5,6" fill="#F9F9F9" style="stroke:#FFFFFF;stroke-width:1.5;"/><line style="stroke:#FFFFFF;stroke-width:1.5;" x1="232" x2="339.7939" y1="28.2969" y2="28.2969"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="94.7939" x="236" y="20.9951">Client Layer</text></g><g class="cluster" data-qualified-name="Backend Layer" data-source-line="10" id="ent0004"><path d="M209.5,152.3 L326.4785,152.3 A3.75,3.75 0 0 1 328.9785,154.8 L335.9785,174.5969 L448.5,174.5969 A2.5,2.5 0 0 1 451,177.0969 L451,382.51 A2.5,2.5 0 0 1 448.5,385.01 L209.5,385.01 A2.5,2.5 0 0 1 207,382.51 L207,154.8 A2.5,2.5 0 0 1 209.5,152.3" fill="#F9F9F9" style="stroke:#FFFFFF;stroke-width:1.5;"/><line style="stroke:#FFFFFF;stroke-width:1.5;" x1="207" x2="335.9785" y1="174.5969" y2="174.5969"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="115.9785" x="211" y="167.2951">Backend Layer</text></g><g class="cluster" data-qualified-name="DB" data-source-line="15" id="ent0007"><path d="M6,452.01 C6,442.01 171.5,442.01 171.5,442.01 C171.5,442.01 337,442.01 337,452.01 L337,734.6 C337,744.6 171.5,744.6 171.5,744.6 C171.5,744.6 6,744.6 6,734.6 L6,452.01" fill="#F9F9F9" style="stroke:#E7E7E7;stroke-width:1;"/><path d="M6,452.01 C6,462.01 171.5,462.01 171.5,462.01 C171.5,462.01 337,462.01 337,452.01" fill="none" style="stroke:#E7E7E7;stroke-width:1;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="92.2305" x="125.3848" y="477.0051">PostgreSQL</text></g><g class="cluster" data-qualified-name="DB.Tables" data-source-line="16" id="ent0008"><path d="M40.5,508.01 L93.1455,508.01 A3.75,3.75 0 0 1 95.6455,510.51 L102.6455,530.3069 L294.5,530.3069 A2.5,2.5 0 0 1 297,532.8069 L297,710.1 A2.5,2.5 0 0 1 294.5,712.6 L40.5,712.6 A2.5,2.5 0 0 1 38,710.1 L38,510.51 A2.5,2.5 0 0 1 40.5,508.01" fill="#F9F9F9" style="stroke:#FFFFFF;stroke-width:1.5;"/><line style="stroke:#FFFFFF;stroke-width:1.5;" x1="38" x2="102.6455" y1="530.3069" y2="530.3069"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" font-weight="700" lengthAdjust="spacing" textLength="51.6455" x="42" y="523.0051">Tables</text></g><g class="entity" data-qualified-name="Client Layer.FE" data-source-line="7" id="ent0003"><rect fill="#313139" height="46.2969" rx="2.5" ry="2.5" style="stroke:#E7E7E7;stroke-width:0.5;" width="161.1807" x="248.41" y="41"/><rect fill="#313139" height="10" style="stroke:#E7E7E7;stroke-width:0.5;" width="15" x="389.5907" y="46"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="387.5907" y="48"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="387.5907" y="52"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="121.1807" x="263.41" y="73.9951">Frontend (Vue.js)</text></g><g class="entity" data-qualified-name="Backend Layer.API" data-source-line="11" id="ent0005"><rect fill="#313139" height="46.2969" rx="2.5" ry="2.5" style="stroke:#E7E7E7;stroke-width:0.5;" width="129.0859" x="264.46" y="187.3"/><rect fill="#313139" height="10" style="stroke:#E7E7E7;stroke-width:0.5;" width="15" x="373.5459" y="192.3"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="371.5459" y="194.3"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="371.5459" y="198.3"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="89.0859" x="279.46" y="220.2951">FastAPI (API)</text></g><g class="entity" data-qualified-name="Backend Layer.DB_Logic" data-source-line="12" id="ent0006"><rect fill="#313139" height="46.2969" rx="2.5" ry="2.5" style="stroke:#E7E7E7;stroke-width:0.5;" width="211.9922" x="223" y="322.71"/><rect fill="#313139" height="10" style="stroke:#E7E7E7;stroke-width:0.5;" width="15" x="414.9922" y="327.71"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="412.9922" y="329.71"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="412.9922" y="333.71"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="171.9922" x="238" y="355.7051">Database Logic (Python)</text></g><g class="entity" data-qualified-name="DB.Tables.users" data-source-line="17" id="ent0009"><rect fill="#313139" height="46.2969" rx="2.5" ry="2.5" style="stroke:#E7E7E7;stroke-width:0.5;" width="77.8301" x="54.08" y="543.01"/><rect fill="#313139" height="10" style="stroke:#E7E7E7;stroke-width:0.5;" width="15" x="111.9101" y="548.01"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="109.9101" y="550.01"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="109.9101" y="554.01"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="37.8301" x="69.08" y="576.0051">users</text></g><g class="entity" data-qualified-name="DB.Tables.passwords" data-source-line="18" id="ent0010"><rect fill="#313139" height="46.2969" rx="2.5" ry="2.5" style="stroke:#E7E7E7;stroke-width:0.5;" width="114.0059" x="167" y="543.01"/><rect fill="#313139" height="10" style="stroke:#E7E7E7;stroke-width:0.5;" width="15" x="261.0059" y="548.01"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="259.0059" y="550.01"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="259.0059" y="554.01"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="74.0059" x="182" y="576.0051">passwords</text></g><g class="entity" data-qualified-name="DB.Tables.devices" data-source-line="19" id="ent0011"><rect fill="#313139" height="46.2969" rx="2.5" ry="2.5" style="stroke:#E7E7E7;stroke-width:0.5;" width="93.2793" x="54.36" y="650.3"/><rect fill="#313139" height="10" style="stroke:#E7E7E7;stroke-width:0.5;" width="15" x="127.6393" y="655.3"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="125.6393" y="657.3"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="125.6393" y="661.3"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="53.2793" x="69.36" y="683.2951">devices</text></g><g class="entity" data-qualified-name="DB.Tables.logs" data-source-line="20" id="ent0012"><rect fill="#313139" height="46.2969" rx="2.5" ry="2.5" style="stroke:#E7E7E7;stroke-width:0.5;" width="68.6357" x="182.68" y="650.3"/><rect fill="#313139" height="10" style="stroke:#E7E7E7;stroke-width:0.5;" width="15" x="231.3157" y="655.3"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="229.3157" y="657.3"/><rect fill="#313139" height="2" style="stroke:#E7E7E7;stroke-width:0.5;" width="4" x="229.3157" y="661.3"/><text fill="#FFFFFF" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="28.6357" x="197.68" y="683.2951">logs</text></g><g class="entity" data-qualified-name="GMN16" data-source-line="29" id="ent0017"><path d="M467.5,175.18 L467.5,245.7113 L616.5005,245.7113 L616.5005,185.18 L606.5005,175.18 L467.5,175.18" fill="#714137" style="stroke:#E7E7E7;stroke-width:0.5;"/><path d="M606.5005,175.18 L606.5005,185.18 L616.5005,185.18 L606.5005,175.18" fill="#714137" style="stroke:#E7E7E7;stroke-width:1;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="56.9956" x="473.5" y="192.2469">Handles:</text><text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="128.0005" x="473.5" y="207.3797">- Table Initialization</text><text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="122.0591" x="473.5" y="222.5125">- CRUD Operations</text><text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="120.4976" x="473.5" y="237.6453">- Object Validation</text></g><g class="link" data-entity-1="ent0003" data-entity-2="ent0005" data-link-type="dependency" data-source-line="24" id="lnk13"><path d="M329,93.69 C329,120.8 329,154.02 329,181.06" fill="none" id="FE-API" style="stroke:#E7E7E7;stroke-width:1;"/><polygon fill="#E7E7E7" points="329,87.69,325,96.69,329,92.69,333,96.69,329,87.69" style="stroke:#E7E7E7;stroke-width:1;"/><polygon fill="#E7E7E7" points="329,187.06,333,178.06,329,182.06,325,178.06,329,187.06" style="stroke:#E7E7E7;stroke-width:1;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="117.6348" x="330" y="132.3669">HTTP/JSON (REST)</text></g><g class="link" data-entity-1="ent0005" data-entity-2="ent0006" data-link-type="dependency" data-source-line="25" id="lnk14"><path d="M329,240.08 C329,264.76 329,292.01 329,316.56" fill="none" id="API-DB_Logic" style="stroke:#E7E7E7;stroke-width:1;"/><polygon fill="#E7E7E7" points="329,234.08,325,243.08,329,239.08,333,243.08,329,234.08" style="stroke:#E7E7E7;stroke-width:1;"/><polygon fill="#E7E7E7" points="329,322.56,333,313.56,329,317.56,325,313.56,329,322.56" style="stroke:#E7E7E7;stroke-width:1;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="85.5029" x="330" y="288.7769">Internal Calls</text></g><g class="link" data-entity-1="ent0006" data-entity-2="ent0007" data-link-type="dependency" data-source-line="26" id="lnk15"><path d="M329,375.4 C329,389.125 329,401.95 329,422.5336 C329,427.6795 329,432.9353 329,438.2488 C329,438.913 329,439.5781 329,440.244 C329,440.5769 329,434.9101 329,435.2434" fill="none" id="DB_Logic-DB" style="stroke:#E7E7E7;stroke-width:1;"/><polygon fill="#E7E7E7" points="329,369.4,325,378.4,329,374.4,333,378.4,329,369.4" style="stroke:#E7E7E7;stroke-width:1;"/><polygon fill="#E7E7E7" points="329,441.2434,333,432.2434,329,436.2434,325,432.2434,329,441.2434" style="stroke:#E7E7E7;stroke-width:1;"/><text fill="#FFFFFF" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="102.1846" x="330" y="414.0769">SQL (Psycopg2)</text></g><g class="link" data-entity-1="ent0017" data-entity-2="ent0006" data-link-type="association" data-source-line="29" id="lnk18"><path d="M493.93,246.18 C472.81,261.01 447.5,278.22 424,292.71 C407.34,302.98 388.54,313.51 372.09,322.4" fill="none" id="GMN16-DB_Logic" style="stroke:#E7E7E7;stroke-width:1;stroke-dasharray:7,7;"/></g><?plantuml-src PL7BRjim4BppAxRgnJxO17AhKHHe_43IkhKRExaKGR0Yrn8ZYXH8Ae4RvDzBIdOYj2GWa3EpEplY1sM4RYL16KBZPvmxV9uMAfHjtdfomff09ao5hVaFLPMez7U7JnGyhojfXNzesbhp6dqWnqD9DNakwO2j3boYgwQ9PxvIfa67DSH6ZJMnvIuSDK4aBmPiZg8gd6sDd5jj7NnSTMkWQA822xhyJ_WfRSPEF6HphQ8BhF58BeCN1d7zNhakZuJHNKlJHp--1_ImMhBNGMNgdJJ_bCQ8NxVNC8gVlYmUUcg10NFq16jRA06ZxJ6KrlIYnUL3XoO7UTPbM-j3uMZtQvtrefFBmMf93h8zvfhysRipIQ_Xxz_l3Nh_R9qSOfAUbA0Xecrnkhwc2LPB-3oPV4cZmmokzlij_xRR_8JHpNAt7xC4T_nvwYYwZZ_C6TGmHwqzUsDEkgY8AM9cVnIsAIx6Z1aR289jm1xUumDSeP4nr2mU9z05ZBrLKAZL7mpAcewOtzmkODEGwo3VOPlyaKI0kwYKlJ8zJxBv2m00?></g></svg></div></div></div>
             </div>
         </div>
 
@@ -116,8 +137,7 @@ Encryption
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../js/jquery-3.6.0.min.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -133,7 +153,7 @@ Encryption
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -153,7 +173,7 @@ Encryption
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">
