@@ -5,10 +5,10 @@ import uvicorn
 import os
 
 db = Database(
-    host=os.getenv("DB_HOST", "localhost"),
-    dbname=os.getenv("DB_NAME", "postgres"),
-    user=os.getenv("DB_USER", "postgres"),
-    password=os.getenv("DB_PASSWORD", "postgres"),
+    host=os.getenv("DB_HOST", "db"),
+    dbname=os.getenv("POSTGRES_DB", "postgres"),
+    user=os.getenv("POSTGRES_USER", "postgres"),
+    password=os.getenv("POSTGRES_PASSWORD", "postgres"),
     port=int(os.getenv("DB_PORT", "5432")),
 )
 db.initializeTables()
