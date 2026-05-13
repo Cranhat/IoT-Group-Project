@@ -1,4 +1,6 @@
 from task_exec import *
+from communication import SecureClient
+from config import *
 
 
 def main():
@@ -6,7 +8,8 @@ def main():
 
     while True:
         try:
-            sock = None     # CHANGE TO SOCKET RECEIVED FROM COMMUNICATION SECTION !!!!!!!!!
+            comms = SecureClient(port=PORT)
+            sock = comms._connect(SERVER_HOST)     # CHANGE TO SOCKET RECEIVED FROM COMMUNICATION SECTION !!!!!!!!!
             sock.connect((SERVER_HOST, PORT))
             retry_delay = 2
 
