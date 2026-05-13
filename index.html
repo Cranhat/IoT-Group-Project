@@ -103,11 +103,11 @@
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#project-layout" class="nav-link">Project Layout</a>
+            <li class="nav-item" data-bs-level="2"><a href="#documentation" class="nav-link">Documentation</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#documentation" class="nav-link">Documentation</a>
+            <li class="nav-item" data-bs-level="2"><a href="#project-layout" class="nav-link">Project Layout</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -124,36 +124,59 @@
 <pre><code>* Cyprian Burdzy (Cranhat) - Technical Leader
 * Nicole Jarczewska (Naitomi) - Developer
 * Natalia Kułak (Natomkul) - Developer
-* Oleh Marushchak () - Developer
-* Tomek Piaseczny () - Developer
+* Oleh Marushchak (Ol3hhh) - Developer
+* Tomek Piaseczny (tpiasek) - Developer
 </code></pre>
 <h2 id="technology-used">Technology Used</h2>
 <ul>
-<li><strong>Communication Protocol</strong>: HTTP (with custom security features)</li>
 <li><strong>Backend</strong>: Python (FastAPI)</li>
+<li><strong>Communication</strong>: TCP with TLS (Transport Layer Security)</li>
 <li><strong>Database</strong>: PostgreSQL</li>
 <li><strong>Frontend</strong>: Vue.js 3 (Vite)</li>
 <li><strong>Network Analysis</strong>: Packet Sniffer (Scapy)</li>
 <li><strong>Documentation</strong>: MkDocs with PlantUML</li>
+<li><strong>Containerization</strong>: Docker</li>
 </ul>
-<h2 id="project-layout">Project Layout</h2>
-<pre><code class="language-text">IoT-Group-Project/
-├── backend/            # Python FastAPI backend &amp; database logic
-│   ├── api/            # API endpoints
-│   └── database/       # Database models and CRUD logic
-├── frontend/           # Vue.js frontend application
-├── packet_sniffer/     # Scapy-based network monitoring tool
-├── docs/               # Project documentation
-│   └── documentation/  # MkDocs source and config
-├── docker-compose.yml  # Container orchestration
-└── README.md
-</code></pre>
 <h2 id="documentation">Documentation</h2>
 <ul>
 <li><strong>Hosted</strong>: GitHub Pages</li>
 <li><strong>Generator</strong>: MkDocs</li>
 <li><strong>Plugins</strong>: PlantUML, Search</li>
-</ul></div>
+</ul>
+<h2 id="project-layout">Project Layout</h2>
+<pre><code class="language-text">IoT-Group-Project/
+├── .github/
+│   └── workflows/
+│       └── ci.yml              # GitHub Actions CI workflow
+├── backend/                    # Python FastAPI backend and database logic
+│   ├── api/                    # API application code
+│   ├── database/               # Database source code and tests
+│   ├── Dockerfile              # Backend container image definition
+│   ├── main.py                 # Backend entry point
+│   └── requirements.txt        # Backend Python dependencies
+├── client/                     # Client-side communication component
+├── communication/
+│   └── keys/                   # TLS keys and certificates used for communication
+├── docs/
+│   └── documentation/
+│       ├── docs/               # MkDocs documentation pages
+│       ├── hooks/              # Documentation build hooks
+│       └── mkdocs.yml          # MkDocs configuration
+├── frontend/                   # Vue.js 3 frontend application
+│   ├── public/                 # Static frontend assets
+│   ├── src/                    # Frontend source code
+│   ├── Dockerfile              # Frontend container image definition
+│   ├── package.json            # Frontend dependencies and scripts
+│   └── vite.config.js          # Vite configuration
+├── packet_sniffer/             # Scapy-based network monitoring tool
+│   ├── tests/                  # Packet sniffer tests
+│   ├── Dockerfile              # Packet sniffer container image definition
+│   ├── main.py                 # Packet sniffer entry point
+│   └── requirements.txt        # Packet sniffer Python dependencies
+├── .env.example                # Example environment configuration
+├── docker-compose.yaml         # Container orchestration
+└── README.md                   # Project overview
+</code></pre></div>
             </div>
         </div>
 
@@ -238,5 +261,5 @@
 
 <!--
 MkDocs version : 1.6.1
-Build Date UTC : 2026-05-12 16:36:11.540650+00:00
+Build Date UTC : 2026-05-13 17:41:59.282869+00:00
 -->
