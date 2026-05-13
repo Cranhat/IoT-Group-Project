@@ -1,0 +1,7 @@
+__pycache__/
+*.py[codz]
+*.pyo
+.venv/
+venv/
+env/
+certs/
