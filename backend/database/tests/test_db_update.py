@@ -1,8 +1,8 @@
 import pytest
 from unittest.mock import MagicMock
 from psycopg2.sql import Composed
-from backend.database.src.db_update import update_table
-from backend.database.src.objects import User
+from database.src.db_update import update_table
+from database.src.objects import User
 
 @pytest.fixture
 def mock_cursor():

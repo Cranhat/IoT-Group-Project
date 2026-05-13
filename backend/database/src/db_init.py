@@ -26,6 +26,7 @@ task_logs_initialization = """
         task_id SERIAL PRIMARY KEY,
         user_id INT,
         device_id INT,
+        problem TEXT,
         status TEXT,
         timestamp TIMESTAMP DEFAULT NOW(),
 

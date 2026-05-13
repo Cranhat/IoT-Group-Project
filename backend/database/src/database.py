@@ -1,11 +1,12 @@
-from backend.database.src.db_init import *
-from backend.database.src.db_fetch import *
-from backend.database.src.db_insert import *
-from backend.database.src.db_update import *
-from backend.database.src.objects import *
-from fastapi import FastAPI, Depends, HTTPException #shows warnings but works fine
+from database.src.db_init import *
+from database.src.db_fetch import *
+from database.src.db_insert import *
+from database.src.db_update import *
+from database.src.objects import *
+from fastapi import HTTPException #shows warnings but works fine
 from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
+import os
 
 ALLOWED_TABLES = {"users", "passwords", "devices", "task_logs", "task_result_logs", "http_logs"}
 TABLE_MODELS = {
@@ -18,21 +19,12 @@ TABLE_MODELS = {
 }
 
 class Database:
-    def __init__(self, host="localhost", dbname="postgres", user="postgres", password="postgres", port=5432):
-        self.host = host
-        self.dbname = dbname
-        self.user = user
-        self.password = password
-        self.port = port
-        self.app = FastAPI()
-        self._setup_routes()
-        self.app.add_middleware(
-            CORSMiddleware,
-            allow_origins=["http://localhost:5173"],
-            allow_credentials=True,
-            allow_methods=["*"],
-            allow_headers=["*"],
-        )
+    def __init__(self):
+        self.host = os.getenv("DB_HOST", "db")
+        self.dbname = os.getenv("POSTGRES_DB")
+        self.user = os.getenv("POSTGRES_USER")
+        self.password = os.getenv("POSTGRES_PASSWORD")
+        self.port = int(os.getenv("HOST_PORT_DB", 5432))
         
     def __enter__(self):
         return self
@@ -66,68 +58,22 @@ class Database:
         conn = self.get_conn()
         curr = conn.cursor()
 
-        self.sendQuery(users_initialization, conn, curr)
-        self.sendQuery(passwords_initialization, conn, curr)
-        conn.commit()
+        try:
+            self.sendQuery(users_initialization, conn, curr)
+            self.sendQuery(passwords_initialization, conn, curr)
+            self.sendQuery(devices_initialization, conn, curr)
+            self.sendQuery(task_logs_initialization, conn, curr)
+            self.sendQuery(task_result_logs_initialization, conn, curr)
+            self.sendQuery(http_logs_initialization, conn, curr)
 
-        self.close_conn(conn, curr)
+            conn.commit()
+        except Exception as e:
+            conn.rollback()
+            raise e
+        finally:
+            self.close_conn(conn, curr)
 
     @staticmethod
     def validate_table(table: str):
         if table not in ALLOWED_TABLES:
             raise HTTPException(status_code=400, detail="Invalid table")
-
-    def _setup_routes(self):  
-        @self.app.get("/{table}")
-        def get_table(table: str, db=Depends(self.get_db)):
-            self.validate_table(table)
-            conn, curr = db
-            data = fetch_table(table, curr)
-            return {"table": table, "data": data}
-
-        @self.app.get("/{table}/{id}")
-        def get_row_by_id(table: str, id: int, db=Depends(self.get_db)):
-            self.validate_table(table)
-            conn, curr = db
-            data = self.fetch_table_where(table, id, curr)
-            if not data:
-                raise HTTPException(status_code=404, detail="Not found")
-            return {"table": table, "id": id, "data": data}
-
-        @self.app.post("/{table}")
-        def insert(table: str, payload: dict, db=Depends(self.get_db)):
-            self.validate_table(table)
-            Model = TABLE_MODELS.get(table)
-            try:
-                validated_data = Model(**payload)
-            except Exception as e:
-                raise HTTPException(status_code=422, detail=str(e))
-
-            conn, curr = db
-            try:
-                insert_into_table(curr, table, validated_data)
-                conn.commit()
-            except Exception as e:
-                conn.rollback()
-                raise HTTPException(status_code=500, detail=str(e))
-
-            return {"message": f"{table} inserted successfully"}
-
-        @self.app.put("/{table}/{id}")
-        def update(table: str, id: int, payload: dict, db=Depends(self.get_db)):
-            self.validate_table(table)
-            Model = TABLE_MODELS.get(table)
-            try:
-                validated_data = Model(**payload)
-            except Exception as e:
-                raise HTTPException(status_code=422, detail=str(e))
-
-            conn, curr = db
-            try:
-                update_table(curr, table, validated_data, {"id": id})
-                conn.commit()
-            except Exception as e:
-                conn.rollback()
-                raise HTTPException(status_code=500, detail=str(e))
-
-            return {"message": f"{table} updated successfully"}
