@@ -92,3 +92,5 @@ ipython_config.py
 node_modules/
 
 venv/
+
+docs/documentation/site/
