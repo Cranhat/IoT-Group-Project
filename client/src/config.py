@@ -1,10 +1,11 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
-SERVER_HOST = "localhost"  # Change to the server machine's LAN IP or DNS name.
-PORT = 5000
-DEVICE_ID = "pi-node-01"
+SERVER_HOST = os.getenv("SERVER_HOST", "localhost")  # Change to the server machine's LAN IP or DNS name.
+PORT = int(os.getenv("PORT", "5000"))
+DEVICE_ID = os.getenv("DEVICE_ID", "pi-node-01")
 
 USE_TLS = False  # Set True when using real certs.
 

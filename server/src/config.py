@@ -1,9 +1,10 @@
+import os
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
-BIND_HOST = "0.0.0.0"
-PORT = 5000
+BIND_HOST = os.getenv("BIND_HOST", "0.0.0.0")
+PORT = int(os.getenv("PORT", "5000"))
 
 USE_TLS = False  # Set True when using real certs.
 
