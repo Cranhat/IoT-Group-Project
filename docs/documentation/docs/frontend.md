@@ -1,3 +1,4 @@
+# Frontend
 The frontend is a modern single-page application (SPA) built with **Vue.js 3** and **Vite**.
 
 ### Tech Stack

@@ -1,7 +1,14 @@
-## Packet Sniffer
+# Packet Sniffer
 The packet sniffer is responsible for monitoring network traffic on a specific port and logging relevant data.
 
-### Workflow
+## Key Features
+- **Scapy Integration**: Uses Scapy for low-level packet capture.
+- **Filtering**: Specifically monitors the `MONITORED_PORT`.
+- **Decoding**: Attempts to decode payloads as UTF-8 for readability.
+- **Logging**: Provides detailed info about captured packets including source/destination IP and ports.
+- **Storing**: Data packets are being stored in database. Allows to track past network activities.
+
+## Workflow
 ```puml
 @startuml
 skinparam backgroundColor #FFFFFF
@@ -36,9 +43,3 @@ stop
 
 @enduml
 ```
-
-### Key Features
-- **Scapy Integration**: Uses Scapy for low-level packet capture.
-- **Filtering**: Specifically monitors the `MONITORED_PORT`.
-- **Decoding**: Attempts to decode payloads as UTF-8 for readability.
-- **Logging**: Provides detailed info about captured packets including source/destination IP and ports.

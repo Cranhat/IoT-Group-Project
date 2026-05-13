@@ -1,4 +1,4 @@
-## Test framework
+# Tests
 Every class shall be tested. Tests will be run automatically after push to check if it doesnt brake the program.
 
 Test framework:
