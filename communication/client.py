@@ -21,11 +21,11 @@ class SecureClient:
         host = input("input server ip: ")
 
         try:
-            self._connect(host)
+            self.connect(host)
             
             while True:
-                self._send_loop()
-                self._recv_loop()
+                self.send_loop()
+                self.recv_loop()
 
         except Exception as e:
             print(f"Error: {e}")
@@ -33,7 +33,7 @@ class SecureClient:
         finally:
             self._cleanup()
 
-    def _connect(self, host):
+    def connect(self, host):
         addr_info = socket.getaddrinfo(
             host,
             self.port,
@@ -62,7 +62,7 @@ class SecureClient:
 
         raise ConnectionError("client: failed to connect")
 
-    def _send_loop(self):
+    def send_loop(self):
         try:
             msg = input()
             if not msg:
@@ -76,7 +76,7 @@ class SecureClient:
             print(f"send error: {e}")
             return False
 
-    def _recv_loop(self):
+    def recv_loop(self):
         try:
             data = self.sfd.recv(self.buf_size - 1)
 
