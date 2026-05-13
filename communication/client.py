@@ -12,16 +12,20 @@ class SecureClient:
 
     def _create_ssl_context(self):
         ctx = ssl.create_default_context()
-        ctx.check_hostname = False
-        ctx.verify_mode = ssl.CERT_NONE
+        ctx.load_cert_chain("client0.crt", "client0.key")
+        ctx.load_verify_locations("ca.pem")
+        ctx.verify_mode = ssl.CERT_REQUIRED
         return ctx
 
     def start(self):
         host = input("input server ip: ")
 
         try:
-            self._connect(host)
-            self._chat_loop()
+            self.connect(host)
+            
+            while True:
+                self.send_loop()
+                self.recv_loop()
 
         except Exception as e:
             print(f"Error: {e}")
@@ -29,7 +33,7 @@ class SecureClient:
         finally:
             self._cleanup()
 
-    def _connect(self, host):
+    def connect(self, host):
         addr_info = socket.getaddrinfo(
             host,
             self.port,
@@ -45,7 +49,7 @@ class SecureClient:
                 self.sfd.connect(sockaddr)
                 self.sfd = self.ctx.wrap_socket(
                     self.sfd,
-                    server_hostname=host
+                    server_hostname='serv'
                 )
 
                 return  # sukces
@@ -58,20 +62,37 @@ class SecureClient:
 
         raise ConnectionError("client: failed to connect")
 
-    def _chat_loop(self):
-        while True:
-            mesg = input()
-            mesg += "\n"
+    def send_loop(self):
+        try:
+            msg = input()
+            if not msg:
+                return False
 
-            self.sfd.sendall(mesg.encode())
+            self.sfd.sendall((msg + "\n").encode())
+            
+            return True
 
+        except Exception as e:
+            print(f"send error: {e}")
+            return False
+
+    def recv_loop(self):
+        try:
             data = self.sfd.recv(self.buf_size - 1)
 
             if not data:
                 print("client recv: connection closed")
-                break
+                return False
 
-            print(data.decode())
+            print("\n" + data.decode(), end="")
+            
+            return True
+
+        except Exception as e:
+            print(f"recv error: {e}")
+            return False     
+            
+            
 
     def _cleanup(self):
         if self.sfd:

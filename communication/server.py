@@ -3,11 +3,13 @@ import ssl
 
 
 class SecureServer:
-    def __init__(self, host="0.0.0.0", port=3000, backlog=5, buf_size=1024):
+    def __init__(self, host="0.0.0.0", port=3000, backlog=5, buf_size=100):
         self.host = host
         self.port = port
         self.backlog = backlog
         self.buf_size = buf_size
+        
+        self._mesg = None
 
         self.sfd = None
         self.cfd = None
@@ -22,15 +24,19 @@ class SecureServer:
 
         ctx.load_cert_chain("server.crt", "server.key")
         ctx.load_verify_locations("ca.pem")
-        ctx.verify_mode = ssl.CERT_NONE
+        ctx.verify_mode = ssl.CERT_REQUIRED
+
+
 
         return ctx
 
     def start(self):
         try:
-            self._create_socket()
-            self._accept_connection()
-            self._handle_client()
+            self.create_socket()
+            self.accept_connection()
+            while True:
+                self.recv_mesg()
+                self.send_echo()
 
         except Exception as e:
             print(f"Error: {e}")
@@ -38,7 +44,7 @@ class SecureServer:
         finally:
             self._cleanup()
 
-    def _create_socket(self):
+    def create_socket(self):
         self.sfd = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         print(f"Server socket = {self.sfd.fileno()}")
 
@@ -48,26 +54,41 @@ class SecureServer:
 
         print("server: waiting to connect...")
 
-    def _accept_connection(self):
+    def accept_connection(self):
         raw_cfd, self.addr = self.sfd.accept()
         self.cfd = self.ctx.wrap_socket(raw_cfd, server_side=True)
 
         print(f"Accepted socket fd = {self.cfd.fileno()}")
         print(f"Connection from {self.addr}")
 
-    def _handle_client(self):
-        while True:
+    def recv_mesg(self):
+        try:
             data = self.cfd.recv(self.buf_size - 1)
 
             if not data:
                 print("server recv: connection closed")
-                break
+                return False
 
-            msg = data.decode()
-            print(f"message [{len(data)}]:\n{msg}")
+            self._msg = data.decode()
+            print(f"message [{len(data)}]:\n{self._msg}")
 
-            response = f"echo: {msg}"
+            return True
+
+        except Exception as e:
+            print(f"recv error: {e}")
+
+            return False
+
+    def send_echo(self):
+        try:
+            response = f"echo: {self._msg}"
             self.cfd.sendall(response.encode())
+
+            return True
+
+        except Exception as e:
+            print(f"send error: {e}")
+            return False
 
     def _cleanup(self):
         try:
