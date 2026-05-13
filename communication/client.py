@@ -22,7 +22,10 @@ class SecureClient:
 
         try:
             self._connect(host)
-            self._chat_loop()
+            
+            while True:
+                self._send_loop()
+                self._recv_loop()
 
         except Exception as e:
             print(f"Error: {e}")
@@ -59,20 +62,37 @@ class SecureClient:
 
         raise ConnectionError("client: failed to connect")
 
-    def _chat_loop(self):
-        while True:
-            mesg = input()
-            mesg += "\n"
+    def _send_loop(self):
+        try:
+            msg = input()
+            if not msg:
+                return False
 
-            self.sfd.sendall(mesg.encode())
+            self.sfd.sendall((msg + "\n").encode())
+            
+            return True
 
+        except Exception as e:
+            print(f"send error: {e}")
+            return False
+
+    def _recv_loop(self):
+        try:
             data = self.sfd.recv(self.buf_size - 1)
 
             if not data:
                 print("client recv: connection closed")
-                break
+                return False
 
-            print(data.decode())
+            print("\n" + data.decode(), end="")
+            
+            return True
+
+        except Exception as e:
+            print(f"recv error: {e}")
+            return False     
+            
+            
 
     def _cleanup(self):
         if self.sfd:
