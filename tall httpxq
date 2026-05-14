@@ -1,0 +1,24 @@
+[33mcommit 9b9362cb9d07815fa96f3fd1a880e25920b8fc7d[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mfrontend[m[33m, [m[1;31morigin/frontend[m[33m)[m
+Merge: e6a244d 8a76fc9
+Author: nicole-jarczewska <nicole.jarczewska@gmail.com>
+Date:   Wed May 13 22:18:21 2026 +0200
+
+    Merge branch 'frontend' of https://github.com/Cranhat/IoT-Group-Project into frontend
+
+[33mcommit e6a244d19bc0414df788dec7071b0db7f74ea4c1[m
+Author: nicole-jarczewska <nicole.jarczewska@gmail.com>
+Date:   Wed May 13 22:11:38 2026 +0200
+
+    Added frontend. Added connection from database to frontend. Fixes for database functions
+
+[33mcommit 8a76fc91079a4e65a930b5270d92d2bf0f3f8ed3[m
+Author: nicole-jarczewska <nicole.jarczewska@gmail.com>
+Date:   Wed May 13 22:11:38 2026 +0200
+
+    Added frontend. Added connection from database to frontend. Fixes for database functions
+
+[33mcommit 5416b9d4e736b375c47ab7d21c7f0b022842884d[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m)[m
+Author: cranhat <cyprian.burdzy@gmail.com>
+Date:   Tue May 12 20:00:34 2026 +0200
+
+    fix: use env vars for postgres healthcheck to avoid role errors

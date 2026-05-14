@@ -1,7 +1,26 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
+import { ref } from 'vue'
+
+import LoginPage from './components/LoginPage.vue'
+import Dashboard from './components/Dashboard.vue'
+
+const loggedIn = ref(false)
+const currentUser = ref(null)
+
+function handleLoginSuccess(user) {
+  currentUser.value = user
+  loggedIn.value = true
+}
 </script>
 
 <template>
-  <HelloWorld />
+  <LoginPage
+    v-if="!loggedIn"
+    @login-success="handleLoginSuccess"
+  />
+
+  <Dashboard
+    v-else
+    :user="currentUser"
+  />
 </template>

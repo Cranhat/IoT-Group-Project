@@ -1,13 +1,18 @@
 import pytest
 import os
 import sys
+from pathlib import Path
 import logging
 from unittest.mock import MagicMock, patch, call
 
 os.environ.setdefault("MONITORED_PORT", "8080")
 os.environ.setdefault("SNIFFER_TIMEOUT", "10")
 
-from packet_sniffer.main import signal_handler, check_permissions, process_packet, main
+PACKET_SNIFFER_DIR = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(PACKET_SNIFFER_DIR))
+
+
+from main import signal_handler, check_permissions, process_packet, main
 
 
 # --- signal_handler tests ---
@@ -21,12 +26,12 @@ def test_signal_handler_exits(caplog):
 
 # --- check_permissions tests ---
 
-@patch("packet_sniffer.main.os.geteuid", create=True, return_value=0)
+@patch("main.os.geteuid", create=True, return_value=0)
 def test_check_permissions_as_root(mock_geteuid):
     assert check_permissions() is True
 
 
-@patch("packet_sniffer.main.os.geteuid", create=True, return_value=1000)
+@patch("main.os.geteuid", create=True, return_value=1000)
 def test_check_permissions_not_root(mock_geteuid, caplog):
     with caplog.at_level(logging.WARNING):
         result = check_permissions()
@@ -129,10 +134,10 @@ def test_process_packet_handles_exception(caplog):
 
 # --- main tests ---
 
-@patch("packet_sniffer.main.sniff")
-@patch("packet_sniffer.main.check_permissions", return_value=True)
-@patch("packet_sniffer.main.time.sleep")
-@patch("packet_sniffer.main.signal.signal")
+@patch("main.sniff")
+@patch("main.check_permissions", return_value=True)
+@patch("main.time.sleep")
+@patch("main.signal.signal")
 def test_main_runs_sniffer(mock_signal, mock_sleep, mock_check, mock_sniff):
     main()
 
@@ -146,20 +151,20 @@ def test_main_runs_sniffer(mock_signal, mock_sleep, mock_check, mock_sniff):
     assert call_kwargs["store"] is False
 
 
-@patch("packet_sniffer.main.sniff", side_effect=PermissionError("denied"))
-@patch("packet_sniffer.main.check_permissions", return_value=False)
-@patch("packet_sniffer.main.time.sleep")
-@patch("packet_sniffer.main.signal.signal")
+@patch("main.sniff", side_effect=PermissionError("denied"))
+@patch("main.check_permissions", return_value=False)
+@patch("main.time.sleep")
+@patch("main.signal.signal")
 def test_main_permission_error_exits(mock_signal, mock_sleep, mock_check, mock_sniff):
     with pytest.raises(SystemExit) as exc_info:
         main()
     assert exc_info.value.code == 1
 
 
-@patch("packet_sniffer.main.sniff", side_effect=RuntimeError("network down"))
-@patch("packet_sniffer.main.check_permissions", return_value=True)
-@patch("packet_sniffer.main.time.sleep")
-@patch("packet_sniffer.main.signal.signal")
+@patch("main.sniff", side_effect=RuntimeError("network down"))
+@patch("main.check_permissions", return_value=True)
+@patch("main.time.sleep")
+@patch("main.signal.signal")
 def test_main_generic_error_exits(mock_signal, mock_sleep, mock_check, mock_sniff):
     with pytest.raises(SystemExit) as exc_info:
         main()
