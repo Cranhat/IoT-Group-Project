@@ -72,6 +72,8 @@ services:
       - .env
     environment:
       MONITORED_PORT: ${SERVER_SNIFFER_PORT:-5000}
+      SNIFFER_NAME: server_sniffer
+      BACKEND_API_URL: http://backend:8000
     volumes:
       - ./packet_sniffer:/app
 
@@ -91,6 +93,8 @@ services:
       - .env
     environment:
       MONITORED_PORT: ${BACKEND_SNIFFER_PORT:-8000}
+      SNIFFER_NAME: backend_sniffer
+      BACKEND_API_URL: http://localhost:8000
     volumes:
       - ./packet_sniffer:/app
 
