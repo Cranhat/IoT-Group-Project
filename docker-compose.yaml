@@ -56,11 +56,30 @@ services:
       - ./frontend:/app
       - /app/node_modules 
 
-  packet_sniffer:
+  server_sniffer:
     build:
       context: ./packet_sniffer 
       dockerfile: Dockerfile
-    container_name: iot_sniffer
+    container_name: iot_server_sniffer
+    restart: unless-stopped
+    network_mode: "service:server"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    depends_on:
+      - server
+    env_file:
+      - .env
+    environment:
+      MONITORED_PORT: ${SERVER_SNIFFER_PORT:-5000}
+    volumes:
+      - ./packet_sniffer:/app
+
+  backend_sniffer:
+    build:
+      context: ./packet_sniffer 
+      dockerfile: Dockerfile
+    container_name: iot_backend_sniffer
     restart: unless-stopped
     network_mode: "service:backend"
     cap_add:
@@ -70,8 +89,45 @@ services:
       - backend
     env_file:
       - .env
+    environment:
+      MONITORED_PORT: ${BACKEND_SNIFFER_PORT:-8000}
     volumes:
       - ./packet_sniffer:/app
+
+  client:
+    build:
+      context: ./client 
+      dockerfile: Dockerfile
+    container_name: iot_client
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      SERVER_HOST: ${CLIENT_SERVER_HOST:-server}
+      PORT: ${CLIENT_PORT:-5000}
+    depends_on:
+      - server
+      - backend
+    volumes:
+      - ./client:/app
+
+  server:
+    build:
+      context: ./server 
+      dockerfile: Dockerfile
+    container_name: iot_server
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+    env_file:
+      - .env
+    environment:
+      BIND_HOST: ${SERVER_BIND_HOST:-0.0.0.0}
+      PORT: ${SERVER_PORT:-5000}
+    ports:
+      - "${HOST_PORT_SERVER:-5000}:5000"
+    volumes:
+      - ./server:/app
 
 volumes:
   pgdata:

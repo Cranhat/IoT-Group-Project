@@ -1,8 +1,21 @@
 import psycopg2
 import os
+from pathlib import Path
+
+from dotenv import load_dotenv
+
+
+PROJECT_ROOT = Path(__file__).resolve().parent.parent
+load_dotenv(PROJECT_ROOT / ".env")
+
+
+def default_db_host():
+    if Path("/.dockerenv").exists():
+        return "db"
+    return "localhost"
 
 conn = psycopg2.connect(
-    host = os.getenv("DB_HOST", "db"),
+    host = os.getenv("DB_HOST", default_db_host()),
     dbname = os.getenv("POSTGRES_DB"),
     user = os.getenv("POSTGRES_USER"),
     password = os.getenv("POSTGRES_PASSWORD"),
