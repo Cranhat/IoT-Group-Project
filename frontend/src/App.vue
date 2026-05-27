@@ -2,14 +2,17 @@
 import { ref } from 'vue'
 
 import LoginPage from './components/LoginPage.vue'
-import Dashboard from './components/Dashboard.vue'
+import DashboardPage from './components/Dashboard.vue'
+import AdminPage from './components/AdminPage.vue'
 
 const loggedIn = ref(false)
 const currentUser = ref(null)
+const currentPage = ref('dashboard')
 
 function handleLoginSuccess(user) {
   currentUser.value = user
   loggedIn.value = true
+  currentPage.value = 'dashboard'
 }
 </script>
 
@@ -19,8 +22,15 @@ function handleLoginSuccess(user) {
     @login-success="handleLoginSuccess"
   />
 
-  <Dashboard
+  <DashboardPage
+    v-else-if="currentPage === 'dashboard'"
+    :user="currentUser"
+    @go-admin="currentPage = 'admin'"
+  />
+
+  <AdminPage
     v-else
     :user="currentUser"
+    @go-dashboard="currentPage = 'dashboard'"
   />
 </template>

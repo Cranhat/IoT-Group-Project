@@ -3,16 +3,29 @@
     <header class="topbar">
       <div>
         <h1>Dashboard</h1>
+
         <p>
           Logged in as
           <strong>{{ user?.name }}</strong>
+
           <span v-if="user?.privilege_type">
             — {{ user.privilege_type }}
           </span>
         </p>
       </div>
 
-      <button @click="refreshAll">Refresh</button>
+      <div class="topbar-actions">
+        <button
+          v-if="user?.privilege_type === 'administrator'"
+          @click="emit('go-admin')"
+        >
+          Admin Panel
+        </button>
+
+        <button @click="refreshAll">
+          Refresh
+        </button>
+      </div>
     </header>
 
     <section class="new-task-card">
@@ -119,6 +132,10 @@ const props = defineProps({
     required: true,
   },
 })
+
+const emit = defineEmits([
+  'go-admin'
+])
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -242,6 +259,11 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   margin: 6px 0 0;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 12px;
 }
 
 button {

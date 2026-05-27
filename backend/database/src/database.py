@@ -66,6 +66,23 @@ class Database:
             self.sendQuery(task_result_logs_initialization, conn, curr)
             self.sendQuery(http_logs_initialization, conn, curr)
 
+            curr.execute("SELECT COUNT(*) FROM users")
+            user_count = curr.fetchone()[0]
+
+            if user_count == 0:
+                curr.execute("""
+                    INSERT INTO users (name, privilege_type)
+                    VALUES ('admin', 'administrator')
+                    RETURNING user_id
+                """)
+
+                admin_id = curr.fetchone()[0]
+
+                curr.execute("""
+                    INSERT INTO passwords (user_id, password)
+                    VALUES (%s, %s)
+                """, (admin_id, "1234"))
+
             conn.commit()
         except Exception as e:
             conn.rollback()

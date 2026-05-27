@@ -13,6 +13,10 @@ class TaskRequest(BaseModel):
     user_id: int
     problem: str
 
+class AdminUserCreate(BaseModel):
+    name: str
+    password: str
+    privilege_type: str
 
 @router.get("/tasks")
 def get_tasks(user_id: int, db=Depends(db_instance.get_db)):
@@ -112,6 +116,36 @@ def create_task(request: TaskRequest, db=Depends(db_instance.get_db)):
 
     except HTTPException:
         raise
+
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+    
+
+@router.post("/add/users")
+def add_user(request: AdminUserCreate, db=Depends(db_instance.get_db)):
+    conn, curr = db
+
+    try:
+        curr.execute("""
+            INSERT INTO users (name, privilege_type)
+            VALUES (%s, %s)
+            RETURNING user_id;
+        """, (request.name, request.privilege_type))
+
+        user_id = curr.fetchone()[0]
+
+        curr.execute("""
+            INSERT INTO passwords (user_id, password)
+            VALUES (%s, %s);
+        """, (user_id, request.password))
+
+        conn.commit()
+
+        return {
+            "message": "User added successfully",
+            "user_id": user_id,
+        }
 
     except Exception as e:
         conn.rollback()
