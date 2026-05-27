@@ -49,9 +49,9 @@ async function login() {
     message.value = 'Login successful'
 
     emit('login-success', {
-      user_id: data.user_id,
-      name: data.name,
-      privilege_type: data.privilege_type
+      user_id: data.user_id || 1,
+      name: data.name || username.value,
+      privilege_type: data.privilege_type || 'user'
     })
   } catch (err) {
     console.error(err)

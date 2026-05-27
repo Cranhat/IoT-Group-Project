@@ -4,9 +4,10 @@ from pydantic import BaseModel
 from datetime import datetime
 import uvicorn
 
-from api.tables import router as tables_router
+from api.users import router as users_router
 from api.tasks import router as tasks_router
 from api.devices import router as devices_router
+from api.tables import router as tables_router
 from database.src.database import Database
 
 db = Database()
@@ -28,9 +29,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(tables_router)
+app.include_router(users_router)
 app.include_router(tasks_router)
 app.include_router(devices_router)
+app.include_router(tables_router)
 
 class LoginRequest(BaseModel):
     username: str
