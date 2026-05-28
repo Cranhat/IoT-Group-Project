@@ -3,6 +3,7 @@ from collections import deque
 import subprocess, tempfile, os, sys, time, socket, ssl, threading
 from protocol import send_msg, recv_msg
 from config import *
+from communication.clientcomms import SecureClient
 
 # DEVICE STATUS
 
@@ -70,7 +71,7 @@ def execute(code: str, timeout: int) -> dict:
         os.unlink(tmp)
 
 
-def task_worker(sock):
+def task_worker(comms: SecureClient):
     """
     Sends tasks from task queue for execution. 
     Sends task's result back to server. 
@@ -86,7 +87,7 @@ def task_worker(sock):
             set_task_state(Task_Status.RUNNING)
             result = execute(task["code"], task.get("timeout", 10))
             set_task_state(Task_Status.DONE)
-            send_msg(sock, {
+            send_msg(comms, {
                 "kind": "result",
                 "task_id": task["task_id"],
                 **result
@@ -98,7 +99,7 @@ def task_worker(sock):
             time.sleep(0.1)
 
 
-def heartbeat_loop(sock):
+def heartbeat_loop(comms: SecureClient):
     """
     Send device status to the server.
 
@@ -107,7 +108,7 @@ def heartbeat_loop(sock):
     """
     while True:
         try:
-            send_msg(sock, {
+            send_msg(comms, {
                 "kind":         "status",
                 "device_id":    DEVICE_ID,
                 "state":        currentDevState,
@@ -118,7 +119,7 @@ def heartbeat_loop(sock):
         time.sleep(HEARTBEAT_INTERVAL)
 
 
-def receive_loop(sock):
+def receive_loop(comms: SecureClient):
     """
     Check for messages from the server. Detect disconnect and received tasks. If task is detected then add it into device's task queue.
 
@@ -127,7 +128,7 @@ def receive_loop(sock):
     """
     while True:
         try:
-            msg = recv_msg(sock)
+            msg = recv_msg(comms)
             if msg is None:
                 print("\n[CLIENT] Server disconnected.")
                 break

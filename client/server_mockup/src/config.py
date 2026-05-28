@@ -5,7 +5,7 @@ BASE_DIR = Path(__file__).resolve().parent
 BIND_HOST = "0.0.0.0"
 PORT = 3000
 
-USE_TLS = False  # Set True when using real certs.
+USE_TLS = True  # Set True when using real certs.
 
 CERT_DIR = BASE_DIR / "certs"
 CA_CERT = str(CERT_DIR / "ca.crt")

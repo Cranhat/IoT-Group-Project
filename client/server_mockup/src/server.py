@@ -9,10 +9,11 @@ Commands:
   quit
 """
 
+import json
 import socket, ssl, threading, time, uuid
 from protocol import send_msg, recv_msg
 from config import *
-from comms import SecureServer
+from communication.comms import SecureServer
 
 pi_status  = {"state": "unknown"}
 connection = None
@@ -48,6 +49,9 @@ def receive_loop(sock):
                     print(f"         stderr  :\n{msg.get('stderr').strip()}")
                 print(f"{'='*50}\n> ", end="", flush=True)
 
+        except (UnicodeDecodeError, json.JSONDecodeError):
+            print("\n[SERVER] Received non-protocol data (transport mismatch or malformed frame).")
+            break
         except (ConnectionResetError, BrokenPipeError, OSError):
             print("\n[SERVER] Connection lost.")
             break
@@ -78,7 +82,12 @@ def main():
     print(f"[SERVER] Listening on {BIND_HOST}:{PORT} ({tls_label})")
     print(f"[SERVER] Waiting for Pi to connect...\n")
 
-    conn, addr = server_sock.accept()
+    raw_conn, addr = server_sock.accept()
+    if USE_TLS:
+        conn = comms.ctx.wrap_socket(raw_conn, server_side=True)
+    else:
+        conn = raw_conn
+
     connection = conn
     print(f"[SERVER] Pi connected from {addr}\n")
 

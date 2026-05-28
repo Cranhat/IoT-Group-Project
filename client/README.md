@@ -1,19 +1,26 @@
-# Client Bundle
+# Client
 
-Copy this entire `client/` directory to the client machine. The deployable code lives in `client/src/`.
+The runnable client lives in `client/src/`.
 
 ## Run
 
 1. Install dependencies:
-   `pip install -r requirements.txt`
-2. Edit `src/config.py` and set `SERVER_HOST` to the server machine's IP or DNS name.
-3. Start the client from the `src/` directory:
-   `python client.py`
+```bash
+pip install -r requirements.txt
+```
+2. Generate TLS files if `USE_TLS = True`:
+```bash
+bash ../communication/setup_all.sh
+```
+3. Start the client from `client/src/`:
+```bash
+python client.py
+```
 
-## Layout
+## Files
 
-- `src/client.py` - active client entry point.
-- `src/config.py` - client-side settings.
-- `src/protocol.py` - shared newline-delimited JSON message helpers.
-- `src/task_exec.py` - code responsible for task queue management and task execution.
-- `src/certs/` - optional TLS certificates if `USE_TLS = True`.
+- `src/client.py` - client entry point.
+- `src/config.py` - client settings.
+- `src/protocol.py` - JSON message helpers.
+- `src/task_exec.py` - task queue and execution helpers.
+- `communication/` - TLS key generation scripts.

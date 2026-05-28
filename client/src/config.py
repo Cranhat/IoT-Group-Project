@@ -2,11 +2,11 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
-SERVER_HOST = "127.0.0.1"  # When working in LAN network change to the server machine's LAN IP or DNS name.
+SERVER_HOST = "localhost"  # When working in LAN network change to the server machine's LAN IP or DNS name.
 PORT = 3000
 DEVICE_ID = "pi-node-01"
 
-USE_TLS = False  # Set True when using real certs.
+USE_TLS = True  # Set True when using real certs.
 
 CERT_DIR = BASE_DIR / "certs"
 CA_CERT = str(CERT_DIR / "ca.crt")
