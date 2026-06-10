@@ -57,3 +57,11 @@ http_logs_initialization = """
         
         FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE SET NULL
     ); """
+
+packet_sniffer_logs_initialization = """
+    CREATE TABLE IF NOT EXISTS packet_sniffer_logs (
+        sniffer_name TEXT NOT NULL,
+        port INT,
+        log TEXT,
+        timestamp TIMESTAMP DEFAULT NOW()
+    ); """

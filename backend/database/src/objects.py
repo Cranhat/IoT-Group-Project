@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from pydantic import BaseModel
 
 class User(BaseModel):
@@ -19,7 +21,7 @@ class Task_log(BaseModel):
     user_id: int
     device_id: int
     status: str
-    timestamp: int
+    timestamp: datetime
 
 class Task_result_log(BaseModel):
     task_id: int
@@ -27,11 +29,17 @@ class Task_result_log(BaseModel):
     result: str
     success: bool
     error_message: str
-    timestamp: int
+    timestamp: datetime
 
 class HTTP_log(BaseModel):
     request_id: int
     user_id: int
     ip_address: str
     status: str
-    timestamp: int
+    timestamp: datetime
+
+class Packet_sniffer_log(BaseModel):
+    sniffer_name: str
+    port: int
+    log: str
+    timestamp: datetime

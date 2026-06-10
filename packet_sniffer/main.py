@@ -3,10 +3,15 @@ import time
 import signal
 import sys
 import os
+import json
+import urllib.request
+from datetime import datetime
 from scapy.all import sniff, IP, TCP, Raw
 
 MONITORED_PORT = int(os.getenv("MONITORED_PORT"))
 SNIFFER_TIMEOUT = int(os.getenv("SNIFFER_TIMEOUT"))
+SNIFFER_NAME = os.getenv("SNIFFER_NAME", "packet_sniffer")
+BACKEND_API_URL = os.getenv("BACKEND_API_URL")
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -25,6 +30,30 @@ def check_permissions():
     return True
 
 
+def save_packet_log(port: int, log: str):
+    if not BACKEND_API_URL:
+        return
+
+    payload = {
+        "sniffer_name": SNIFFER_NAME,
+        "port": port,
+        "log": log,
+        "timestamp": datetime.now().isoformat(),
+    }
+    data = json.dumps(payload).encode("utf-8")
+    request = urllib.request.Request(
+        f"{BACKEND_API_URL.rstrip('/')}/tables/packet_sniffer_logs",
+        data=data,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+
+    try:
+        urllib.request.urlopen(request, timeout=2)
+    except Exception as e:
+        logger.warning(f"Failed to save packet log: {e}")
+
+
 def process_packet(packet):
     try:
         if packet.haslayer(TCP) and packet.haslayer(IP):
@@ -34,6 +63,8 @@ def process_packet(packet):
             dport = packet[TCP].dport
 
             if sport == MONITORED_PORT or dport == MONITORED_PORT:
+                matched_port = sport if sport == MONITORED_PORT else dport
+
                 if packet.haslayer(Raw):
                     raw_data = packet[Raw].load
 
@@ -47,12 +78,14 @@ def process_packet(packet):
                             for line in lines[:5]:
                                 logger.info(f"   {line.strip()}")
                             logger.info("-" * 40)
+                            save_packet_log(matched_port, decoded_data.strip())
 
                     except Exception as e:
                         logger.warning(f"UTF-8 decoding error: {e}")
                         logger.info(f"CAPTURED (Binary): [{ip_src}:{sport} -> {ip_dst}:{dport}]")
                         logger.info(f"   {raw_data[:50]}...")
                         logger.info("-" * 40)
+                        save_packet_log(matched_port, str(raw_data[:50]))
     except Exception as e:
         logger.error(f"Packet processing error: {e}", exc_info=True)
 
