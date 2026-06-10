@@ -9,7 +9,7 @@ import ssl
 import threading
 import time
 
-from config import CA_CERT, CLIENT_CERT, CLIENT_KEY, PORT, SERVER_HOST, USE_TLS
+from config import CA_CERT, CLIENT_CERT, CLIENT_KEY, PORT, SERVER_HOST, TLS_SERVER_HOSTNAME, USE_TLS
 from task_exec import heartbeat_loop, receive_loop, task_worker
 
 
@@ -27,7 +27,7 @@ def make_client_socket() -> socket.socket:
         ctx.load_verify_locations(CA_CERT)
         ctx.load_cert_chain(CLIENT_CERT, CLIENT_KEY)
         ctx.check_hostname = True
-        return ctx.wrap_socket(raw, server_hostname=SERVER_HOST)
+        return ctx.wrap_socket(raw, server_hostname=TLS_SERVER_HOSTNAME)
 
     return raw
 

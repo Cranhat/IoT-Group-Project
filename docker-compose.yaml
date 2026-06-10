@@ -109,11 +109,17 @@ services:
     environment:
       SERVER_HOST: ${CLIENT_SERVER_HOST:-server}
       PORT: ${CLIENT_PORT:-5000}
+      USE_TLS: ${USE_TLS:-true}
+      CA_CERT: /certs/ca.pem
+      CLIENT_CERT: /certs/client0.crt
+      CLIENT_KEY: /certs/client0.key
+      TLS_SERVER_HOSTNAME: ${TLS_SERVER_HOSTNAME:-serv}
     depends_on:
       - server
       - backend
     volumes:
       - ./client:/app
+      - ./communication:/certs:ro
 
   server:
     build:
@@ -128,10 +134,15 @@ services:
     environment:
       BIND_HOST: ${SERVER_BIND_HOST:-0.0.0.0}
       PORT: ${SERVER_PORT:-5000}
+      USE_TLS: ${USE_TLS:-true}
+      CA_CERT: /certs/ca.pem
+      SERVER_CERT: /certs/server.crt
+      SERVER_KEY: /certs/server.key
     ports:
       - "${HOST_PORT_SERVER:-5000}:5000"
     volumes:
       - ./server:/app
+      - ./communication:/certs:ro
 
 volumes:
   pgdata:
