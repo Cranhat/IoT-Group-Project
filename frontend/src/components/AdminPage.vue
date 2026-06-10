@@ -8,7 +8,7 @@ defineProps({
   },
 })
 
-defineEmits(['go-dashboard'])
+defineEmits(['go-dashboard', 'go-sniffer'])
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
@@ -262,6 +262,10 @@ onMounted(refreshAll)
 
       <button @click="refreshAll">
         Refresh All
+      </button>
+
+      <button @click="$emit('go-sniffer')">
+        Packet Sniffer Logs
       </button>
     </section>
 
