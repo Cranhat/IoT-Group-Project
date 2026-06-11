@@ -11,4 +11,6 @@ COPY src ./src
 
 WORKDIR /app/src
 
+RUN mkdir -p /certs
+
 CMD ["python", "-u", "client.py"]

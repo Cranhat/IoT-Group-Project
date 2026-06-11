@@ -18,8 +18,18 @@ devices_initialization = """
     CREATE TABLE IF NOT EXISTS devices (
         device_id SERIAL PRIMARY KEY,
         status TEXT NOT NULL,
-        ip_address TEXT UNIQUE
+        ip_address TEXT UNIQUE,
+        container_name TEXT,
+        device_name TEXT
     ); """
+
+devices_container_name_migration = """
+    ALTER TABLE devices ADD COLUMN IF NOT EXISTS container_name TEXT;
+"""
+
+devices_device_name_migration = """
+    ALTER TABLE devices ADD COLUMN IF NOT EXISTS device_name TEXT;
+"""
 
 task_logs_initialization = """
     CREATE TABLE IF NOT EXISTS task_logs (

@@ -15,6 +15,8 @@ class Device(BaseModel):
     device_id: int
     status: str
     ip_adress: str
+    container_name: str | None = None
+    device_name: str | None = None
 
 class Task_log(BaseModel):
     task_id: int
