@@ -9,6 +9,7 @@ from api.tasks import router as tasks_router
 from api.devices import router as devices_router
 from api.tables import router as tables_router
 from api.sniffer import router as sniffer_router
+from api.agent import router as agent_router
 from database.src.database import Database
 
 db = Database()
@@ -35,6 +36,7 @@ app.include_router(tasks_router)
 app.include_router(devices_router)
 app.include_router(tables_router)
 app.include_router(sniffer_router)
+app.include_router(agent_router)
 
 class LoginRequest(BaseModel):
     username: str

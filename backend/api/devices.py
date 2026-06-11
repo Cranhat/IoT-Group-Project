@@ -1,16 +1,22 @@
+import os
+
+import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
 from database.src.database import Database
 
-
 router = APIRouter(tags=["devices"])
 
 db_instance = Database()
+AGENT_URL = os.getenv("AGENT_URL", "http://agent:9000")
+
 
 class Device(BaseModel):
     status: str
     ip_address: str
+    container_name: str | None = None
+    device_name: str | None = None
 
 
 @router.get("/devices")
@@ -19,7 +25,7 @@ def get_devices(db=Depends(db_instance.get_db)):
 
     try:
         curr.execute("""
-            SELECT device_id, status, ip_address
+            SELECT device_id, status, ip_address, container_name, device_name
             FROM devices
             ORDER BY device_id;
         """)
@@ -31,6 +37,8 @@ def get_devices(db=Depends(db_instance.get_db)):
                 "device_id": row[0],
                 "status": row[1],
                 "ip_address": row[2],
+                "container_name": row[3],
+                "device_name": row[4],
             }
             for row in rows
         ]
@@ -39,7 +47,7 @@ def get_devices(db=Depends(db_instance.get_db)):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-    
+
 
 @router.post("/add/devices")
 def add_device(request: Device, db=Depends(db_instance.get_db)):
@@ -47,10 +55,15 @@ def add_device(request: Device, db=Depends(db_instance.get_db)):
 
     try:
         curr.execute("""
-            INSERT INTO devices (status, ip_address)
-            VALUES (%s, %s)
+            INSERT INTO devices (status, ip_address, container_name, device_name)
+            VALUES (%s, %s, %s, %s)
             RETURNING device_id;
-        """, (request.status, request.ip_address))
+        """, (
+            request.status,
+            request.ip_address,
+            request.container_name,
+            request.device_name,
+        ))
 
         device_id = curr.fetchone()[0]
 
@@ -74,10 +87,18 @@ def update_device(device_id: int, request: Device, db=Depends(db_instance.get_db
         curr.execute("""
             UPDATE devices
             SET status = %s,
-                ip_address = %s
+                ip_address = %s,
+                container_name = %s,
+                device_name = %s
             WHERE device_id = %s
             RETURNING device_id;
-        """, (request.status, request.ip_address, device_id))
+        """, (
+            request.status,
+            request.ip_address,
+            request.container_name,
+            request.device_name,
+            device_id,
+        ))
 
         updated = curr.fetchone()
 
@@ -97,7 +118,7 @@ def update_device(device_id: int, request: Device, db=Depends(db_instance.get_db
     except Exception as e:
         conn.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-    
+
 
 @router.delete("/delete/devices/{device_id}")
 def delete_device(device_id: int, db=Depends(db_instance.get_db)):
@@ -105,10 +126,40 @@ def delete_device(device_id: int, db=Depends(db_instance.get_db)):
 
     try:
         curr.execute(
-            "DELETE FROM devices WHERE device_id = %s RETURNING device_id;",
-            (device_id,)
+            """
+            SELECT container_name
+            FROM devices
+            WHERE device_id = %s;
+            """,
+            (device_id,),
         )
+        row = curr.fetchone()
 
+        if not row:
+            raise HTTPException(status_code=404, detail="Device not found")
+
+        container_name = row[0]
+        if container_name:
+            try:
+                with httpx.Client(timeout=60.0) as client:
+                    response = client.delete(
+                        f"{AGENT_URL.rstrip('/')}/devices/{container_name}"
+                    )
+                    if response.status_code >= 400:
+                        raise HTTPException(
+                            status_code=502,
+                            detail=f"Agent failed to remove container: {response.text}",
+                        )
+            except httpx.RequestError as exc:
+                raise HTTPException(
+                    status_code=503,
+                    detail=f"Agent unavailable while removing container: {exc}",
+                ) from exc
+
+        curr.execute(
+            "DELETE FROM devices WHERE device_id = %s RETURNING device_id;",
+            (device_id,),
+        )
         deleted = curr.fetchone()
 
         if not deleted:

@@ -87,6 +87,8 @@ ipython_config.py
 
 .env
 
+agent/certs/clients/
+
 .vite/
 
 node_modules/

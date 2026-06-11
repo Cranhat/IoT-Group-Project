@@ -63,6 +63,8 @@ class Database:
             self.sendQuery(users_initialization, conn, curr)
             self.sendQuery(passwords_initialization, conn, curr)
             self.sendQuery(devices_initialization, conn, curr)
+            self.sendQuery(devices_container_name_migration, conn, curr)
+            self.sendQuery(devices_device_name_migration, conn, curr)
             self.sendQuery(task_logs_initialization, conn, curr)
             self.sendQuery(task_result_logs_initialization, conn, curr)
             self.sendQuery(http_logs_initialization, conn, curr)

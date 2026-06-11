@@ -5,6 +5,7 @@ from fastapi.testclient import TestClient
 from database.src.database import Database
 from api.app import app
 from api.tables import db_instance as tables_db_instance
+from api.sniffer import db_instance as sniffer_db_instance
 from api import tables
 
 
@@ -98,5 +99,37 @@ def test_update_route(client):
     assert response.status_code == 200
     assert response.json() == {"message": "users updated successfully"}
     mock_conn.commit.assert_called_once()
+
+    app.dependency_overrides.clear()
+
+
+def test_sniffer_logs_route_filters_by_port(client):
+    mock_conn = MagicMock()
+    mock_curr = MagicMock()
+
+    app.dependency_overrides[sniffer_db_instance.get_db] = lambda: (mock_conn, mock_curr)
+
+    mock_curr.fetchall.return_value = [
+        ("server_sniffer", 5000, "packet payload", "2026-06-11T10:08:23"),
+    ]
+
+    response = client.get("/sniffer/logs?limit=25&sort=asc&port=5000")
+
+    assert response.status_code == 200
+
+    query, params = mock_curr.execute.call_args[0]
+    assert "WHERE port = %s" in query
+    assert "ORDER BY timestamp ASC" in query
+    assert params == (5000, 25)
+    assert response.json() == {
+        "logs": [
+            {
+                "sniffer_name": "server_sniffer",
+                "port": 5000,
+                "log": "packet payload",
+                "timestamp": "2026-06-11T10:08:23",
+            }
+        ],
+    }
 
     app.dependency_overrides.clear()

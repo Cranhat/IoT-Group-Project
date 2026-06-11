@@ -15,15 +15,25 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 const logs = ref([])
 const limit = ref(10)
 const sort = ref('desc')
+const portFilter = ref('')
 const message = ref('')
 
 async function fetchLogs() {
   message.value = ''
 
   try {
-    const res = await fetch(
-      `${API_URL}/sniffer/logs?limit=${limit.value}&sort=${sort.value}`
-    )
+    const params = new URLSearchParams({
+      limit: limit.value,
+      sort: sort.value,
+    })
+
+    const normalizedPort = String(portFilter.value).trim()
+
+    if (normalizedPort) {
+      params.set('port', normalizedPort)
+    }
+
+    const res = await fetch(`${API_URL}/sniffer/logs?${params.toString()}`)
 
     const data = await res.json()
 
@@ -80,8 +90,28 @@ onMounted(fetchLogs)
         </select>
       </label>
 
+      <label>
+        Port
+        <input
+          v-model="portFilter"
+          type="number"
+          min="1"
+          max="65535"
+          placeholder="Any"
+          @keyup.enter="fetchLogs"
+        />
+      </label>
+
       <button @click="fetchLogs">
-        Refresh
+        Apply
+      </button>
+
+      <button
+        v-if="portFilter"
+        class="secondary-button"
+        @click="portFilter = ''; fetchLogs()"
+      >
+        Clear
       </button>
     </section>
 
@@ -153,10 +183,17 @@ onMounted(fetchLogs)
 
 .controls-card {
   display: flex;
+  flex-wrap: wrap;
   gap: 16px;
   align-items: center;
   padding: 18px;
   margin-bottom: 20px;
+}
+
+.controls-card label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .logs-card {
@@ -172,11 +209,21 @@ button {
   cursor: pointer;
 }
 
-select {
+.secondary-button {
+  background: #4b5563;
+}
+
+select,
+input {
   padding: 8px;
   border-radius: 6px;
+  border: 1px solid #9ca3af;
   background: rgb(225, 239, 231);
   color: #010512;
+}
+
+input {
+  width: 96px;
 }
 
 table {

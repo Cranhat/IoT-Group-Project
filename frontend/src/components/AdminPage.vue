@@ -22,8 +22,11 @@ const showRequests = ref(false)
 
 const showUserModal = ref(false)
 const showDeviceModal = ref(false)
+const showProvisionModal = ref(false)
+const provisioning = ref(false)
 
 const message = ref('')
+const provisionName = ref('')
 
 const newUser = ref({
   name: '',
@@ -135,6 +138,38 @@ async function addUser() {
   }
 }
 
+async function provisionDockerDevice() {
+  message.value = ''
+  provisioning.value = true
+
+  try {
+    const res = await fetch(`${API_URL}/devices/provision`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        device_name: provisionName.value || null,
+      }),
+    })
+
+    const data = await res.json()
+
+    if (!res.ok) {
+      message.value = data.detail || 'Could not provision device'
+      return
+    }
+
+    provisionName.value = ''
+    showProvisionModal.value = false
+    message.value = `Docker device provisioned: ${data.device_name || data.device_id}`
+    await fetchDevices()
+  } catch (err) {
+    console.error(err)
+    message.value = 'Agent or server error'
+  } finally {
+    provisioning.value = false
+  }
+}
+
 async function addDevice() {
   message.value = ''
 
@@ -176,6 +211,8 @@ async function updateDevice(device) {
       body: JSON.stringify({
         ip_address: device.ip_address,
         status: device.status,
+        container_name: device.container_name || null,
+        device_name: device.device_name || null,
       }),
     })
 
@@ -260,6 +297,10 @@ onMounted(refreshAll)
         Add Device
       </button>
 
+      <button @click="showProvisionModal = true">
+        Provision Docker Device
+      </button>
+
       <button @click="refreshAll">
         Refresh All
       </button>
@@ -284,7 +325,9 @@ onMounted(refreshAll)
           <thead>
             <tr>
               <th>ID</th>
-              <th>IP Address</th>
+              <th>Name</th>
+              <th>Container</th>
+              <th>IP / Device ID</th>
               <th>Status</th>
               <th>Save</th>
               <th>Delete</th>
@@ -294,6 +337,10 @@ onMounted(refreshAll)
           <tbody>
             <tr v-for="device in devices" :key="device.device_id">
               <td>{{ device.device_id }}</td>
+
+              <td>{{ device.device_name || '—' }}</td>
+
+              <td>{{ device.container_name || '—' }}</td>
 
               <td>
                 <input v-model="device.ip_address" />
@@ -436,6 +483,33 @@ onMounted(refreshAll)
 
             <button type="submit">
               Create User
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div v-if="showProvisionModal" class="modal-backdrop">
+      <div class="modal">
+        <h2>Provision Docker Device</h2>
+        <p class="modal-hint">
+          Creates a new peripheral container, copies TLS certificates with docker cp,
+          and registers the device in the system.
+        </p>
+
+        <form @submit.prevent="provisionDockerDevice">
+          <input
+            v-model="provisionName"
+            placeholder="Device name (optional), e.g. sensor-01"
+          />
+
+          <div class="modal-actions">
+            <button type="button" @click="showProvisionModal = false">
+              Cancel
+            </button>
+
+            <button type="submit" :disabled="provisioning">
+              {{ provisioning ? 'Provisioning...' : 'Create Device' }}
             </button>
           </div>
         </form>
@@ -638,6 +712,13 @@ th {
 .modal h2 {
   margin-top: 0;
   color: #020a26;
+}
+
+.modal-hint {
+  margin-top: 0;
+  color: #374151;
+  font-size: 14px;
+  line-height: 1.4;
 }
 
 .modal form {
