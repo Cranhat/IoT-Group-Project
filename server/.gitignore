@@ -1,0 +1,13 @@
+__pycache__/
+*.py[codz]
+*.pyo
+.venv/
+venv/
+env/
+
+certs/
+*.srl
+*.crt
+*.key
+*.csr
+*.pem
