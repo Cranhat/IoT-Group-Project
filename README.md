@@ -1,125 +1,42 @@
-# Running
+# IoT-Group-Project
 
-This is a Python-based client-server application using mutual TLS authentication (mTLS).
+### Requirements
+- Python 3.10+
+- Node.js 18+ (with npm)
+- PostgreSQL database
 
-To run this application, you need the following TLS materials:
+### Create a virtual environment && install needed tools (bash):
+cd backend/database
+python -m venv venv
 
-- CA certificate: ca.pem
-- CA private key: ca.key
-- Server:
-  - private key: server.key
-  - certificate: server.crt
-- Client:
-  - private key: client0.key
-  - certificate: client0.crt
+    Windows:    venv\Scripts\activate
+    Linux:      source venv/bin/activate
 
-## How to generate needed keys
+pip install fastapi uvicorn psycopg2-binary
 
-1. Generate Certificate Authority (CA)
+### Create a database connection:
+python backend/main.py
 
-```
-./genca.sh
-```
+### Run Vue server:
+cd frontend
+npm install
+npm run dev
 
-Or generate manually:
+### Run full stack with Docker:
+cp .env.example .env
+docker compose up --build
 
-Create a private key for the CA:
+### Provision a peripheral device (Docker):
+1. Open Admin Panel in the frontend.
+2. Click **Provision Docker Device**.
+3. The agent creates a new client container, copies TLS certs with `docker cp`, and registers the device.
 
-```
-openssl genrsa -out ca.key 4096
-```
-
-Generate a self-signed CA certificate from the private key ca.key:
-
-```
-openssl req -x509 -new -nodes -key ca.key -sha256 -days 3650 -out ca.pem
-```
-
-2. Generate Server Certificate
-
-```
-./keyserver.sh
+CLI alternative (inside Docker, no local Python needed):
+```bash
+docker compose exec agent python scripts/provision_device.py sensor-01
 ```
 
-Or generate manually:
-
-Create server private key:
-
+Mock mode (no new container created):
+```bash
+docker compose exec -e PROVISION_MOCK=true agent python scripts/provision_device.py sensor-01
 ```
-openssl genrsa -out server.key 2048
-```
-
-Create a certificate signing request (CSR):
-
-```
-openssl req -new -key server.key -out server.csr -subj "/C=PL/ST=DN/L=Wroc/O=../OU=../CN=serv" -passout pass:IoT-p
-```
-
-Sign the server certificate with CA:
-
-```
-openssl x509 -req -in server.csr -CA ca.pem -CAkey ca.key -CAcreateserial -out server.crt -days 365 -sha256
-```
-
-3. Generate Client Certificate
-
-```
-./keyclient.sh
-```
-
-Or generate manually:
-
-Create client private key:
-
-```
-openssl genrsa -out client0.key 2048
-```
-
-Create CSR:
-
-```
-openssl req -new -key client0.key -out client0.csr -subj "/C=PL/ST=DN/L=Wroc/O=../OU=../CN=.." -passout pass:IoT-p
-```
-
-Sign the client certificate:
-
-```
-openssl x509 -req -in client0.csr -CA ca.pem -CAkey ca.key -CAcreateserial -out client0.crt -days 365 -sha256
-```
-
-### Setup script
-
-- Make sure you have  installed:
--- OpenSSL
-
-if you don't 
-
-```
-sudo apt install openssl
-```
-
-Then generate CA, server, and client certificates:
-
-```
-cd communication
-./setup_all.sh
-```
-
-### Run the Python server:
-```
-python3 server.py
-```
-
-### Run the Python client:
-```
-python3 client.py
-```
-
-When started, the client will prompt for the server IP address:
-
-```
-input server ip:
-```
-
-Enter the IP address of the server (e.g. 127.0.0.1 for local testing).
-
