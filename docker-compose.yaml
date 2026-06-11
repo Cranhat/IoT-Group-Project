@@ -35,6 +35,12 @@ services:
     volumes:
       - ./backend:/app
     command: uvicorn api.app:app --host 0.0.0.0 --port 8000 --reload --reload-dir /app/api
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:8000/', timeout=2)\""]
+      interval: 5s
+      timeout: 3s
+      retries: 12
+      start_period: 10s
     
   frontend:
     build:
@@ -67,7 +73,10 @@ services:
       - NET_ADMIN
       - NET_RAW
     depends_on:
-      - server
+      backend:
+        condition: service_healthy
+      server:
+        condition: service_started
     env_file:
       - .env
     environment:
@@ -88,7 +97,8 @@ services:
       - NET_ADMIN
       - NET_RAW
     depends_on:
-      - backend
+      backend:
+        condition: service_healthy
     env_file:
       - .env
     environment:

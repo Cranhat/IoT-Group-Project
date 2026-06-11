@@ -14,7 +14,7 @@ class Password(BaseModel):
 class Device(BaseModel):
     device_id: int
     status: str
-    ip_adress: str
+    ip_address: str
     container_name: str | None = None
     device_name: str | None = None
 
@@ -45,3 +45,9 @@ class Packet_sniffer_log(BaseModel):
     port: int
     log: str
     timestamp: datetime
+
+    def __init__(self, **data):
+        if isinstance(data.get("log"), str):
+            data["log"] = data["log"].replace("\x00", "")
+
+        super().__init__(**data)

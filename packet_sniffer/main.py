@@ -12,9 +12,15 @@ MONITORED_PORT = int(os.getenv("MONITORED_PORT"))
 SNIFFER_TIMEOUT = int(os.getenv("SNIFFER_TIMEOUT"))
 SNIFFER_NAME = os.getenv("SNIFFER_NAME", "packet_sniffer")
 BACKEND_API_URL = os.getenv("BACKEND_API_URL")
+BACKEND_SAVE_RETRIES = int(os.getenv("BACKEND_SAVE_RETRIES", "5"))
+BACKEND_SAVE_RETRY_DELAY = float(os.getenv("BACKEND_SAVE_RETRY_DELAY", "1"))
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(message)s')
 logger = logging.getLogger(__name__)
+
+
+def sanitize_log_text(log: str):
+    return log.replace("\x00", "")
 
 
 def signal_handler(sig, frame):
@@ -32,7 +38,9 @@ def check_permissions():
 
 def save_packet_log(port: int, log: str):
     if not BACKEND_API_URL:
-        return
+        return False
+
+    log = sanitize_log_text(log)
 
     payload = {
         "sniffer_name": SNIFFER_NAME,
@@ -48,10 +56,18 @@ def save_packet_log(port: int, log: str):
         method="POST",
     )
 
-    try:
-        urllib.request.urlopen(request, timeout=2)
-    except Exception as e:
-        logger.warning(f"Failed to save packet log: {e}")
+    last_error = None
+    for attempt in range(1, BACKEND_SAVE_RETRIES + 1):
+        try:
+            urllib.request.urlopen(request, timeout=2)
+            return True
+        except Exception as e:
+            last_error = e
+            if attempt < BACKEND_SAVE_RETRIES:
+                time.sleep(BACKEND_SAVE_RETRY_DELAY)
+
+    logger.warning(f"Failed to save packet log after {BACKEND_SAVE_RETRIES} attempts: {last_error}")
+    return False
 
 
 def process_packet(packet):

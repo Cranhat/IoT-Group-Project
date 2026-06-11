@@ -11,6 +11,7 @@ db_instance = Database()
 def get_sniffer_logs(
     limit: int = Query(10, ge=1, le=100),
     sort: str = Query("desc"),
+    port: int | None = Query(None, ge=1, le=65535),
     db=Depends(db_instance.get_db),
 ):
     conn, curr = db
@@ -19,14 +20,24 @@ def get_sniffer_logs(
         raise HTTPException(status_code=400, detail="Sort must be asc or desc")
 
     try:
+        where_clause = ""
+        params = []
+
+        if port is not None:
+            where_clause = "WHERE port = %s"
+            params.append(port)
+
+        params.append(limit)
+
         curr.execute(
             f"""
             SELECT sniffer_name, port, log, timestamp
             FROM packet_sniffer_logs
+            {where_clause}
             ORDER BY timestamp {sort.upper()}
             LIMIT %s;
             """,
-            (limit,),
+            tuple(params),
         )
 
         rows = curr.fetchall()

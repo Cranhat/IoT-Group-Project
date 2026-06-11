@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock
 from psycopg2.sql import Composed
 from database.src.db_insert import insert_into_table
-from database.src.objects import User, Device
+from database.src.objects import User, Device, Packet_sniffer_log
 
 @pytest.fixture
 def mock_cursor():
@@ -18,13 +18,13 @@ def test_insert_user(mock_cursor):
     assert values == [1, "test_user", "admin"]
 
 def test_insert_device(mock_cursor):
-    device = Device(device_id=1, status="online", ip_adress="192.168.1.1")
+    device = Device(device_id=1, status="online", ip_address="192.168.1.1")
     insert_into_table(mock_cursor, "devices", device)
     
     mock_cursor.execute.assert_called_once()
     query, values = mock_cursor.execute.call_args[0]
     assert isinstance(query, Composed)
-    assert values == [1, "online", "192.168.1.1"]
+    assert values == [1, "online", "192.168.1.1", None, None]
 
 def test_insert_dict(mock_cursor):
     data = {"id": 1, "name": "test"}
@@ -34,3 +34,17 @@ def test_insert_dict(mock_cursor):
     query, values = mock_cursor.execute.call_args[0]
     assert isinstance(query, Composed)
     assert values == [1, "test"]
+
+def test_insert_packet_sniffer_log_strips_null_bytes(mock_cursor):
+    log = Packet_sniffer_log(
+        sniffer_name="server_sniffer",
+        port=5000,
+        log="hello\x00world",
+        timestamp="2026-06-11T10:19:01",
+    )
+    insert_into_table(mock_cursor, "packet_sniffer_logs", log)
+
+    mock_cursor.execute.assert_called_once()
+    query, values = mock_cursor.execute.call_args[0]
+    assert isinstance(query, Composed)
+    assert values[2] == "helloworld"

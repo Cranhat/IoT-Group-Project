@@ -1,4 +1,5 @@
 import pytest
+import json
 import os
 import sys
 from pathlib import Path
@@ -12,7 +13,7 @@ PACKET_SNIFFER_DIR = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PACKET_SNIFFER_DIR))
 
 
-from main import signal_handler, check_permissions, process_packet, main
+from main import signal_handler, check_permissions, process_packet, save_packet_log, sanitize_log_text, main
 
 
 # --- signal_handler tests ---
@@ -130,6 +131,33 @@ def test_process_packet_handles_exception(caplog):
     with caplog.at_level(logging.ERROR):
         process_packet(packet)
     assert "Packet processing error" in caplog.text
+
+
+def test_save_packet_log_retries_transient_backend_refusal(caplog):
+    """Retries backend writes so startup races do not drop packet logs immediately."""
+    with patch("main.BACKEND_API_URL", "http://backend:8000"), \
+         patch("main.BACKEND_SAVE_RETRIES", 2), \
+         patch("main.BACKEND_SAVE_RETRY_DELAY", 0.1), \
+         patch("main.time.sleep") as mock_sleep, \
+         patch("main.urllib.request.urlopen", side_effect=[OSError("connection refused"), MagicMock()]) as mock_urlopen:
+        with caplog.at_level(logging.WARNING):
+            assert save_packet_log(8080, "payload") is True
+
+    assert mock_urlopen.call_count == 2
+    mock_sleep.assert_called_once_with(0.1)
+    assert "Failed to save packet log" not in caplog.text
+
+
+def test_save_packet_log_strips_null_bytes_before_posting():
+    with patch("main.BACKEND_API_URL", "http://backend:8000"), \
+         patch("main.urllib.request.urlopen") as mock_urlopen:
+        assert save_packet_log(5000, "abc\x00def") is True
+
+    request = mock_urlopen.call_args[0][0]
+    payload = json.loads(request.data.decode("utf-8"))
+
+    assert payload["log"] == "abcdef"
+    assert sanitize_log_text("a\x00b") == "ab"
 
 
 # --- main tests ---
