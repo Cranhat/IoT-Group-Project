@@ -40,3 +40,19 @@ Mock mode (no new container created):
 ```bash
 docker compose exec -e PROVISION_MOCK=true agent python scripts/provision_device.py sensor-01
 ```
+
+### Server-Client setup & connection
+Both services are launched automatically along with all docker setup process \[`docker compose up --build`\].
+1. First docker sets up TLS encryption process using `cert_gen` service that generates all the necessary keys and certificates.
+2. `client` and `server` services wait for the certification set-up process to be completed.
+3. Then above services are launched consecutively.
+
+To access `client` and `server` services run:
+- `docker attach iot_client`
+- `docker attach iot_server`
+
+Command available on the server (server sends them to client for execution in remote environment):
+- `send <code>` - sends one-line Python scripts to client for execution
+- `file <path>` - sends full .py file to client for execution \(root of the path is in the *server/src* directory\)
+- `status` - prints client's status information
+- `quit` - exits server app

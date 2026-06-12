@@ -95,4 +95,19 @@ node_modules/
 
 venv/
 
-docs/documentation/site/
+docs/documentation/site/# Python
+__pycache__/
+*.py[codz]
+*.pyo
+.venv/
+venv/
+env/
+
+# TLS artefacts — never commit private keys
+*.key
+*.crt
+*.csr
+*.pem
+*.srl
+.tls-ca/
+certs/

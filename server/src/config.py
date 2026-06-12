@@ -3,17 +3,14 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 
+BIND_HOST = os.environ.get("BIND_HOST", "0.0.0.0")
+PORT      = int(os.environ.get("PORT", "3000"))
 
-def env_bool(name: str, default: bool = False) -> bool:
-    return os.getenv(name, str(default)).strip().lower() in {"1", "true", "yes", "on"}
+USE_TLS = os.environ.get("USE_TLS", "true").lower() in ("1", "true", "yes")
 
-
-BIND_HOST = os.getenv("BIND_HOST", "0.0.0.0")
-PORT = int(os.getenv("PORT", "5000"))
-
-USE_TLS = env_bool("USE_TLS", False)
-
-CERT_DIR = Path(os.getenv("CERT_DIR", BASE_DIR / "certs"))
-CA_CERT = os.getenv("CA_CERT", str(CERT_DIR / "ca.crt"))
-SERVER_CERT = os.getenv("SERVER_CERT", str(CERT_DIR / "server.crt"))
-SERVER_KEY = os.getenv("SERVER_KEY", str(CERT_DIR / "server.key"))
+# Cert paths — defaults to the communication/ subdir next to this file.
+# Overridden by environment variables in Docker.
+_COMM_DIR  = BASE_DIR / "communication"
+CA_CERT     = os.environ.get("CA_CERT",     str(_COMM_DIR / "ca.pem"))
+SERVER_CERT = os.environ.get("SERVER_CERT", str(_COMM_DIR / "server.crt"))
+SERVER_KEY  = os.environ.get("SERVER_KEY",  str(_COMM_DIR / "server.key"))

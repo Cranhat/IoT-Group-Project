@@ -1,5 +1,8 @@
 
-*.sh
+# CA working directory (holds ca.key — never commit private keys)
+.tls-ca/
+
+# Generated TLS artefacts — regenerate with setup_all.sh
 *.srl
 *.crt
 *.key

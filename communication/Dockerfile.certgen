@@ -1,0 +1,4 @@
+FROM python:3.11-slim
+RUN pip install --no-cache-dir cryptography
+WORKDIR /app
+CMD ["python3", "communication/make_certs.py"]
