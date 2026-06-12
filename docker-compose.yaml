@@ -145,6 +145,8 @@ services:
       dockerfile: Dockerfile
     container_name: iot_client
     restart: unless-stopped
+    stdin_open: true
+    tty: true
     env_file:
       - .env
     environment:
@@ -156,8 +158,12 @@ services:
       CLIENT_KEY: /certs/client0.key
       TLS_SERVER_HOSTNAME: ${TLS_SERVER_HOSTNAME:-serv}
     depends_on:
-      - server
-      - backend
+      server:
+        condition: service_started
+      backend:
+        condition: service_healthy
+      cert_gen:
+        condition: service_completed_successfully
     volumes:
       - ./client:/app
       - ./communication:/certs:ro
@@ -170,6 +176,9 @@ services:
     restart: unless-stopped
     stdin_open: true
     tty: true
+    depends_on:
+      cert_gen:
+        condition: service_completed_successfully
     env_file:
       - .env
     environment:
@@ -184,6 +193,16 @@ services:
     volumes:
       - ./server:/app
       - ./communication:/certs:ro
+
+  cert_gen:
+    build:
+      context: .
+      dockerfile: communication/Dockerfile.certgen
+    container_name: iot_cert_gen
+    volumes:
+      - ./communication:/app/communication
+      - ./server/src/communication:/app/server/src/communication
+      - ./client/src/communication:/app/client/src/communication
 
 volumes:
   pgdata:

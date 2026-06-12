@@ -1,2 +1,1 @@
-# Dev / cert-generation only
-cryptography
+# No external runtime dependencies.

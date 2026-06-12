@@ -1,3 +1,4 @@
+import os
 import socket
 import ssl
 from pathlib import Path
@@ -70,7 +71,7 @@ class SecureClient:
                 self.sfd.connect(sockaddr)
                 self.sfd = self.ctx.wrap_socket(
                     self.sfd,
-                    server_hostname='serv'
+                    server_hostname=os.environ.get("TLS_SERVER_HOSTNAME", "serv")
                 )
 
                 return  # sukces
