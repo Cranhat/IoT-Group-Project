@@ -51,8 +51,3 @@ class Packet_sniffer_log(BaseModel):
 
         super().__init__(**data)
 
-class Communication_response(BaseModel):
-    task_id: str
-    response: str
-    timestamp: datetime = Field(default_factory=datetime.now)
-

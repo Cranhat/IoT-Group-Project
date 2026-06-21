@@ -132,47 +132,6 @@ def save_task_result_to_db(task_id, msg):
         print(f"\n[SERVER] Failed to save task result: {e}\n> ", end="", flush=True)
 
 
-def save_response_to_db(task_id, msg):
-    try:
-        # Format the response from client stdout and stderr
-        stdout = msg.get("stdout", "").strip()
-        stderr = msg.get("stderr", "").strip()
-        
-        response_text = stdout
-        if stderr:
-            if response_text:
-                response_text += f"\nError: {stderr}"
-            else:
-                response_text = f"Error: {stderr}"
-                
-        if not response_text:
-            response_text = f"Exit code: {msg.get('exit_code', 0)}"
-
-        # Default backend URL is http://backend:8000
-        backend_url = os.environ.get("BACKEND_API_URL", "http://backend:8000")
-        url = f"{backend_url.rstrip('/')}/tables/communication_responses"
-        
-        payload = {
-            "task_id": str(task_id),
-            "response": response_text,
-            "timestamp": datetime.now().isoformat()
-        }
-        
-        data = json.dumps(payload).encode("utf-8")
-        req = urllib.request.Request(
-            url,
-            data=data,
-            headers={"Content-Type": "application/json"},
-            method="POST"
-        )
-        
-        with urllib.request.urlopen(req, timeout=5) as response:
-            pass
-        print(f"\n[SERVER] Successfully saved response for task {task_id} to database.\n> ", end="", flush=True)
-    except Exception as e:
-        print(f"\n[SERVER] Failed to save response to database: {e}\n> ", end="", flush=True)
-
-
 def receive_loop(sock):
     global pi_status
     print("[SERVER] Receive loop started")
@@ -204,7 +163,6 @@ def receive_loop(sock):
                 print(f"{'='*50}\n> ", end="", flush=True)
 
                 # Save the response in the database in a background thread
-                threading.Thread(target=save_response_to_db, args=(task_id, msg), daemon=True).start()
                 threading.Thread(target=save_task_result_to_db, args=(task_id, msg), daemon=True).start()
 
 

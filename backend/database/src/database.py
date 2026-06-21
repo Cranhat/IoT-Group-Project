@@ -8,7 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import psycopg2
 import os
 
-ALLOWED_TABLES = {"users", "passwords", "devices", "task_logs", "task_result_logs", "http_logs", "packet_sniffer_logs", "communication_responses"}
+ALLOWED_TABLES = {"users", "passwords", "devices", "task_logs", "task_result_logs", "http_logs", "packet_sniffer_logs"}
 TABLE_MODELS = {
     "users": User,
     "passwords": Password,
@@ -16,8 +16,7 @@ TABLE_MODELS = {
     "task_logs": Task_log,
     "task_result_logs": Task_result_log,
     "http_logs": HTTP_log,
-    "packet_sniffer_logs": Packet_sniffer_log,
-    "communication_responses": Communication_response
+    "packet_sniffer_logs": Packet_sniffer_log
 }
 
 class Database:
@@ -70,7 +69,6 @@ class Database:
             self.sendQuery(task_result_logs_initialization, conn, curr)
             self.sendQuery(http_logs_initialization, conn, curr)
             self.sendQuery(packet_sniffer_logs_initialization, conn, curr)
-            self.sendQuery(communication_responses_initialization, conn, curr)
 
             curr.execute("SELECT COUNT(*) FROM users")
             user_count = curr.fetchone()[0]

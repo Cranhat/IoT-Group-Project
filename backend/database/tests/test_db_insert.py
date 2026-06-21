@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import MagicMock
 from psycopg2.sql import Composed
 from database.src.db_insert import insert_into_table
-from database.src.objects import User, Device, Packet_sniffer_log, Communication_response
+from database.src.objects import User, Device, Packet_sniffer_log, Task_result_log
 
 @pytest.fixture
 def mock_cursor():
@@ -49,16 +49,19 @@ def test_insert_packet_sniffer_log_strips_null_bytes(mock_cursor):
     assert isinstance(query, Composed)
     assert values[2] == "helloworld"
 
-def test_insert_communication_response(mock_cursor):
+def test_insert_task_result_log(mock_cursor):
     from datetime import datetime
-    resp = Communication_response(
-        task_id="abc12345",
-        response="Calculated value: 3.1415",
+    resp = Task_result_log(
+        task_id=123,
+        device_id=1,
+        result="Calculated value: 3.1415",
+        success=True,
+        error_message="",
         timestamp=datetime.fromisoformat("2026-06-20T12:00:00")
     )
-    insert_into_table(mock_cursor, "communication_responses", resp)
+    insert_into_table(mock_cursor, "task_result_logs", resp)
     
     mock_cursor.execute.assert_called_once()
     query, values = mock_cursor.execute.call_args[0]
     assert isinstance(query, Composed)
-    assert values == ["abc12345", "Calculated value: 3.1415", datetime.fromisoformat("2026-06-20T12:00:00")]
+    assert values == [123, 1, "Calculated value: 3.1415", True, "", datetime.fromisoformat("2026-06-20T12:00:00")]
