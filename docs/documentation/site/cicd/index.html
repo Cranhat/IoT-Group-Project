@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>CICD - IoT Group Project Documentation</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../assets/mkdocs_puml/puml.css" rel="stylesheet">
         <link href="../assets/mkdocs_puml/interaction.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -24,7 +28,7 @@
             <div class="container">
                 <a class="navbar-brand" href="..">IoT Group Project Documentation</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -32,39 +36,48 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href=".." class="nav-link">Info</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
+                                <a href="../architecture/" class="nav-link">Architecture</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../docker/" class="nav-link">Docker</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="../backend/" class="nav-link">Backend</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../frontend/" class="nav-link">Frontend</a>
                             </li>
-                            <li class="navitem">
-                                <a href="../contribution/" class="nav-link">Contribution</a>
+                            <li class="nav-item">
+                                <a href="../communication/" class="nav-link">Communication</a>
                             </li>
-                            <li class="navitem active">
-                                <a href="./" class="nav-link">CICD</a>
-                            </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../tests/" class="nav-link">Tests</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">CICD</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../contribution/" class="nav-link">Contribution</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../contribution/" class="nav-link">
+                                <a rel="prev" href="../tests/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../tests/" class="nav-link">
+                                <a rel="next" href="../contribution/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -75,22 +88,100 @@
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#cicd" class="nav-link">CI/CD</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#job-tests" class="nav-link">Job: Tests</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#kroki-pipeline" class="nav-link">Kroki pipeline</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#co-testuje-ci" class="nav-link">Co testuje CI</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#rozszerzenie-pipeline-propozycja" class="nav-link">Rozszerzenie pipeline (propozycja)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
         </ul>
     </div>
 </div></div>
                     <div class="col-md-9" role="main">
 
-<p>Using github actions</p></div>
+<h1 id="cicd">CI/CD</h1>
+<p>Pipeline CI uruchamiany jest przez <strong>GitHub Actions</strong> przy każdym push i pull request.</p>
+<p>Plik: <code>.github/workflows/ci.yml</code></p>
+<h2 id="job-tests">Job: Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Wartość</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trigger</td>
+<td><code>push</code>, <code>pull_request</code></td>
+</tr>
+<tr>
+<td>OS</td>
+<td><code>ubuntu-latest</code>, <code>windows-latest</code></td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.10, 3.11, 3.12</td>
+</tr>
+<tr>
+<td>Strategia</td>
+<td>matrix (<code>fail-fast: false</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kroki-pipeline">Kroki pipeline</h2>
+<ol>
+<li><strong>Checkout</strong> — pobranie kodu (<code>actions/checkout@v3</code>).</li>
+<li><strong>Set up Python</strong> — instalacja wersji z macierzy (<code>actions/setup-python@v4</code>).</li>
+<li><strong>Install dependencies</strong> — <code>pip install -r backend/requirements.txt</code>.</li>
+<li><strong>Run tests</strong> — <code>python -m pytest</code> z ustawionym <code>PYTHONPATH</code>:</li>
+<li>Unix: <code>backend:workspace_root</code></li>
+<li>Windows: <code>backend;workspace_root</code></li>
+</ol>
+<h2 id="co-testuje-ci">Co testuje CI</h2>
+<p>Obecnie pipeline uruchamia testy pytest z katalogów:</p>
+<ul>
+<li><code>backend/database/tests/</code></li>
+<li><code>packet_sniffer/tests/</code></li>
+</ul>
+<p>CI <strong>nie</strong> uruchamia automatycznie:</p>
+<ul>
+<li>testów integracyjnych Docker Compose,</li>
+<li>buildu frontendu,</li>
+<li>linterów.</li>
+</ul>
+<h2 id="rozszerzenie-pipeline-propozycja">Rozszerzenie pipeline (propozycja)</h2>
+<p>Przy dodawaniu nowych jobów warto rozważyć:</p>
+<ul>
+<li><code>npm run build</code> w <code>frontend/</code>,</li>
+<li>testy z wymaganiem uruchomionej bazy (service container PostgreSQL),</li>
+<li>publikację dokumentacji MkDocs na GitHub Pages po merge do <code>main</code>.</li>
+</ul></div>
             </div>
         </div>
 
@@ -98,8 +189,7 @@
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../js/jquery-3.6.0.min.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -115,7 +205,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -135,7 +225,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">

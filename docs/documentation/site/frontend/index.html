@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Frontend - IoT Group Project Documentation</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../assets/mkdocs_puml/puml.css" rel="stylesheet">
         <link href="../assets/mkdocs_puml/interaction.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -24,7 +28,7 @@
             <div class="container">
                 <a class="navbar-brand" href="..">IoT Group Project Documentation</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -32,29 +36,38 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href=".." class="nav-link">Info</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
+                                <a href="../architecture/" class="nav-link">Architecture</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../docker/" class="nav-link">Docker</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="../backend/" class="nav-link">Backend</a>
                             </li>
-                            <li class="navitem active">
-                                <a href="./" class="nav-link">Frontend</a>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Frontend</a>
                             </li>
-                            <li class="navitem">
-                                <a href="../contribution/" class="nav-link">Contribution</a>
+                            <li class="nav-item">
+                                <a href="../communication/" class="nav-link">Communication</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
+                                <a href="../tests/" class="nav-link">Tests</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="../cicd/" class="nav-link">CICD</a>
                             </li>
-                            <li class="navitem">
-                                <a href="../tests/" class="nav-link">Tests</a>
+                            <li class="nav-item">
+                                <a href="../contribution/" class="nav-link">Contribution</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
@@ -64,7 +77,7 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../contribution/" class="nav-link">
+                                <a rel="next" href="../communication/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -75,19 +88,47 @@
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="2"><a href="#frontend" class="nav-link">Frontend</a>
+            <li class="nav-item" data-bs-level="1"><a href="#frontend" class="nav-link">Frontend</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#uruchomienie-lokalne" class="nav-link">Uruchomienie lokalne</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#konfiguracja" class="nav-link">Konfiguracja</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#struktura" class="nav-link">Struktura</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#strony-aplikacji" class="nav-link">Strony aplikacji</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#integracja-z-api" class="nav-link">Integracja z API</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#skrypty-npm" class="nav-link">Skrypty npm</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#docker" class="nav-link">Docker</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -95,10 +136,119 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h2 id="frontend">Frontend</h2>
-<pre><code>Language: JavaScript
-Framework: Svelte
-</code></pre></div>
+<h1 id="frontend">Frontend</h1>
+<p>Single-page application w <strong>Vue 3</strong> z bundlerem <strong>Vite</strong>.</p>
+<h2 id="uruchomienie-lokalne">Uruchomienie lokalne</h2>
+<pre><code class="language-bash">cd frontend
+npm install
+npm run dev
+</code></pre>
+<p>Aplikacja domyślnie dostępna pod http://localhost:5173.</p>
+<h2 id="konfiguracja">Konfiguracja</h2>
+<table>
+<thead>
+<tr>
+<th>Zmienna</th>
+<th>Domyślnie</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VITE_API_URL</code></td>
+<td><code>http://localhost:8000</code></td>
+<td>Adres backendu FastAPI</td>
+</tr>
+</tbody>
+</table>
+<p>W Dockerze frontend łączy się z backendem przez sieć Compose. Ustaw <code>VITE_API_URL</code> w <code>.env</code>, jeśli backend jest na innym hoście.</p>
+<h2 id="struktura">Struktura</h2>
+<pre><code>frontend/src/
+├── main.js              # Punkt wejścia Vue
+├── App.vue              # Routing stanu (strony)
+├── style.css
+├── components/
+│   ├── LoginPage.vue    # Logowanie
+│   ├── Dashboard.vue    # Wysyłka zadań, historia
+│   ├── AdminPage.vue    # Panel admina (użytkownicy, urządzenia, wykres)
+│   ├── SnifferLogs.vue  # Lista logów sniffera
+│   └── SnifferLogDetail.vue  # Szczegóły pojedynczego logu
+└── assets/
+</code></pre>
+<h2 id="strony-aplikacji">Strony aplikacji</h2>
+<p>Nawigacja odbywa się przez stan w <code>App.vue</code> (<code>currentPage</code>), bez Vue Router.</p>
+<table>
+<thead>
+<tr>
+<th>Strona</th>
+<th>Dostęp</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Login</td>
+<td>publiczny</td>
+<td>Formularz logowania → <code>POST /login</code></td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>zalogowany</td>
+<td>Wysyłka problemów, lista zadań</td>
+</tr>
+<tr>
+<td>Admin Panel</td>
+<td><code>privilege_type === 'administrator'</code></td>
+<td>CRUD użytkowników i urządzeń, provisioning, wykres zadań</td>
+</tr>
+<tr>
+<td>Sniffer Logs</td>
+<td>admin</td>
+<td>Podgląd przechwyconych pakietów</td>
+</tr>
+<tr>
+<td>Log Detail</td>
+<td>admin</td>
+<td>Szczegóły wybranego logu</td>
+</tr>
+</tbody>
+</table>
+<h2 id="integracja-z-api">Integracja z API</h2>
+<p>Frontend komunikuje się z backendem przez <code>fetch</code>. Przykładowe endpointy:</p>
+<ul>
+<li><code>POST /login</code> — logowanie</li>
+<li><code>GET /tasks?user_id=</code> — zadania użytkownika</li>
+<li><code>POST /tasks</code> — nowe zadanie</li>
+<li><code>GET /devices</code>, <code>POST /add/devices</code>, <code>PUT /update/devices/{id}</code>, <code>DELETE /delete/devices/{id}</code></li>
+<li><code>POST /devices/provision</code> — provisioning przez agenta</li>
+<li><code>GET /sniffer/logs</code> — logi sniffera</li>
+<li><code>GET /tables/users</code>, <code>GET /tables/task_logs</code> — dane dla panelu admina</li>
+</ul>
+<h2 id="skrypty-npm">Skrypty npm</h2>
+<table>
+<thead>
+<tr>
+<th>Polecenie</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>npm run dev</code></td>
+<td>Serwer deweloperski Vite</td>
+</tr>
+<tr>
+<td><code>npm run build</code></td>
+<td>Build produkcyjny</td>
+</tr>
+<tr>
+<td><code>npm run preview</code></td>
+<td>Podgląd buildu</td>
+</tr>
+</tbody>
+</table>
+<h2 id="docker">Docker</h2>
+<p>Kontener <code>iot_frontend</code> montuje kod źródłowy i uruchamia <code>npm run dev</code> z hot-reload. Port mapowany przez <code>HOST_PORT_FRONTEND</code> (domyślnie 5173).</p></div>
             </div>
         </div>
 
@@ -106,8 +256,7 @@ Framework: Svelte
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../js/jquery-3.6.0.min.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -123,7 +272,7 @@ Framework: Svelte
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -143,7 +292,7 @@ Framework: Svelte
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">
