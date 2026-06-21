@@ -1,58 +1,117 @@
 # IoT-Group-Project
 
-### Requirements
-- Python 3.10+
-- Node.js 18+ (with npm)
-- PostgreSQL database
+Platforma IoT do bezpiecznej komunikacji z urządzeniami brzegowymi — panel webowy, REST API, provisioning kontenerów Docker, kanał TLS server↔client oraz monitorowanie ruchu sieciowego.
 
-### Create a virtual environment && install needed tools (bash):
+## Wymagania
+
+- Python 3.10+
+- Node.js 18+ (npm)
+- Docker i Docker Compose (zalecane)
+- PostgreSQL (przy uruchomieniu lokalnym bez Docker)
+
+## Szybki start (Docker)
+
+```bash
+cp .env.example .env
+# Uzupełnij POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
+docker compose up --build
+```
+
+| Serwis | Adres |
+|--------|-------|
+| Frontend | http://localhost:5173 |
+| Backend API | http://localhost:8000 |
+| Agent | http://localhost:9000 |
+
+Domyślne konto administratora (tworzone przy pierwszym starcie): `admin` / `1234`.
+
+Pełna dokumentacja: [docs/documentation/docs/index.md](docs/documentation/docs/index.md) (MkDocs).
+
+## Uruchomienie lokalne (bez Docker)
+
+### Backend
+
+```bash
 cd backend/database
 python -m venv venv
+source venv/bin/activate          # Linux
+# venv\Scripts\activate           # Windows
+pip install -r ../requirements.txt
 
-    Windows:    venv\Scripts\activate
-    Linux:      source venv/bin/activate
+# Ustaw POSTGRES_* i DB_HOST=localhost
+uvicorn api.app:app --reload --app-dir ../
+```
 
-pip install fastapi uvicorn psycopg2-binary
+### Frontend
 
-### Create a database connection:
-python backend/main.py
-
-### Run Vue server:
+```bash
 cd frontend
 npm install
 npm run dev
+```
 
-### Run full stack with Docker:
-cp .env.example .env
-docker compose up --build
+## Provisioning urządzenia (Docker)
 
-### Provision a peripheral device (Docker):
-1. Open Admin Panel in the frontend.
-2. Click **Provision Docker Device**.
-3. The agent creates a new client container, copies TLS certs with `docker cp`, and registers the device.
+1. Zaloguj się jako administrator w frontendzie.
+2. Otwórz **Admin Panel** → **Provision Docker Device**.
+3. Agent tworzy kontener klienta, kopiuje certyfikaty TLS i rejestruje urządzenie w bazie.
 
-CLI alternative (inside Docker, no local Python needed):
+CLI:
+
 ```bash
 docker compose exec agent python scripts/provision_device.py sensor-01
 ```
 
-Mock mode (no new container created):
+Tryb mock (bez nowego kontenera):
+
 ```bash
 docker compose exec -e PROVISION_MOCK=true agent python scripts/provision_device.py sensor-01
 ```
 
-### Server-Client setup & connection
-Both services are launched automatically along with all docker setup process \[`docker compose up --build`\].
-1. First docker sets up TLS encryption process using `cert_gen` service that generates all the necessary keys and certificates.
-2. `client` and `server` services wait for the certification set-up process to be completed.
-3. Then above services are launched consecutively.
+## Server ↔ Client
 
-To access `client` and `server` services run:
-- `docker attach iot_client`
-- `docker attach iot_server`
+Serwisy startują automatycznie w Docker Compose:
 
-Command available on the server (server sends them to client for execution in remote environment):
-- `send <code>` - sends one-line Python scripts to client for execution
-- `file <path>` - sends full .py file to client for execution \(root of the path is in the *server/src* directory\)
-- `status` - prints client's status information
-- `quit` - exits server app
+1. `cert_gen` generuje certyfikaty TLS.
+2. `server` i `client` startują po zakończeniu `cert_gen`.
+
+Interakcja z CLI serwera:
+
+```bash
+docker attach iot_server
+```
+
+Polecenia:
+
+| Polecenie | Opis |
+|-----------|------|
+| `send <code>` | Wyślij jednolinijkowy skrypt Python |
+| `file <path>` | Wyślij plik `.py` (ścieżka względem `server/src/`) |
+| `status` | Pokaż stan klienta |
+| `quit` | Zakończ serwer |
+
+Logi klienta: `docker attach iot_client`
+
+## Testy
+
+```bash
+pip install -r backend/requirements.txt
+PYTHONPATH=backend:. python -m pytest
+```
+
+## Struktura projektu
+
+```
+backend/          FastAPI + PostgreSQL
+frontend/         Vue 3 + Vite
+server/           Serwer TLS (zadania IoT)
+client/           Klient urządzenia
+agent/            Provisioning Docker
+packet_sniffer/   Monitorowanie ruchu TCP
+communication/    Certyfikaty TLS
+docs/documentation/  Dokumentacja MkDocs
+```
+
+## Zespół
+
+Cyprian Burdzy, Nicole Jarczewska, Natalia Kułak, Oleh Marushchak, Tomek Piaseczny

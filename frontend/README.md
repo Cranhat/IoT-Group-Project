@@ -1,5 +1,31 @@
-# Vue 3 + Vite
+# Frontend
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Vue 3 single-page application with Vite.
 
-Learn more about IDE Support for Vue in the [Vue Docs Scaling up Guide](https://vuejs.org/guide/scaling-up/tooling.html#ide-support).
+## Setup
+
+```bash
+npm install
+npm run dev
+```
+
+## Configuration
+
+Set `VITE_API_URL` to point at the FastAPI backend (default: `http://localhost:8000`).
+
+## Pages
+
+- **LoginPage** — authentication
+- **Dashboard** — send tasks, view history
+- **AdminPage** — users, devices, provisioning, request chart
+- **SnifferLogs** / **SnifferLogDetail** — packet sniffer logs (admin)
+
+See [frontend documentation](../docs/documentation/docs/frontend.md) for details.
+
+## Scripts
+
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Development server |
+| `npm run build` | Production build |
+| `npm run preview` | Preview production build |

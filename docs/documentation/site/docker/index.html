@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Backend - IoT Group Project Documentation</title>
+        <title>Docker - IoT Group Project Documentation</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -43,10 +43,10 @@
                                 <a href="../architecture/" class="nav-link">Architecture</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../docker/" class="nav-link">Docker</a>
+                                <a href="./" class="nav-link active" aria-current="page">Docker</a>
                             </li>
                             <li class="nav-item">
-                                <a href="./" class="nav-link active" aria-current="page">Backend</a>
+                                <a href="../backend/" class="nav-link">Backend</a>
                             </li>
                             <li class="nav-item">
                                 <a href="../frontend/" class="nav-link">Frontend</a>
@@ -72,12 +72,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../docker/" class="nav-link">
+                                <a rel="prev" href="../architecture/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../frontend/" class="nav-link">
+                                <a rel="next" href="../backend/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -99,25 +99,29 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#backend" class="nav-link">Backend</a>
+            <li class="nav-item" data-bs-level="1"><a href="#docker" class="nav-link">Docker</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#uruchomienie-lokalne" class="nav-link">Uruchomienie lokalne</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#struktura" class="nav-link">Struktura</a>
+            <li class="nav-item" data-bs-level="2"><a href="#serwisy" class="nav-link">Serwisy</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#baza-danych" class="nav-link">Baza danych</a>
+            <li class="nav-item" data-bs-level="2"><a href="#kolejnosc-startu" class="nav-link">Kolejność startu</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#endpointy-api" class="nav-link">Endpointy API</a>
+            <li class="nav-item" data-bs-level="2"><a href="#zmienne-srodowiskowe-env" class="nav-link">Zmienne środowiskowe (.env)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#zaleznosci" class="nav-link">Zależności</a>
+            <li class="nav-item" data-bs-level="2"><a href="#interakcja-z-serwerem-i-klientem" class="nav-link">Interakcja z serwerem i klientem</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#provisioning-urzadzenia" class="nav-link">Provisioning urządzenia</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#certyfikaty-tls" class="nav-link">Certyfikaty TLS</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -128,251 +132,175 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="backend">Backend</h1>
-<p>REST API w Pythonie (FastAPI) z warstwą dostępu do PostgreSQL.</p>
-<h2 id="uruchomienie-lokalne">Uruchomienie lokalne</h2>
-<pre><code class="language-bash">cd backend/database
-python -m venv venv
-source venv/bin/activate   # Linux
-pip install -r ../requirements.txt
-
-# Ustaw zmienne POSTGRES_* i DB_HOST=localhost
-uvicorn api.app:app --reload --app-dir ../
+<h1 id="docker">Docker</h1>
+<p>Pełny stack uruchamia się jednym poleceniem:</p>
+<pre><code class="language-bash">cp .env.example .env
+docker compose up --build
 </code></pre>
-<p>W Dockerze backend startuje automatycznie jako <code>iot_fastapi</code>.</p>
-<h2 id="struktura">Struktura</h2>
-<pre><code>backend/
-├── api/
-│   ├── app.py        # Aplikacja FastAPI, CORS, startup
-│   ├── users.py      # CRUD użytkowników
-│   ├── tasks.py      # Zadania użytkowników
-│   ├── devices.py    # CRUD urządzeń
-│   ├── agent.py      # Proxy do agenta (provisioning)
-│   ├── sniffer.py    # Odczyt logów sniffera
-│   └── tables.py     # Generyczny dostęp do tabel
-└── database/
-    └── src/
-        ├── database.py   # Połączenie, inicjalizacja tabel
-        ├── db_init.py    # DDL tabel
-        ├── db_fetch.py
-        ├── db_insert.py
-        ├── db_update.py
-        └── objects.py    # Modele Pydantic
+<h2 id="serwisy">Serwisy</h2>
+<table>
+<thead>
+<tr>
+<th>Serwis</th>
+<th>Kontener</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>db</code></td>
+<td><code>iot_postgres</code></td>
+<td>PostgreSQL 16, wolumen <code>pgdata</code></td>
+</tr>
+<tr>
+<td><code>backend</code></td>
+<td><code>iot_fastapi</code></td>
+<td>FastAPI na porcie 8000, hot-reload</td>
+</tr>
+<tr>
+<td><code>frontend</code></td>
+<td><code>iot_frontend</code></td>
+<td>Vue dev server na porcie 5173</td>
+</tr>
+<tr>
+<td><code>cert_gen</code></td>
+<td><code>iot_cert_gen</code></td>
+<td>Jednorazowe generowanie certyfikatów TLS</td>
+</tr>
+<tr>
+<td><code>server</code></td>
+<td><code>iot_server</code></td>
+<td>Serwer IoT (port 5000), tryb interaktywny</td>
+</tr>
+<tr>
+<td><code>client</code></td>
+<td><code>iot_client</code></td>
+<td>Domyślny klient urządzenia</td>
+</tr>
+<tr>
+<td><code>agent</code></td>
+<td><code>iot_agent</code></td>
+<td>Provisioning kontenerów (port 9000)</td>
+</tr>
+<tr>
+<td><code>backend_sniffer</code></td>
+<td><code>iot_backend_sniffer</code></td>
+<td>Sniffer ruchu backendu</td>
+</tr>
+<tr>
+<td><code>server_sniffer</code></td>
+<td><code>iot_server_sniffer</code></td>
+<td>Sniffer ruchu serwera</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kolejnosc-startu">Kolejność startu</h2>
+<ol>
+<li><code>cert_gen</code> generuje certyfikaty TLS i kończy działanie.</li>
+<li><code>db</code> przechodzi healthcheck (<code>pg_isready</code>).</li>
+<li><code>backend</code> startuje po zdrowej bazie, inicjalizuje tabele.</li>
+<li><code>server</code> i <code>client</code> startują po <code>cert_gen</code>.</li>
+<li><code>agent</code>, sniffery i <code>frontend</code> startują po backendzie.</li>
+</ol>
+<h2 id="zmienne-srodowiskowe-env">Zmienne środowiskowe (<code>.env</code>)</h2>
+<table>
+<thead>
+<tr>
+<th>Zmienna</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POSTGRES_USER</code>, <code>POSTGRES_PASSWORD</code>, <code>POSTGRES_DB</code></td>
+<td>Dane PostgreSQL (wymagane)</td>
+</tr>
+<tr>
+<td><code>HOST_PORT_FRONTEND</code></td>
+<td>Port frontendu na hoście (domyślnie 5173)</td>
+</tr>
+<tr>
+<td><code>HOST_PORT_BACKEND</code></td>
+<td>Port backendu na hoście (domyślnie 8000)</td>
+</tr>
+<tr>
+<td><code>HOST_PORT_AGENT</code></td>
+<td>Port agenta na hoście (domyślnie 9000)</td>
+</tr>
+<tr>
+<td><code>AGENT_URL</code></td>
+<td>URL agenta z perspektywy backendu</td>
+</tr>
+<tr>
+<td><code>DOCKER_NETWORK</code></td>
+<td>Sieć Docker (auto-wykrywana przez agenta, opcjonalna)</td>
+</tr>
+<tr>
+<td><code>PROVISION_MOCK</code></td>
+<td><code>true</code> — provisioning bez tworzenia kontenera</td>
+</tr>
+<tr>
+<td><code>SERVER_PORT</code></td>
+<td>Port serwera IoT (domyślnie 5000)</td>
+</tr>
+<tr>
+<td><code>USE_TLS</code></td>
+<td>Włączenie TLS między server a client</td>
+</tr>
+<tr>
+<td><code>TLS_SERVER_HOSTNAME</code></td>
+<td>CN certyfikatu serwera (domyślnie <code>serv</code>)</td>
+</tr>
+<tr>
+<td><code>MONITORED_PORT</code>, <code>SNIFFER_TIMEOUT</code></td>
+<td>Konfiguracja sniffera</td>
+</tr>
+</tbody>
+</table>
+<h2 id="interakcja-z-serwerem-i-klientem">Interakcja z serwerem i klientem</h2>
+<pre><code class="language-bash">docker attach iot_server   # CLI serwera (send, file, status, quit)
+docker attach iot_client     # logi klienta
 </code></pre>
-<h2 id="baza-danych">Baza danych</h2>
-<p>Tabele tworzone przy starcie (<code>initializeTables</code>):</p>
+<p>Polecenia serwera:</p>
 <table>
 <thead>
 <tr>
-<th>Tabela</th>
+<th>Polecenie</th>
 <th>Opis</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>users</code></td>
-<td>Użytkownicy (<code>name</code>, <code>privilege_type</code>)</td>
+<td><code>send &lt;code&gt;</code></td>
+<td>Wyślij jednolinijkowy skrypt Python</td>
 </tr>
 <tr>
-<td><code>passwords</code></td>
-<td>Hasła powiązane z <code>user_id</code></td>
+<td><code>file &lt;path&gt;</code></td>
+<td>Wyślij plik <code>.py</code> (ścieżka względem <code>server/src/</code>)</td>
 </tr>
 <tr>
-<td><code>devices</code></td>
-<td>Urządzenia IoT (<code>status</code>, <code>ip_address</code>, <code>container_name</code>, <code>device_name</code>)</td>
+<td><code>status</code></td>
+<td>Pokaż ostatni stan klienta</td>
 </tr>
 <tr>
-<td><code>task_logs</code></td>
-<td>Zadania wysłane z dashboardu</td>
-</tr>
-<tr>
-<td><code>task_result_logs</code></td>
-<td>Wyniki wykonania zadań</td>
-</tr>
-<tr>
-<td><code>http_logs</code></td>
-<td>Logi żądań HTTP</td>
-</tr>
-<tr>
-<td><code>packet_sniffer_logs</code></td>
-<td>Przechwycone payloady TCP</td>
+<td><code>quit</code></td>
+<td>Zakończ serwer</td>
 </tr>
 </tbody>
 </table>
-<p>Domyślny administrator (gdy baza pusta): <code>admin</code> / <code>1234</code>.</p>
-<h2 id="endpointy-api">Endpointy API</h2>
-<h3 id="autoryzacja">Autoryzacja</h3>
-<table>
-<thead>
-<tr>
-<th>Metoda</th>
-<th>Ścieżka</th>
-<th>Opis</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>POST</code></td>
-<td><code>/login</code></td>
-<td>Logowanie (<code>username</code>, <code>passcode</code>)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="uzytkownicy">Użytkownicy</h3>
-<table>
-<thead>
-<tr>
-<th>Metoda</th>
-<th>Ścieżka</th>
-<th>Opis</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>GET</code></td>
-<td><code>/users</code></td>
-<td>Lista użytkowników</td>
-</tr>
-<tr>
-<td><code>POST</code></td>
-<td><code>/add/users</code></td>
-<td>Dodaj użytkownika</td>
-</tr>
-<tr>
-<td><code>DELETE</code></td>
-<td><code>/delete/users/{user_id}</code></td>
-<td>Usuń użytkownika</td>
-</tr>
-</tbody>
-</table>
-<h3 id="zadania">Zadania</h3>
-<table>
-<thead>
-<tr>
-<th>Metoda</th>
-<th>Ścieżka</th>
-<th>Opis</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>GET</code></td>
-<td><code>/tasks?user_id=</code></td>
-<td>Zadania użytkownika</td>
-</tr>
-<tr>
-<td><code>POST</code></td>
-<td><code>/tasks</code></td>
-<td>Utwórz zadanie (<code>user_id</code>, <code>problem</code>)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="urzadzenia">Urządzenia</h3>
-<table>
-<thead>
-<tr>
-<th>Metoda</th>
-<th>Ścieżka</th>
-<th>Opis</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>GET</code></td>
-<td><code>/devices</code></td>
-<td>Lista urządzeń</td>
-</tr>
-<tr>
-<td><code>POST</code></td>
-<td><code>/add/devices</code></td>
-<td>Dodaj urządzenie</td>
-</tr>
-<tr>
-<td><code>PUT</code></td>
-<td><code>/update/devices/{device_id}</code></td>
-<td>Aktualizuj urządzenie</td>
-</tr>
-<tr>
-<td><code>DELETE</code></td>
-<td><code>/delete/devices/{device_id}</code></td>
-<td>Usuń urządzenie (+ kontener przez agenta)</td>
-</tr>
-</tbody>
-</table>
-<h3 id="agent-proxy">Agent (proxy)</h3>
-<table>
-<thead>
-<tr>
-<th>Metoda</th>
-<th>Ścieżka</th>
-<th>Opis</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>POST</code></td>
-<td><code>/devices/provision</code></td>
-<td>Provisionuj urządzenie Docker</td>
-</tr>
-<tr>
-<td><code>GET</code></td>
-<td><code>/devices/provision/{container_name}/status</code></td>
-<td>Status provisioningu</td>
-</tr>
-<tr>
-<td><code>DELETE</code></td>
-<td><code>/devices/provision/{container_name}</code></td>
-<td>Deprovisionuj urządzenie</td>
-</tr>
-</tbody>
-</table>
-<h3 id="sniffer">Sniffer</h3>
-<table>
-<thead>
-<tr>
-<th>Metoda</th>
-<th>Ścieżka</th>
-<th>Opis</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>GET</code></td>
-<td><code>/sniffer/logs?limit=&amp;sort=&amp;port=</code></td>
-<td>Logi pakietów</td>
-</tr>
-</tbody>
-</table>
-<h3 id="tabele-generyczne">Tabele (generyczne)</h3>
-<table>
-<thead>
-<tr>
-<th>Metoda</th>
-<th>Ścieżka</th>
-<th>Opis</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>GET</code></td>
-<td><code>/tables/{table}</code></td>
-<td>Odczyt tabeli</td>
-</tr>
-<tr>
-<td><code>POST</code></td>
-<td><code>/tables/{table}</code></td>
-<td>Wstaw wiersz</td>
-</tr>
-<tr>
-<td><code>PUT</code></td>
-<td><code>/tables/{table}/{id}</code></td>
-<td>Aktualizuj wiersz</td>
-</tr>
-</tbody>
-</table>
-<p>Dozwolone tabele: <code>users</code>, <code>passwords</code>, <code>devices</code>, <code>task_logs</code>, <code>task_result_logs</code>, <code>http_logs</code>, <code>packet_sniffer_logs</code>.</p>
-<h2 id="zaleznosci">Zależności</h2>
-<p>Plik <code>backend/requirements.txt</code>: FastAPI, Uvicorn, psycopg2-binary, httpx, pydantic, pytest, scapy.</p></div>
+<h2 id="provisioning-urzadzenia">Provisioning urządzenia</h2>
+<p><strong>Z UI:</strong> Admin Panel → <strong>Provision Docker Device</strong>.</p>
+<p><strong>CLI:</strong></p>
+<pre><code class="language-bash">docker compose exec agent python scripts/provision_device.py sensor-01
+</code></pre>
+<p><strong>Tryb mock (bez nowego kontenera):</strong></p>
+<pre><code class="language-bash">docker compose exec -e PROVISION_MOCK=true agent python scripts/provision_device.py sensor-01
+</code></pre>
+<h2 id="certyfikaty-tls">Certyfikaty TLS</h2>
+<p>Generowane automatycznie przez serwis <code>cert_gen</code> przy pierwszym <code>docker compose up</code>. Pliki trafiają do katalogu <code>communication/</code> (montowany jako <code>/certs</code> w kontenerach).</p>
+<p>Ręczna regeneracja (poza Dockerem):</p>
+<pre><code class="language-bash">python3 communication/make_certs.py
+</code></pre></div>
             </div>
         </div>
 

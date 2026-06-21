@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Tests - IoT Group Project Documentation</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../assets/mkdocs_puml/puml.css" rel="stylesheet">
         <link href="../assets/mkdocs_puml/interaction.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -24,7 +28,7 @@
             <div class="container">
                 <a class="navbar-brand" href="..">IoT Group Project Documentation</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -32,39 +36,48 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href=".." class="nav-link">Info</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
+                                <a href="../architecture/" class="nav-link">Architecture</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../docker/" class="nav-link">Docker</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="../backend/" class="nav-link">Backend</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../frontend/" class="nav-link">Frontend</a>
                             </li>
-                            <li class="navitem">
-                                <a href="../contribution/" class="nav-link">Contribution</a>
+                            <li class="nav-item">
+                                <a href="../communication/" class="nav-link">Communication</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Tests</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="../cicd/" class="nav-link">CICD</a>
                             </li>
-                            <li class="navitem active">
-                                <a href="./" class="nav-link">Tests</a>
+                            <li class="nav-item">
+                                <a href="../contribution/" class="nav-link">Contribution</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../cicd/" class="nav-link">
+                                <a rel="prev" href="../communication/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" class="nav-link disabled">
+                                <a rel="next" href="../cicd/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -75,19 +88,39 @@
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="2"><a href="#test-framework" class="nav-link">Test framework</a>
+            <li class="nav-item" data-bs-level="1"><a href="#tests" class="nav-link">Tests</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#uruchomienie" class="nav-link">Uruchomienie</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#lokalizacja-testow" class="nav-link">Lokalizacja testów</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#ci" class="nav-link">CI</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#mockowanie" class="nav-link">Mockowanie</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#pokrycie-obecny-stan" class="nav-link">Pokrycie (obecny stan)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -95,12 +128,74 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h2 id="test-framework">Test framework</h2>
-<p>Every class shall be tested. Tests will be run automatically after push to check if it doesnt brake the program.</p>
-<p>Test framework:
-    - pytest</p>
-<p>Mocking objects:
-    - testing.mock from default python library</p></div>
+<h1 id="tests">Tests</h1>
+<p>Testy automatyczne oparte na <strong>pytest</strong>.</p>
+<h2 id="uruchomienie">Uruchomienie</h2>
+<pre><code class="language-bash">pip install -r backend/requirements.txt
+PYTHONPATH=backend:. python -m pytest
+</code></pre>
+<p>Na Windows:</p>
+<pre><code class="language-powershell">$env:PYTHONPATH=&quot;backend;.&quot;
+python -m pytest
+</code></pre>
+<h2 id="lokalizacja-testow">Lokalizacja testów</h2>
+<table>
+<thead>
+<tr>
+<th>Katalog</th>
+<th>Zakres</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>backend/database/tests/</code></td>
+<td>Warstwa bazy: insert, fetch, update, inicjalizacja</td>
+</tr>
+<tr>
+<td><code>packet_sniffer/tests/</code></td>
+<td>Sniffer: zapis logów, przetwarzanie pakietów</td>
+</tr>
+</tbody>
+</table>
+<p>Przykładowe pliki:</p>
+<ul>
+<li><code>test_database.py</code> — inicjalizacja tabel, seed admina</li>
+<li><code>test_db_insert.py</code>, <code>test_db_fetch.py</code>, <code>test_db_update.py</code> — operacje CRUD</li>
+<li><code>test_packet_sniffer.py</code> — logika sniffera (mocki HTTP)</li>
+</ul>
+<h2 id="ci">CI</h2>
+<p>Testy uruchamiane są automatycznie w GitHub Actions na Ubuntu i Windows z Pythonem 3.10–3.12. Szczegóły: <a href="../cicd/">CICD</a>.</p>
+<h2 id="mockowanie">Mockowanie</h2>
+<p>W testach sniffera używane są mocki (<code>unittest.mock</code>) do izolacji wywołań HTTP do backendu.</p>
+<p>Testy bazy danych wymagają działającej instancji PostgreSQL ze skonfigurowanymi zmiennymi <code>POSTGRES_*</code> (lub uruchomienia w Dockerze z dostępem do <code>db</code>).</p>
+<h2 id="pokrycie-obecny-stan">Pokrycie (obecny stan)</h2>
+<table>
+<thead>
+<tr>
+<th>Moduł</th>
+<th>Testy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Backend API (FastAPI)</td>
+<td>brak dedykowanych testów</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>brak</td>
+</tr>
+<tr>
+<td>Server / Client</td>
+<td>brak</td>
+</tr>
+<tr>
+<td>Frontend</td>
+<td>brak</td>
+</tr>
+</tbody>
+</table>
+<p>Nowa logika biznesowa powinna być pokrywana testami jednostkowymi w odpowiednim katalogu <code>tests/</code>.</p></div>
             </div>
         </div>
 
@@ -108,8 +203,7 @@
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../js/jquery-3.6.0.min.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -125,7 +219,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -145,7 +239,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">
