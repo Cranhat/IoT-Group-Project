@@ -40,22 +40,28 @@
                                 <a href=".." class="nav-link">Info</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../backend/" class="nav-link">Backend</a>
+                                <a href="../architecture/" class="nav-link">Architecture</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../packet_sniffer/" class="nav-link">Packet Sniffer</a>
+                                <a href="../docker/" class="nav-link">Docker</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../backend/" class="nav-link">Backend</a>
                             </li>
                             <li class="nav-item">
                                 <a href="../frontend/" class="nav-link">Frontend</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../contribution/" class="nav-link">Contribution</a>
+                                <a href="../communication/" class="nav-link">Communication</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../tests/" class="nav-link">Tests</a>
                             </li>
                             <li class="nav-item">
                                 <a href="./" class="nav-link active" aria-current="page">CICD</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../tests/" class="nav-link">Tests</a>
+                                <a href="../contribution/" class="nav-link">Contribution</a>
                             </li>
                         </ul>
 
@@ -66,12 +72,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../contribution/" class="nav-link">
+                                <a rel="prev" href="../tests/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../tests/" class="nav-link">
+                                <a rel="next" href="../contribution/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -93,8 +99,24 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="2"><a href="#cicd" class="nav-link">CI/CD</a>
+            <li class="nav-item" data-bs-level="1"><a href="#cicd" class="nav-link">CI/CD</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#job-tests" class="nav-link">Job: Tests</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#kroki-pipeline" class="nav-link">Kroki pipeline</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#co-testuje-ci" class="nav-link">Co testuje CI</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#rozszerzenie-pipeline-propozycja" class="nav-link">Rozszerzenie pipeline (propozycja)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -102,21 +124,64 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h2 id="cicd">CI/CD</h2>
-<p>This project uses GitHub Actions for continuous integration. The workflow is triggered on every push and pull request, so code is tested before it is merged and after new changes are added to the repository.</p>
-<p>The CI job runs tests on a matrix of operating systems and Python versions:</p>
-<ul>
-<li>Operating systems: Ubuntu and Windows</li>
-<li>Python versions: 3.10, 3.11, and 3.12</li>
-</ul>
-<p>This means the same test suite is executed six times in total, covering each combination of operating system and Python version. The workflow has <code>fail-fast</code> disabled, so if one combination fails, the remaining combinations still continue. This makes it easier to see whether a problem affects only one environment or the whole project.</p>
-<p>For each matrix entry, GitHub Actions performs the following steps:</p>
+<h1 id="cicd">CI/CD</h1>
+<p>Pipeline CI uruchamiany jest przez <strong>GitHub Actions</strong> przy każdym push i pull request.</p>
+<p>Plik: <code>.github/workflows/ci.yml</code></p>
+<h2 id="job-tests">Job: Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Parametr</th>
+<th>Wartość</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Trigger</td>
+<td><code>push</code>, <code>pull_request</code></td>
+</tr>
+<tr>
+<td>OS</td>
+<td><code>ubuntu-latest</code>, <code>windows-latest</code></td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.10, 3.11, 3.12</td>
+</tr>
+<tr>
+<td>Strategia</td>
+<td>matrix (<code>fail-fast: false</code>)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kroki-pipeline">Kroki pipeline</h2>
 <ol>
-<li>Checks out the repository code.</li>
-<li>Installs the selected Python version.</li>
-<li>Upgrades <code>pip</code> and installs backend dependencies from requirements.</li>
-<li>Runs the test suite with <code>pytest</code>.</li>
-</ol></div>
+<li><strong>Checkout</strong> — pobranie kodu (<code>actions/checkout@v3</code>).</li>
+<li><strong>Set up Python</strong> — instalacja wersji z macierzy (<code>actions/setup-python@v4</code>).</li>
+<li><strong>Install dependencies</strong> — <code>pip install -r backend/requirements.txt</code>.</li>
+<li><strong>Run tests</strong> — <code>python -m pytest</code> z ustawionym <code>PYTHONPATH</code>:</li>
+<li>Unix: <code>backend:workspace_root</code></li>
+<li>Windows: <code>backend;workspace_root</code></li>
+</ol>
+<h2 id="co-testuje-ci">Co testuje CI</h2>
+<p>Obecnie pipeline uruchamia testy pytest z katalogów:</p>
+<ul>
+<li><code>backend/database/tests/</code></li>
+<li><code>packet_sniffer/tests/</code></li>
+</ul>
+<p>CI <strong>nie</strong> uruchamia automatycznie:</p>
+<ul>
+<li>testów integracyjnych Docker Compose,</li>
+<li>buildu frontendu,</li>
+<li>linterów.</li>
+</ul>
+<h2 id="rozszerzenie-pipeline-propozycja">Rozszerzenie pipeline (propozycja)</h2>
+<p>Przy dodawaniu nowych jobów warto rozważyć:</p>
+<ul>
+<li><code>npm run build</code> w <code>frontend/</code>,</li>
+<li>testy z wymaganiem uruchomionej bazy (service container PostgreSQL),</li>
+<li>publikację dokumentacji MkDocs na GitHub Pages po merge do <code>main</code>.</li>
+</ul></div>
             </div>
         </div>
 

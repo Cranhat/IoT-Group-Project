@@ -40,22 +40,28 @@
                                 <a href=".." class="nav-link">Info</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../backend/" class="nav-link">Backend</a>
+                                <a href="../architecture/" class="nav-link">Architecture</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../packet_sniffer/" class="nav-link">Packet Sniffer</a>
+                                <a href="../docker/" class="nav-link">Docker</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../backend/" class="nav-link">Backend</a>
                             </li>
                             <li class="nav-item">
                                 <a href="../frontend/" class="nav-link">Frontend</a>
                             </li>
                             <li class="nav-item">
-                                <a href="./" class="nav-link active" aria-current="page">Contribution</a>
+                                <a href="../communication/" class="nav-link">Communication</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../tests/" class="nav-link">Tests</a>
                             </li>
                             <li class="nav-item">
                                 <a href="../cicd/" class="nav-link">CICD</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../tests/" class="nav-link">Tests</a>
+                                <a href="./" class="nav-link active" aria-current="page">Contribution</a>
                             </li>
                         </ul>
 
@@ -66,12 +72,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../frontend/" class="nav-link">
+                                <a rel="prev" href="../cicd/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../cicd/" class="nav-link">
+                                <a rel="next" class="nav-link disabled">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -95,7 +101,23 @@
             
             <li class="nav-item" data-bs-level="1"><a href="#contribution" class="nav-link">Contribution</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#commit-message" class="nav-link">Commit message</a>
+            <li class="nav-item" data-bs-level="2"><a href="#pull-requesty" class="nav-link">Pull requesty</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#format-commit-message" class="nav-link">Format commit message</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#konwencje-kodu" class="nav-link">Konwencje kodu</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#lokalne-sprawdzenie-przed-pr" class="nav-link">Lokalne sprawdzenie przed PR</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#gaezie" class="nav-link">Gałęzie</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -107,12 +129,38 @@
                     <div class="col-md-9" role="main">
 
 <h1 id="contribution">Contribution</h1>
-<p>Contributing to this repository will be made with approval of at leat one member and technical leader via pull requests.</p>
-<h2 id="commit-message">Commit message</h2>
+<h2 id="pull-requesty">Pull requesty</h2>
+<p>Zmiany w repozytorium wprowadzamy przez <strong>pull requesty</strong>. Każdy PR wymaga zatwierdzenia co najmniej jednego członka zespołu oraz Technical Leadera.</p>
+<h2 id="format-commit-message">Format commit message</h2>
 <pre><code>[Topic]
 Why: [Why the change is being submitted]
 What: [What are the changes]
-</code></pre></div>
+</code></pre>
+<p>Przykład:</p>
+<pre><code>[backend] Add sniffer log pagination
+Why: Admin panel loads too many rows at once
+What: Add limit/sort query params to GET /sniffer/logs
+</code></pre>
+<h2 id="konwencje-kodu">Konwencje kodu</h2>
+<ul>
+<li><strong>Python:</strong> zgodność z istniejącym stylem modułów (<code>backend/</code>, <code>agent/</code>, <code>server/</code>, <code>client/</code>).</li>
+<li><strong>Frontend:</strong> Vue 3 Composition API (<code>&lt;script setup&gt;</code>), spójny styl CSS w komponentach.</li>
+<li><strong>Testy:</strong> nowa logika w backendzie/database — dodaj testy pytest w odpowiednim katalogu <code>tests/</code>.</li>
+<li><strong>Dokumentacja:</strong> aktualizuj pliki w <code>docs/documentation/docs/</code> przy zmianach API lub architektury.</li>
+</ul>
+<h2 id="lokalne-sprawdzenie-przed-pr">Lokalne sprawdzenie przed PR</h2>
+<pre><code class="language-bash"># Testy Python
+pip install -r backend/requirements.txt
+PYTHONPATH=backend:. python -m pytest
+
+# Frontend (opcjonalnie)
+cd frontend &amp;&amp; npm install &amp;&amp; npm run build
+
+# Stack Docker (opcjonalnie)
+docker compose up --build
+</code></pre>
+<h2 id="gaezie">Gałęzie</h2>
+<p>Pracuj na osobnych branchach feature/fix. Nie commituj plików z <code>.env</code>, certyfikatów TLS ani kluczy prywatnych.</p></div>
             </div>
         </div>
 

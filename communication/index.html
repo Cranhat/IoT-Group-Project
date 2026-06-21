@@ -8,7 +8,7 @@
         
         
         <link rel="shortcut icon" href="../img/favicon.ico">
-        <title>Frontend - IoT Group Project Documentation</title>
+        <title>Communication - IoT Group Project Documentation</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
         <link href="../css/fontawesome.min.css" rel="stylesheet">
         <link href="../css/brands.min.css" rel="stylesheet">
@@ -49,10 +49,10 @@
                                 <a href="../backend/" class="nav-link">Backend</a>
                             </li>
                             <li class="nav-item">
-                                <a href="./" class="nav-link active" aria-current="page">Frontend</a>
+                                <a href="../frontend/" class="nav-link">Frontend</a>
                             </li>
                             <li class="nav-item">
-                                <a href="../communication/" class="nav-link">Communication</a>
+                                <a href="./" class="nav-link active" aria-current="page">Communication</a>
                             </li>
                             <li class="nav-item">
                                 <a href="../tests/" class="nav-link">Tests</a>
@@ -72,12 +72,12 @@
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../backend/" class="nav-link">
+                                <a rel="prev" href="../frontend/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../communication/" class="nav-link">
+                                <a rel="next" href="../tests/" class="nav-link">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -99,33 +99,29 @@
     <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-bs-level="1"><a href="#frontend" class="nav-link">Frontend</a>
+            <li class="nav-item" data-bs-level="1"><a href="#communication" class="nav-link">Communication</a>
               <ul class="nav flex-column">
-            <li class="nav-item" data-bs-level="2"><a href="#uruchomienie-lokalne" class="nav-link">Uruchomienie lokalne</a>
-              <ul class="nav flex-column">
-              </ul>
-            </li>
-            <li class="nav-item" data-bs-level="2"><a href="#konfiguracja" class="nav-link">Konfiguracja</a>
+            <li class="nav-item" data-bs-level="2"><a href="#server-server" class="nav-link">Server (server/)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#struktura" class="nav-link">Struktura</a>
+            <li class="nav-item" data-bs-level="2"><a href="#client-client" class="nav-link">Client (client/)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#strony-aplikacji" class="nav-link">Strony aplikacji</a>
+            <li class="nav-item" data-bs-level="2"><a href="#agent-agent" class="nav-link">Agent (agent/)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#integracja-z-api" class="nav-link">Integracja z API</a>
+            <li class="nav-item" data-bs-level="2"><a href="#certyfikaty-tls-communication" class="nav-link">Certyfikaty TLS (communication/)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#skrypty-npm" class="nav-link">Skrypty npm</a>
+            <li class="nav-item" data-bs-level="2"><a href="#packet-sniffer-packet_sniffer" class="nav-link">Packet sniffer (packet_sniffer/)</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            <li class="nav-item" data-bs-level="2"><a href="#docker" class="nav-link">Docker</a>
+            <li class="nav-item" data-bs-level="2"><a href="#protoko-wiadomosci" class="nav-link">Protokół wiadomości</a>
               <ul class="nav flex-column">
               </ul>
             </li>
@@ -136,119 +132,174 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h1 id="frontend">Frontend</h1>
-<p>Single-page application w <strong>Vue 3</strong> z bundlerem <strong>Vite</strong>.</p>
-<h2 id="uruchomienie-lokalne">Uruchomienie lokalne</h2>
-<pre><code class="language-bash">cd frontend
-npm install
-npm run dev
+<h1 id="communication">Communication</h1>
+<p>Warstwa komunikacji między urządzeniami IoT oraz usługami wspierającymi.</p>
+<h2 id="server-server">Server (<code>server/</code>)</h2>
+<p>Serwer nasłuchuje na porcie 5000 (domyślnie), akceptuje <strong>jedno</strong> połączenie klienta i obsługuje interaktywne CLI.</p>
+<p><strong>Uruchomienie (Docker):</strong> automatycznie jako <code>iot_server</code>.</p>
+<p><strong>Uruchomienie lokalne:</strong></p>
+<pre><code class="language-bash">python3 communication/make_certs.py
+cd server/src
+python server.py
 </code></pre>
-<p>Aplikacja domyślnie dostępna pod http://localhost:5173.</p>
-<h2 id="konfiguracja">Konfiguracja</h2>
+<p><strong>Pliki kluczowe:</strong></p>
 <table>
 <thead>
 <tr>
-<th>Zmienna</th>
-<th>Domyślnie</th>
+<th>Plik</th>
 <th>Opis</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td><code>VITE_API_URL</code></td>
-<td><code>http://localhost:8000</code></td>
-<td>Adres backendu FastAPI</td>
+<td><code>server/src/server.py</code></td>
+<td>Główna pętla, CLI</td>
+</tr>
+<tr>
+<td><code>server/src/protocol.py</code></td>
+<td>Serializacja JSON + newline</td>
+</tr>
+<tr>
+<td><code>server/src/communication/comms.py</code></td>
+<td>TLS server socket</td>
+</tr>
+<tr>
+<td><code>server/src/config.py</code></td>
+<td><code>BIND_HOST</code>, <code>PORT</code>, <code>USE_TLS</code>, ścieżki certów</td>
 </tr>
 </tbody>
 </table>
-<p>W Dockerze frontend łączy się z backendem przez sieć Compose. Ustaw <code>VITE_API_URL</code> w <code>.env</code>, jeśli backend jest na innym hoście.</p>
-<h2 id="struktura">Struktura</h2>
-<pre><code>frontend/src/
-├── main.js              # Punkt wejścia Vue
-├── App.vue              # Routing stanu (strony)
-├── style.css
-├── components/
-│   ├── LoginPage.vue    # Logowanie
-│   ├── Dashboard.vue    # Wysyłka zadań, historia
-│   ├── AdminPage.vue    # Panel admina (użytkownicy, urządzenia, wykres)
-│   ├── SnifferLogs.vue  # Lista logów sniffera
-│   └── SnifferLogDetail.vue  # Szczegóły pojedynczego logu
-└── assets/
+<h2 id="client-client">Client (<code>client/</code>)</h2>
+<p>Klient łączy się z serwerem, wysyła heartbeat ze statusem urządzenia i wykonuje zadania Python z kolejki.</p>
+<p><strong>Uruchomienie lokalne:</strong></p>
+<pre><code class="language-bash">pip install -r requirements.txt
+python3 communication/make_certs.py
+cd client/src
+python client.py
 </code></pre>
-<h2 id="strony-aplikacji">Strony aplikacji</h2>
-<p>Nawigacja odbywa się przez stan w <code>App.vue</code> (<code>currentPage</code>), bez Vue Router.</p>
+<p><strong>Pliki kluczowe:</strong></p>
 <table>
 <thead>
 <tr>
-<th>Strona</th>
-<th>Dostęp</th>
+<th>Plik</th>
 <th>Opis</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>Login</td>
-<td>publiczny</td>
-<td>Formularz logowania → <code>POST /login</code></td>
+<td><code>client/src/client.py</code></td>
+<td>Połączenie, wątki, reconnect</td>
 </tr>
 <tr>
-<td>Dashboard</td>
-<td>zalogowany</td>
-<td>Wysyłka problemów, lista zadań</td>
+<td><code>client/src/task_exec.py</code></td>
+<td>Kolejka zadań, <code>subprocess</code></td>
 </tr>
 <tr>
-<td>Admin Panel</td>
-<td><code>privilege_type === 'administrator'</code></td>
-<td>CRUD użytkowników i urządzeń, provisioning, wykres zadań</td>
+<td><code>client/src/communication/clientcomms.py</code></td>
+<td>TLS client socket</td>
 </tr>
 <tr>
-<td>Sniffer Logs</td>
-<td>admin</td>
-<td>Podgląd przechwyconych pakietów</td>
-</tr>
-<tr>
-<td>Log Detail</td>
-<td>admin</td>
-<td>Szczegóły wybranego logu</td>
+<td><code>client/src/config.py</code></td>
+<td><code>SERVER_HOST</code>, <code>PORT</code>, certyfikaty</td>
 </tr>
 </tbody>
 </table>
-<h2 id="integracja-z-api">Integracja z API</h2>
-<p>Frontend komunikuje się z backendem przez <code>fetch</code>. Przykładowe endpointy:</p>
+<p>Klient automatycznie reconnectuje z exponential backoff (2s → max 60s).</p>
+<h2 id="agent-agent">Agent (<code>agent/</code>)</h2>
+<p>HTTP API do dynamicznego tworzenia kontenerów-urządzeń.</p>
+<table>
+<thead>
+<tr>
+<th>Endpoint</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST /provision</code></td>
+<td>Utwórz urządzenie (<code>device_name</code> opcjonalne)</td>
+</tr>
+<tr>
+<td><code>GET /provision/{container_name}/status</code></td>
+<td>Status kontenera</td>
+</tr>
+<tr>
+<td><code>DELETE /devices/{container_name}</code></td>
+<td>Usuń kontener</td>
+</tr>
+</tbody>
+</table>
+<p>Flow provisioningu:</p>
+<ol>
+<li>Generacja <code>device_id</code> i certyfikatu klienta.</li>
+<li><code>docker create</code> + <code>docker cp</code> certów + <code>docker start</code>.</li>
+<li>Rejestracja w backendzie (<code>POST /add/devices</code>).</li>
+</ol>
+<p>Szczegóły: <code>agent/README.md</code>.</p>
+<h2 id="certyfikaty-tls-communication">Certyfikaty TLS (<code>communication/</code>)</h2>
+<table>
+<thead>
+<tr>
+<th>Skrypt / plik</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>make_certs.py</code></td>
+<td>Główny generator (Python, <code>cryptography</code>)</td>
+</tr>
+<tr>
+<td><code>setup_all.sh</code></td>
+<td>Legacy (wymaga OpenSSL)</td>
+</tr>
+<tr>
+<td><code>communication/ca.pem</code></td>
+<td>Certyfikat CA (generowany, gitignored)</td>
+</tr>
+<tr>
+<td><code>communication/server.crt</code>, <code>server.key</code></td>
+<td>Cert serwera</td>
+</tr>
+<tr>
+<td><code>communication/client0.crt</code>, <code>client0.key</code></td>
+<td>Cert domyślnego klienta</td>
+</tr>
+</tbody>
+</table>
+<p>Przy <code>USE_TLS=true</code> obie strony wymagają ważnych certyfikatów podpisanych przez wspólną CA.</p>
+<h2 id="packet-sniffer-packet_sniffer">Packet sniffer (<code>packet_sniffer/</code>)</h2>
+<p>Sniffer filtruje ruch TCP na <code>MONITORED_PORT</code>, dekoduje payload i wysyła do backendu:</p>
+<pre><code>POST /tables/packet_sniffer_logs
+{
+  &quot;sniffer_name&quot;: &quot;backend_sniffer&quot;,
+  &quot;port&quot;: 8000,
+  &quot;log&quot;: &quot;...&quot;,
+  &quot;timestamp&quot;: &quot;...&quot;
+}
+</code></pre>
+<p>Wymaga uprawnień <code>NET_ADMIN</code> / <code>NET_RAW</code> (ustawione w <code>docker-compose.yaml</code>).</p>
+<p>Dwa warianty:</p>
 <ul>
-<li><code>POST /login</code> — logowanie</li>
-<li><code>GET /tasks?user_id=</code> — zadania użytkownika</li>
-<li><code>POST /tasks</code> — nowe zadanie</li>
-<li><code>GET /devices</code>, <code>POST /add/devices</code>, <code>PUT /update/devices/{id}</code>, <code>DELETE /delete/devices/{id}</code></li>
-<li><code>POST /devices/provision</code> — provisioning przez agenta</li>
-<li><code>GET /sniffer/logs</code> — logi sniffera</li>
-<li><code>GET /tables/users</code>, <code>GET /tables/task_logs</code> — dane dla panelu admina</li>
+<li><code>backend_sniffer</code> — <code>network_mode: service:backend</code>, port 8000</li>
+<li><code>server_sniffer</code> — <code>network_mode: service:server</code>, port 5000</li>
 </ul>
-<h2 id="skrypty-npm">Skrypty npm</h2>
-<table>
-<thead>
-<tr>
-<th>Polecenie</th>
-<th>Opis</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>npm run dev</code></td>
-<td>Serwer deweloperski Vite</td>
-</tr>
-<tr>
-<td><code>npm run build</code></td>
-<td>Build produkcyjny</td>
-</tr>
-<tr>
-<td><code>npm run preview</code></td>
-<td>Podgląd buildu</td>
-</tr>
-</tbody>
-</table>
-<h2 id="docker">Docker</h2>
-<p>Kontener <code>iot_frontend</code> montuje kod źródłowy i uruchamia <code>npm run dev</code> z hot-reload. Port mapowany przez <code>HOST_PORT_FRONTEND</code> (domyślnie 5173).</p></div>
+<h2 id="protoko-wiadomosci">Protokół wiadomości</h2>
+<p>Format: JSON + <code>\n</code> (UTF-8).</p>
+<h3 id="integracja-z-backendem">Integracja z backendem</h3>
+<p>Serwer IoT pełni rolę mostu między API a klientami:</p>
+<ol>
+<li>Pobiera zadania <code>pending</code> z <code>POST /internal/tasks/claim</code> (klucz urządzenia = <code>device_id</code> z heartbeatu).</li>
+<li>Wysyła je do klienta jako <code>kind: task</code>.</li>
+<li>Po otrzymaniu <code>kind: result</code> zapisuje wynik przez <code>POST /internal/tasks/{task_id}/result</code>.</li>
+</ol>
+<p>Mapowanie: <code>devices.ip_address</code> w bazie = <code>DEVICE_ID</code> klienta (np. <code>pi-node-01</code> lub id z provisioningu).</p>
+<p>Przykład zadania (server → client):</p>
+<pre><code class="language-json">{&quot;kind&quot;: &quot;task&quot;, &quot;task_id&quot;: &quot;a1b2c3d4&quot;, &quot;code&quot;: &quot;print(42)&quot;, &quot;timeout&quot;: 10}
+</code></pre>
+<p>Przykład wyniku (client → server):</p>
+<pre><code class="language-json">{&quot;kind&quot;: &quot;result&quot;, &quot;task_id&quot;: &quot;a1b2c3d4&quot;, &quot;stdout&quot;: &quot;42\n&quot;, &quot;stderr&quot;: &quot;&quot;, &quot;exit_code&quot;: 0}
+</code></pre></div>
             </div>
         </div>
 
