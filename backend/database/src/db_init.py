@@ -75,3 +75,12 @@ packet_sniffer_logs_initialization = """
         log TEXT,
         timestamp TIMESTAMP DEFAULT NOW()
     ); """
+
+communication_responses_initialization = """
+    CREATE TABLE IF NOT EXISTS communication_responses (
+        id SERIAL PRIMARY KEY,
+        task_id TEXT,
+        response TEXT,
+        timestamp TIMESTAMP DEFAULT NOW()
+    ); """
+

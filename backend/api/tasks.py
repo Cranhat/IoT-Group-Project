@@ -99,6 +99,20 @@ def create_task(request: TaskRequest, db=Depends(db_instance.get_db)):
 
         conn.commit()
 
+        # Forward task to socket server HTTP endpoint
+        try:
+            import urllib.request
+            import json
+            req = urllib.request.Request(
+                "http://server:8080/task",
+                data=json.dumps({"task_id": str(task_id), "code": request.problem}).encode(),
+                headers={"Content-Type": "application/json"}
+            )
+            with urllib.request.urlopen(req, timeout=2.0) as resp:
+                pass
+        except Exception as e:
+            print(f"Error forwarding task to socket server: {e}")
+
         return {
             "message": "Task created successfully",
             "task": {
@@ -121,6 +135,43 @@ def create_task(request: TaskRequest, db=Depends(db_instance.get_db)):
         conn.rollback()
         raise HTTPException(status_code=500, detail=str(e))
     
+
+class TaskResultRequest(BaseModel):
+    device_id: int
+    result: str
+    success: bool
+    error_message: str
+
+@router.post("/tasks/{task_id}/result")
+def save_task_result(task_id: int, request: TaskResultRequest, db=Depends(db_instance.get_db)):
+    conn, curr = db
+    try:
+        # Insert into task_result_logs
+        curr.execute("""
+            INSERT INTO task_result_logs (task_id, device_id, result, success, error_message)
+            VALUES (%s, %s, %s, %s, %s);
+        """, (
+            task_id,
+            request.device_id,
+            request.result,
+            request.success,
+            request.error_message
+        ))
+        
+        # Update task_logs status
+        status = "completed" if request.success else "failed"
+        curr.execute("""
+            UPDATE task_logs
+            SET status = %s
+            WHERE task_id = %s;
+        """, (status, task_id))
+        
+        conn.commit()
+        return {"message": "Task result saved successfully"}
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.post("/add/users")
 def add_user(request: AdminUserCreate, db=Depends(db_instance.get_db)):

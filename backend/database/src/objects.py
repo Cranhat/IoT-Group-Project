@@ -1,6 +1,5 @@
 from datetime import datetime
-
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 class User(BaseModel):
     user_id: int
@@ -51,3 +50,9 @@ class Packet_sniffer_log(BaseModel):
             data["log"] = data["log"].replace("\x00", "")
 
         super().__init__(**data)
+
+class Communication_response(BaseModel):
+    task_id: str
+    response: str
+    timestamp: datetime = Field(default_factory=datetime.now)
+
