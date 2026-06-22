@@ -132,6 +132,46 @@ def save_task_result_to_db(task_id, msg, device_name):
         print(f"\n[SERVER] Failed to save task result: {e}\n> ", end="", flush=True)
 
 
+def update_device_status_in_db(ip_address, status):
+    try:
+        backend_url = os.environ.get("BACKEND_API_URL", "http://backend:8000")
+        url = f"{backend_url.rstrip('/')}/devices/status/{ip_address}"
+        payload = {"status": status}
+        data = json.dumps(payload).encode("utf-8")
+        req = urllib.request.Request(
+            url,
+            data=data,
+            headers={"Content-Type": "application/json"},
+            method="PUT"
+        )
+        with urllib.request.urlopen(req, timeout=3.0) as response:
+            pass
+        print(f"\n[SERVER] Updated device {ip_address} status to {status} in database.\n> ", end="", flush=True)
+    except Exception as e:
+        print(f"\n[SERVER] Failed to update device {ip_address} status to {status}: {e}\n> ", end="", flush=True)
+
+
+def heartbeat_check_loop():
+    while True:
+        time.sleep(5)
+        now = time.time()
+        stale_devices = []
+        with conn_lock:
+            for device_id, msg in list(pi_statuses.items()):
+                if now - msg.get("received_at", 0) > 15:
+                    stale_devices.append(device_id)
+
+        for device_id in stale_devices:
+            print(f"\n[SERVER] Device {device_id} heartbeat timeout. Closing socket.")
+            with conn_lock:
+                sock = active_connections.get(device_id)
+                if sock:
+                    try:
+                        sock.close()
+                    except Exception:
+                        pass
+
+
 def receive_loop(sock):
     print("[SERVER] Receive loop started")
     client_device_id = None
@@ -148,10 +188,23 @@ def receive_loop(sock):
             if kind == "status":
                 device_id = msg.get("device_id")
                 client_device_id = device_id
-                
+                state = msg.get("state")
+                db_status = "online" if state == "ready" else "busy"
+
                 with conn_lock:
+                    prev_msg = pi_statuses.get(device_id)
+                    prev_state = prev_msg.get("state") if prev_msg else None
+
                     active_connections[device_id] = sock
+                    msg["received_at"] = time.time()
                     pi_statuses[device_id] = msg
+
+                if prev_state != state:
+                    threading.Thread(
+                        target=update_device_status_in_db,
+                        args=(device_id, db_status),
+                        daemon=True
+                    ).start()
                 
                 print(f"\r[PI {device_id}] state={msg.get('state')} | "
                       f"cpu={msg.get('cpu')}% | "
@@ -182,8 +235,19 @@ def receive_loop(sock):
 
     if client_device_id:
         with conn_lock:
-            active_connections.pop(client_device_id, None)
-            pi_statuses.pop(client_device_id, None)
+            if active_connections.get(client_device_id) == sock:
+                active_connections.pop(client_device_id, None)
+                pi_statuses.pop(client_device_id, None)
+                still_connected = False
+            else:
+                still_connected = True
+
+        if not still_connected:
+            threading.Thread(
+                target=update_device_status_in_db,
+                args=(client_device_id, "offline"),
+                daemon=True
+            ).start()
 
 
 def make_server_socket() -> socket.socket:
@@ -219,6 +283,20 @@ def accept_connections(server_sock, comms):
 
 def main():
     threading.Thread(target=run_http_server, daemon=True).start()
+
+    # Mark all devices offline in the database at startup
+    try:
+        backend_url = os.environ.get("BACKEND_API_URL", "http://backend:8000")
+        url = f"{backend_url.rstrip('/')}/devices/offline-all"
+        req = urllib.request.Request(url, method="POST")
+        with urllib.request.urlopen(req, timeout=3.0) as resp:
+            pass
+        print("[SERVER] Marked all devices as offline in DB at startup.")
+    except Exception as e:
+        print(f"[SERVER] Failed to mark all devices offline at startup: {e}")
+
+    # Start heartbeat check loop thread
+    threading.Thread(target=heartbeat_check_loop, daemon=True).start()
 
     comms = SecureServer(host=BIND_HOST, port=PORT)
     server_sock = comms._create_socket()
