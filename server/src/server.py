@@ -17,8 +17,8 @@ from protocol import send_msg, recv_msg
 from config import *
 from communication.comms import SecureServer
 
-pi_status  = {"state": "unknown"}
-connection = None
+active_connections = {}
+pi_statuses = {}
 conn_lock  = threading.Lock()
 
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -28,7 +28,6 @@ class TaskHTTPHandler(BaseHTTPRequestHandler):
         return
 
     def do_POST(self):
-        global connection
         if self.path == "/task":
             content_length = int(self.headers['Content-Length'])
             post_data = self.rfile.read(content_length)
@@ -36,10 +35,12 @@ class TaskHTTPHandler(BaseHTTPRequestHandler):
                 data = json.loads(post_data.decode('utf-8'))
                 task_id = data.get("task_id")
                 code = data.get("code")
+                target_device = data.get("device_name")
                 
                 with conn_lock:
-                    if connection is not None:
-                        send_msg(connection, {
+                    conn = active_connections.get(target_device) if target_device else next(iter(active_connections.values()), None)
+                    if conn is not None:
+                        send_msg(conn, {
                             "kind": "task",
                             "task_id": str(task_id),
                             "code": code
@@ -48,13 +49,13 @@ class TaskHTTPHandler(BaseHTTPRequestHandler):
                         self.send_header('Content-Type', 'application/json')
                         self.end_headers()
                         self.wfile.write(json.dumps({"status": "success"}).encode())
-                        print(f"\n[HTTP] Forwarded task {task_id} to client.\n> ", end="", flush=True)
+                        print(f"\n[HTTP] Forwarded task {task_id} to client {target_device or 'default'}.\n> ", end="", flush=True)
                     else:
                         self.send_response(503)
                         self.send_header('Content-Type', 'application/json')
                         self.end_headers()
-                        self.wfile.write(json.dumps({"error": "No client connected"}).encode())
-                        print(f"\n[HTTP] Failed to forward task {task_id}: No client connected.\n> ", end="", flush=True)
+                        self.wfile.write(json.dumps({"error": f"Client {target_device or 'default'} not connected"}).encode())
+                        print(f"\n[HTTP] Failed to forward task {task_id}: Client {target_device or 'default'} not connected.\n> ", end="", flush=True)
             except Exception as e:
                 self.send_response(500)
                 self.send_header('Content-Type', 'application/json')
@@ -80,14 +81,14 @@ def get_device_id_by_name(device_name):
         with urllib.request.urlopen(url, timeout=2.0) as resp:
             data = json.loads(resp.read().decode("utf-8"))
             for dev in data.get("devices", []):
-                if dev.get("name") == device_name:
+                if dev.get("ip_address") == device_name:
                     return int(dev.get("device_id"))
     except Exception as e:
         print(f"[SERVER] Error fetching device ID for name '{device_name}': {e}")
     return 1
 
 
-def save_task_result_to_db(task_id, msg):
+def save_task_result_to_db(task_id, msg, device_name):
     try:
         task_id_int = int(task_id)
     except (ValueError, TypeError):
@@ -100,7 +101,6 @@ def save_task_result_to_db(task_id, msg):
         success = (exit_code == 0)
 
         # Resolve the database integer device_id from the client's string device_id
-        device_name = pi_status.get("device_id")
         device_id = get_device_id_by_name(device_name)
 
         result_text = stdout
@@ -133,21 +133,27 @@ def save_task_result_to_db(task_id, msg):
 
 
 def receive_loop(sock):
-    global pi_status
     print("[SERVER] Receive loop started")
+    client_device_id = None
 
     while True:
         try:
             msg = recv_msg(sock)
             if msg is None:
-                print("\n[SERVER] Client disconnected.")
+                print(f"\n[SERVER] Client {client_device_id or 'unknown'} disconnected.")
                 break
 
             kind = msg.get("kind")
 
             if kind == "status":
-                pi_status = msg
-                print(f"\r[PI] state={msg.get('state')} | "
+                device_id = msg.get("device_id")
+                client_device_id = device_id
+                
+                with conn_lock:
+                    active_connections[device_id] = sock
+                    pi_statuses[device_id] = msg
+                
+                print(f"\r[PI {device_id}] state={msg.get('state')} | "
                       f"cpu={msg.get('cpu')}% | "
                       f"mem={msg.get('mem')}%        ",
                       end="", flush=True)
@@ -155,23 +161,29 @@ def receive_loop(sock):
             elif kind == "result":
                 task_id = msg.get('task_id')
                 print(f"\n\n{'='*50}")
-                print(f"[RESULT] task_id : {task_id}")
-                print(f"         exit    : {msg.get('exit_code')}")
-                print(f"         stdout  :\n{msg.get('stdout', '').strip()}")
+                print(f"[RESULT] device   : {client_device_id}")
+                print(f"[RESULT] task_id  : {task_id}")
+                print(f"         exit     : {msg.get('exit_code')}")
+                print(f"         stdout   :\n{msg.get('stdout', '').strip()}")
                 if msg.get("stderr"):
-                    print(f"         stderr  :\n{msg.get('stderr').strip()}")
+                    print(f"         stderr   :\n{msg.get('stderr').strip()}")
                 print(f"{'='*50}\n> ", end="", flush=True)
 
                 # Save the response in the database in a background thread
-                threading.Thread(target=save_task_result_to_db, args=(task_id, msg), daemon=True).start()
+                threading.Thread(target=save_task_result_to_db, args=(task_id, msg, client_device_id), daemon=True).start()
 
 
         except (UnicodeDecodeError, json.JSONDecodeError):
             print("\n[SERVER] Received non-protocol data (transport mismatch or malformed frame).")
             break
         except (ConnectionResetError, BrokenPipeError, OSError):
-            print("\n[SERVER] Connection lost.")
+            print(f"\n[SERVER] Connection lost for client {client_device_id or 'unknown'}.")
             break
+
+    if client_device_id:
+        with conn_lock:
+            active_connections.pop(client_device_id, None)
+            pi_statuses.pop(client_device_id, None)
 
 
 def make_server_socket() -> socket.socket:
@@ -190,26 +202,32 @@ def make_server_socket() -> socket.socket:
     return raw
 
 
+def accept_connections(server_sock, comms):
+    while True:
+        try:
+            raw_conn, addr = server_sock.accept()
+            if USE_TLS:
+                conn = comms.ctx.wrap_socket(raw_conn, server_side=True)
+            else:
+                conn = raw_conn
+            print(f"\n[SERVER] Connection accepted from {addr}\n> ", end="", flush=True)
+            threading.Thread(target=receive_loop, args=(conn,), daemon=True).start()
+        except Exception as e:
+            print(f"\n[SERVER] Accept error: {e}\n> ", end="", flush=True)
+            time.sleep(1)
+
+
 def main():
-    global connection
     threading.Thread(target=run_http_server, daemon=True).start()
 
     comms = SecureServer(host=BIND_HOST, port=PORT)
     server_sock = comms._create_socket()
     tls_label   = "TLS" if USE_TLS else "plain TCP (dev mode)"
     print(f"[SERVER] Listening on {BIND_HOST}:{PORT} ({tls_label})")
-    print(f"[SERVER] Waiting for Pi to connect...\n")
+    print(f"[SERVER] Waiting for clients to connect...\n")
 
-    raw_conn, addr = server_sock.accept()
-    if USE_TLS:
-        conn = comms.ctx.wrap_socket(raw_conn, server_side=True)
-    else:
-        conn = raw_conn
-
-    connection = conn
-    print(f"[SERVER] Pi connected from {addr}\n")
-
-    threading.Thread(target=receive_loop, args=(conn,), daemon=True).start()
+    # Start accept loop thread
+    threading.Thread(target=accept_connections, args=(server_sock, comms), daemon=True).start()
 
     print("Commands: send <code> | file <path> | status | quit\n")
     while True:
@@ -231,7 +249,7 @@ def main():
                 print("[ERROR] File not found")
                 continue
         elif raw == "status":
-            print(f"\n[STATUS] {pi_status}")
+            print(f"\n[STATUS] {pi_statuses}")
             continue
         elif raw == "quit":
             break
@@ -240,14 +258,20 @@ def main():
             continue
 
         task = {"kind": "task", "task_id": str(uuid.uuid4())[:8], "code": code, "timeout": 10}
-        try:
-            send_msg(connection, task)
-            print(f"[SERVER] Task sent (id={task['task_id']})")
-        except OSError:
-            print("[ERROR] Not connected.")
+        
+        with conn_lock:
+            target_conn = next(iter(active_connections.values()), None)
+
+        if target_conn:
+            try:
+                send_msg(target_conn, task)
+                print(f"[SERVER] Task sent (id={task['task_id']})")
+            except OSError:
+                print("[ERROR] Failed to send message.")
+        else:
+            print("[ERROR] No clients connected.")
 
     print("[SERVER] Shutting down.")
-    conn.close()
     server_sock.close()
 
 

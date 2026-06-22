@@ -72,14 +72,14 @@ def create_task(request: TaskRequest, db=Depends(db_instance.get_db)):
     try:
         if request.device_id:
             curr.execute("""
-                SELECT device_id
+                SELECT device_id, ip_address
                 FROM devices
                 WHERE device_id = %s
                     AND status = 'online';
             """, (request.device_id,))
         else:
             curr.execute("""
-                SELECT device_id
+                SELECT device_id, ip_address
                 FROM devices
                 WHERE status = 'online'
                 ORDER BY device_id
@@ -94,7 +94,7 @@ def create_task(request: TaskRequest, db=Depends(db_instance.get_db)):
 
             raise HTTPException(status_code=503, detail="No online devices available")
 
-        device_id = device[0]
+        device_id, device_ip_address = device
 
         curr.execute("""
             INSERT INTO task_logs (user_id, device_id, problem, status)
@@ -117,7 +117,11 @@ def create_task(request: TaskRequest, db=Depends(db_instance.get_db)):
             import json
             req = urllib.request.Request(
                 "http://server:8080/task",
-                data=json.dumps({"task_id": str(task_id), "code": request.problem}).encode(),
+                data=json.dumps({
+                    "task_id": str(task_id),
+                    "code": request.problem,
+                    "device_name": device_ip_address
+                }).encode(),
                 headers={"Content-Type": "application/json"}
             )
             with urllib.request.urlopen(req, timeout=2.0) as resp:
