@@ -11,6 +11,11 @@ const loggedIn = ref(false)
 const currentUser = ref(null)
 const currentPage = ref('dashboard')
 const selectedLog = ref(null)
+const snifferFilters = ref({
+  limit: 10,
+  sort: 'desc',
+  port: '',
+})
 
 function handleLoginSuccess(user) {
   currentUser.value = user
@@ -47,8 +52,10 @@ function openLog(log) {
   <SnifferLogsPage
     v-else-if="currentPage === 'sniffer'"
     :user="currentUser"
+    :filters="snifferFilters"
     @go-admin="currentPage = 'admin'"
     @view-log="openLog"
+    @update-filters="snifferFilters = $event"
   />
 
   <SnifferLogDetailPage

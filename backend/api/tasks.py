@@ -12,6 +12,7 @@ db_instance = Database()
 class TaskRequest(BaseModel):
     user_id: int
     problem: str
+    device_id: int | None = None
 
 class AdminUserCreate(BaseModel):
     name: str
@@ -69,17 +70,28 @@ def create_task(request: TaskRequest, db=Depends(db_instance.get_db)):
     conn, curr = db
 
     try:
-        curr.execute("""
-            SELECT device_id
-            FROM devices
-            WHERE status = 'online'
-            ORDER BY device_id
-            LIMIT 1;
-        """)
+        if request.device_id:
+            curr.execute("""
+                SELECT device_id
+                FROM devices
+                WHERE device_id = %s
+                    AND status = 'online';
+            """, (request.device_id,))
+        else:
+            curr.execute("""
+                SELECT device_id
+                FROM devices
+                WHERE status = 'online'
+                ORDER BY device_id
+                LIMIT 1;
+            """)
 
         device = curr.fetchone()
 
         if not device:
+            if request.device_id:
+                raise HTTPException(status_code=400, detail="Selected device is not online")
+
             raise HTTPException(status_code=503, detail="No online devices available")
 
         device_id = device[0]
