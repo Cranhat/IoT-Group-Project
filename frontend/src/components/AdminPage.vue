@@ -21,7 +21,6 @@ const showDevices = ref(true)
 const showRequests = ref(false)
 
 const showUserModal = ref(false)
-const showDeviceModal = ref(false)
 const showProvisionModal = ref(false)
 const provisioning = ref(false)
 
@@ -34,11 +33,103 @@ const newUser = ref({
   privilege_type: 'user',
 })
 
-const newDevice = ref({
-  ip_address: '',
-  status: 'online',
+const requestUserFilter = ref('')
+const requestDeviceFilter = ref('')
+const requestStatusFilter = ref('')
+const requestTimeSort = ref('newest')
+
+const userById = computed(() => {
+  return new Map(users.value.map((user) => [String(user.user_id), user]))
 })
 
+const deviceById = computed(() => {
+  return new Map(devices.value.map((device) => [String(device.device_id), device]))
+})
+
+const requestUsers = computed(() => {
+  const options = new Map()
+
+  for (const request of requests.value) {
+    if (!request.user_id) continue
+    options.set(String(request.user_id), getUserName(request.user_id))
+  }
+
+  return sortOptions(options)
+})
+
+const requestDevices = computed(() => {
+  const options = new Map()
+
+  for (const request of requests.value) {
+    const value = request.device_id ? String(request.device_id) : 'waiting'
+    options.set(value, getRequestDeviceName(request))
+  }
+
+  return sortOptions(options)
+})
+
+const requestStatuses = computed(() => {
+  return [...new Set(requests.value.map((request) => normalizeValue(request.status)))]
+    .sort((first, second) => first.localeCompare(second, undefined, {
+      numeric: true,
+      sensitivity: 'base',
+    }))
+})
+
+const filteredRequests = computed(() => {
+  return requests.value
+    .filter((request) => {
+      const userMatches = !requestUserFilter.value || String(request.user_id) === requestUserFilter.value
+      const deviceValue = request.device_id ? String(request.device_id) : 'waiting'
+      const deviceMatches = !requestDeviceFilter.value || deviceValue === requestDeviceFilter.value
+      const statusMatches = !requestStatusFilter.value || normalizeValue(request.status) === requestStatusFilter.value
+
+      return userMatches && deviceMatches && statusMatches
+    })
+    .sort((first, second) => {
+      const firstTime = getTimestamp(first.timestamp)
+      const secondTime = getTimestamp(second.timestamp)
+
+      return requestTimeSort.value === 'oldest'
+        ? firstTime - secondTime
+        : secondTime - firstTime
+    })
+})
+
+function getUserName(userId) {
+  const user = userById.value.get(String(userId))
+  return user?.name || `User ${userId}`
+}
+
+function getDeviceName(device) {
+  if (!device) return ''
+  return device.device_name || device.container_name || `Device ${device.device_id}`
+}
+
+function getRequestDeviceName(request) {
+  if (!request.device_id) return 'Waiting'
+
+  const device = deviceById.value.get(String(request.device_id))
+  return getDeviceName(device) || `Device ${request.device_id}`
+}
+
+function sortOptions(options) {
+  return [...options.entries()]
+    .map(([value, label]) => ({ value, label }))
+    .sort((first, second) => first.label.localeCompare(second.label, undefined, {
+      numeric: true,
+      sensitivity: 'base',
+    }))
+}
+
+function normalizeValue(value) {
+  return String(value || 'unknown').toLowerCase()
+}
+
+function getTimestamp(value) {
+  if (!value) return 0
+  return new Date(value).getTime() || 0
+}
 
 const requestsPerDay = computed(() => {
   const days = []
@@ -86,6 +177,10 @@ async function refreshAll() {
     fetchDevices(),
     fetchRequests(),
   ])
+
+  showUsers.value = users.value.length > 0
+  showDevices.value = devices.value.length > 0
+  showRequests.value = requests.value.length > 0
 }
 
 async function fetchUsers() {
@@ -101,9 +196,20 @@ async function fetchDevices() {
 }
 
 async function fetchRequests() {
-  const res = await fetch(`${API_URL}/tables/task_logs`)
-  const data = await res.json()
-  requests.value = data.data || []
+  const [tasksRes, resultsRes] = await Promise.all([
+    fetch(`${API_URL}/tables/task_logs`),
+    fetch(`${API_URL}/tables/task_result_logs`),
+  ])
+  const tasksData = await tasksRes.json()
+  const resultsData = await resultsRes.json()
+  const resultsByTaskId = new Map(
+    (resultsData.data || []).map((result) => [String(result.task_id), result])
+  )
+
+  requests.value = (tasksData.data || []).map((task) => ({
+    ...task,
+    result_log: resultsByTaskId.get(String(task.task_id)) || null,
+  }))
 }
 
 async function addUser() {
@@ -132,6 +238,7 @@ async function addUser() {
     showUserModal.value = false
     message.value = 'User added successfully'
     await fetchUsers()
+    showUsers.value = true
   } catch (err) {
     console.error(err)
     message.value = 'Server error'
@@ -162,42 +269,12 @@ async function provisionDockerDevice() {
     showProvisionModal.value = false
     message.value = `Docker device provisioned: ${data.device_name || data.device_id}`
     await fetchDevices()
+    showDevices.value = true
   } catch (err) {
     console.error(err)
     message.value = 'Agent or server error'
   } finally {
     provisioning.value = false
-  }
-}
-
-async function addDevice() {
-  message.value = ''
-
-  try {
-    const res = await fetch(`${API_URL}/add/devices`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(newDevice.value),
-    })
-
-    const data = await res.json()
-
-    if (!res.ok) {
-      message.value = data.detail || 'Could not add device'
-      return
-    }
-
-    newDevice.value = {
-      ip_address: '',
-      status: 'online',
-    }
-
-    showDeviceModal.value = false
-    message.value = 'Device added successfully'
-    await fetchDevices()
-  } catch (err) {
-    console.error(err)
-    message.value = 'Server error'
   }
 }
 
@@ -272,6 +349,25 @@ function formatDate(value) {
   return new Date(value).toLocaleString()
 }
 
+function formatRequestDate(value) {
+  if (!value) return '—'
+
+  const date = new Date(value)
+  const now = new Date()
+  const isToday = date.toDateString() === now.toDateString()
+
+  return isToday
+    ? date.toLocaleTimeString()
+    : date.toLocaleString()
+}
+
+function getRequestResult(task) {
+  if (!task.result_log) return '—'
+  if (task.result_log.success === false) return task.result_log.error_message || 'Error'
+
+  return task.result_log.result || '—'
+}
+
 onMounted(refreshAll)
 </script>
 
@@ -289,18 +385,6 @@ onMounted(refreshAll)
     </header>
 
     <section class="actions-card">
-      <button @click="showUserModal = true">
-        Add User
-      </button>
-
-      <button @click="showDeviceModal = true">
-        Add Device
-      </button>
-
-      <button @click="showProvisionModal = true">
-        Provision Docker Device
-      </button>
-
       <button @click="refreshAll">
         Refresh All
       </button>
@@ -316,7 +400,19 @@ onMounted(refreshAll)
 
     <section class="fold-card">
       <button class="fold-header" @click="showDevices = !showDevices">
-        <span>Devices</span>
+        <span class="fold-title">
+          Devices
+          <span
+            class="inline-action"
+            role="button"
+            tabindex="0"
+            @click.stop="showProvisionModal = true"
+            @keydown.enter.stop.prevent="showProvisionModal = true"
+            @keydown.space.stop.prevent="showProvisionModal = true"
+          >
+            Add Device
+          </span>
+        </span>
         <span>{{ showDevices ? '▲' : '▼' }}</span>
       </button>
 
@@ -378,7 +474,19 @@ onMounted(refreshAll)
 
     <section class="fold-card">
     <button class="fold-header" @click="showUsers = !showUsers">
-        <span>Users</span>
+        <span class="fold-title">
+            Users
+            <span
+                class="inline-action"
+                role="button"
+                tabindex="0"
+                @click.stop="showUserModal = true"
+                @keydown.enter.stop.prevent="showUserModal = true"
+                @keydown.space.stop.prevent="showUserModal = true"
+            >
+                Add User
+            </span>
+        </span>
         <span>{{ showUsers ? '▲' : '▼' }}</span>
     </button>
 
@@ -425,31 +533,91 @@ onMounted(refreshAll)
       </button>
 
       <div v-if="showRequests" class="fold-content">
-        <table v-if="requests.length">
+        <div class="request-tools">
+          <label>
+            User
+            <select v-model="requestUserFilter">
+              <option value="">All users</option>
+              <option
+                v-for="option in requestUsers"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Device
+            <select v-model="requestDeviceFilter">
+              <option value="">All devices</option>
+              <option
+                v-for="option in requestDevices"
+                :key="option.value"
+                :value="option.value"
+              >
+                {{ option.label }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Status
+            <select v-model="requestStatusFilter">
+              <option value="">All statuses</option>
+              <option
+                v-for="status in requestStatuses"
+                :key="status"
+                :value="status"
+              >
+                {{ status }}
+              </option>
+            </select>
+          </label>
+
+          <label>
+            Time
+            <select v-model="requestTimeSort">
+              <option value="newest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+            </select>
+          </label>
+        </div>
+
+        <table v-if="filteredRequests.length">
           <thead>
             <tr>
               <th>Task ID</th>
-              <th>User ID</th>
-              <th>Device ID</th>
+              <th>User</th>
+              <th>Device</th>
               <th>Request</th>
               <th>Status</th>
+              <th>Result</th>
               <th>Time</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr v-for="task in requests" :key="task.task_id">
+            <tr v-for="task in filteredRequests" :key="task.task_id">
               <td>{{ task.task_id }}</td>
-              <td>{{ task.user_id }}</td>
-              <td>{{ task.device_id || '—' }}</td>
+              <td>{{ getUserName(task.user_id) }}</td>
+              <td>{{ getRequestDeviceName(task) }}</td>
               <td>{{ task.problem || '—' }}</td>
-              <td>{{ task.status || 'unknown' }}</td>
-              <td>{{ formatDate(task.timestamp) }}</td>
+              <td>
+                <span :class="['status', task.status]">
+                  {{ task.status || 'unknown' }}
+                </span>
+              </td>
+              <td>{{ getRequestResult(task) }}</td>
+              <td>{{ formatRequestDate(task.timestamp) }}</td>
             </tr>
           </tbody>
         </table>
 
-        <p v-else>No requests found.</p>
+        <p v-else>
+          {{ requests.length ? 'No requests match the selected filters.' : 'No requests found.' }}
+        </p>
       </div>
     </section>
 
@@ -491,7 +659,7 @@ onMounted(refreshAll)
 
     <div v-if="showProvisionModal" class="modal-backdrop">
       <div class="modal">
-        <h2>Provision Docker Device</h2>
+        <h2>Add Device</h2>
         <p class="modal-hint">
           Creates a new peripheral container, copies TLS certificates with docker cp,
           and registers the device in the system.
@@ -516,35 +684,6 @@ onMounted(refreshAll)
       </div>
     </div>
 
-    <div v-if="showDeviceModal" class="modal-backdrop">
-      <div class="modal">
-        <h2>Add Device</h2>
-
-        <form @submit.prevent="addDevice">
-          <input
-            v-model="newDevice.ip_address"
-            placeholder="IP address"
-            required
-          />
-
-          <select v-model="newDevice.status">
-            <option value="online">online</option>
-            <option value="busy">busy</option>
-            <option value="offline">offline</option>
-          </select>
-
-          <div class="modal-actions">
-            <button type="button" @click="showDeviceModal = false">
-              Cancel
-            </button>
-
-            <button type="submit">
-              Create Device
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
   </div>
 
 <section class="fold-card chart-card">
@@ -635,6 +774,47 @@ onMounted(refreshAll)
   padding: 18px;
 }
 
+.fold-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.inline-action {
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: #1f2937;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.inline-action:hover,
+.inline-action:focus {
+  background: #111827;
+}
+
+.request-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.request-tools label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #020a26;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.request-tools select {
+  min-width: 150px;
+}
+
 button {
   padding: 10px 14px;
   background: #1f2937;
@@ -685,6 +865,33 @@ td {
 
 th {
   background: #f3f4f6;
+}
+
+.status {
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: #e5e7eb;
+}
+
+.status.completed,
+.status.online,
+.status.available {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status.pending,
+.status.running,
+.status.busy {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.status.failed,
+.status.offline {
+  background: #fee2e2;
+  color: #991b1b;
 }
 
 .message {

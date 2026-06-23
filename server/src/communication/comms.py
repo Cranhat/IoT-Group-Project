@@ -33,9 +33,10 @@ class SecureServer:
         ctx.maximum_version = ssl.TLSVersion.TLSv1_3
         cert_dir = Path(__file__).resolve().parent
 
-        cert_path = cert_dir / "server.crt"
-        key_path = cert_dir / "server.key"
-        ca_path = cert_dir / "ca.pem"
+        import os
+        cert_path = Path(os.environ.get("SERVER_CERT", str(cert_dir / "server.crt")))
+        key_path = Path(os.environ.get("SERVER_KEY", str(cert_dir / "server.key")))
+        ca_path = Path(os.environ.get("CA_CERT", str(cert_dir / "ca.pem")))
 
         missing = [str(p) for p in (cert_path, key_path, ca_path) if not p.exists()]
         if missing:

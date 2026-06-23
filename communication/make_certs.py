@@ -32,7 +32,7 @@ from cryptography.x509.oid import NameOID, ExtendedKeyUsageOID
 SCRIPT_DIR = Path(__file__).resolve().parent
 ROOT_DIR   = SCRIPT_DIR.parent
 
-CA_DIR     = SCRIPT_DIR / ".tls-ca"
+CA_DIR     = SCRIPT_DIR
 SERVER_OUT = ROOT_DIR / "server" / "src" / "communication"
 CLIENT_OUT = ROOT_DIR / "client" / "src" / "communication"
 
@@ -160,6 +160,10 @@ _save_key(srv_key,   SERVER_OUT / "server.key")
 _save_cert(srv_cert, SERVER_OUT / "server.crt")
 _save_cert(ca_cert,  SERVER_OUT / "ca.pem")
 
+_save_key(srv_key,   SCRIPT_DIR / "server.key")
+_save_cert(srv_cert, SCRIPT_DIR / "server.crt")
+_save_cert(ca_cert,  SCRIPT_DIR / "ca.pem")
+
 # ── 3. Client certificate ─────────────────────────────────────────────────────
 
 print("[3/3] Generating client cert …")
@@ -201,6 +205,10 @@ cli_cert = (
 _save_key(cli_key,   CLIENT_OUT / "client0.key")
 _save_cert(cli_cert, CLIENT_OUT / "client0.crt")
 _save_cert(ca_cert,  CLIENT_OUT / "ca.pem")
+
+_save_key(cli_key,   SCRIPT_DIR / "client0.key")
+_save_cert(cli_cert, SCRIPT_DIR / "client0.crt")
+_save_cert(ca_cert,  SCRIPT_DIR / "ca.pem")
 
 print("\n[OK] TLS materials generated for server and client.")
 print(f"     CA:     {CA_DIR}")
