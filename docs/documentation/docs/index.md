@@ -43,10 +43,3 @@ Bob->Alicee: Hello
 
     Plugins:
     puml
-
-
-
-
-
-
-    

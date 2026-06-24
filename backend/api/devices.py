@@ -3,6 +3,7 @@ import os
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+from typing import Optional
 
 from database.src.database import Database
 
@@ -15,8 +16,12 @@ AGENT_URL = os.getenv("AGENT_URL", "http://agent:9000")
 class Device(BaseModel):
     status: str
     ip_address: str
-    container_name: str | None = None
-    device_name: str | None = None
+    container_name: Optional[str] = None
+    device_name: Optional[str] = None
+
+
+class DeviceStatusUpdate(BaseModel):
+    status: str
 
 
 @router.get("/devices")
@@ -111,6 +116,68 @@ def update_device(device_id: int, request: Device, db=Depends(db_instance.get_db
             "message": "Device updated successfully",
             "device_id": device_id,
         }
+
+    except HTTPException:
+        raise
+
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/devices/register")
+def register_device(request: Device, db=Depends(db_instance.get_db)):
+    """
+    Upsert a device by ip_address. Called by the IoT server when a client
+    connects. Returns the device_id so the server can reference it later.
+    """
+    conn, curr = db
+
+    try:
+        curr.execute("""
+            INSERT INTO devices (status, ip_address, container_name, device_name)
+            VALUES (%s, %s, %s, %s)
+            ON CONFLICT (ip_address) DO UPDATE
+                SET status         = EXCLUDED.status,
+                    container_name = EXCLUDED.container_name,
+                    device_name    = EXCLUDED.device_name
+            RETURNING device_id;
+        """, (
+            request.status,
+            request.ip_address,
+            request.container_name,
+            request.device_name,
+        ))
+
+        device_id = curr.fetchone()[0]
+        conn.commit()
+
+        return {"device_id": device_id}
+
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.patch("/devices/by-ip/{ip_address}/status")
+def update_device_status_by_ip(ip_address: str, request: DeviceStatusUpdate, db=Depends(db_instance.get_db)):
+    """Update only the status field for a device identified by IP. Called by the IoT server."""
+    conn, curr = db
+
+    try:
+        curr.execute("""
+            UPDATE devices
+            SET status = %s
+            WHERE ip_address = %s
+            RETURNING device_id;
+        """, (request.status, ip_address))
+
+        row = curr.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Device not found")
+
+        conn.commit()
+        return {"device_id": row[0], "status": request.status}
 
     except HTTPException:
         raise

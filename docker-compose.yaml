@@ -168,6 +168,30 @@ services:
       - ./client:/app
       - ./communication:/certs:ro
 
+  client2:
+    image: iot-client:latest
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    container_name: iot_client2
+    stdin_open: true
+    tty: true
+    environment:
+      SERVER_HOST: server
+      PORT: ${SERVER_PORT:-5000}
+      USE_TLS: "true"
+      TLS_SERVER_HOSTNAME: serv
+    depends_on:
+      server:
+        condition: service_started
+      backend:
+        condition: service_healthy
+      cert_gen:
+        condition: service_completed_successfully
+    volumes:
+      - ./client:/app
+      - ./client2/src/communication:/app/src/communication:ro
+
   server:
     build:
       context: ./server 
@@ -179,6 +203,8 @@ services:
     depends_on:
       cert_gen:
         condition: service_completed_successfully
+      backend:
+        condition: service_healthy
     env_file:
       - .env
     environment:
@@ -188,6 +214,7 @@ services:
       CA_CERT: /certs/ca.pem
       SERVER_CERT: /certs/server.crt
       SERVER_KEY: /certs/server.key
+      BACKEND_URL: http://backend:8000
     ports:
       - "${HOST_PORT_SERVER:-5000}:5000"
     volumes:
@@ -199,6 +226,8 @@ services:
       context: .
       dockerfile: communication/Dockerfile.certgen
     container_name: iot_cert_gen
+    # .tls-ca/ lives inside ./communication on the host — it persists across
+    # restarts so the same CA is reused and existing device certs stay valid.
     volumes:
       - ./communication:/app/communication
       - ./server/src/communication:/app/server/src/communication

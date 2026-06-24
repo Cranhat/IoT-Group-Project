@@ -57,6 +57,19 @@ task_result_logs_initialization = """
         FOREIGN KEY (device_id) REFERENCES devices(device_id) ON DELETE SET NULL
     ); """
 
+task_result_logs_unique_migration = """
+    DO $$
+    BEGIN
+        IF NOT EXISTS (
+            SELECT 1 FROM pg_constraint
+            WHERE conname = 'task_result_logs_task_id_key'
+        ) THEN
+            ALTER TABLE task_result_logs ADD CONSTRAINT task_result_logs_task_id_key UNIQUE (task_id);
+        END IF;
+    END
+    $$;
+"""
+
 http_logs_initialization = """
     CREATE TABLE IF NOT EXISTS http_logs (
         request_id SERIAL PRIMARY KEY,

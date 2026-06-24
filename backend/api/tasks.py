@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
+from typing import Optional
 
 from database.src.database import Database
 
@@ -12,6 +13,13 @@ db_instance = Database()
 class TaskRequest(BaseModel):
     user_id: int
     problem: str
+
+
+class TaskResultRequest(BaseModel):
+    result: Optional[str] = None
+    success: bool
+    exit_code: Optional[int] = None
+    error_message: Optional[str] = None
 
 class AdminUserCreate(BaseModel):
     name: str
@@ -120,7 +128,85 @@ def create_task(request: TaskRequest, db=Depends(db_instance.get_db)):
     except Exception as e:
         conn.rollback()
         raise HTTPException(status_code=500, detail=str(e))
-    
+
+
+@router.get("/tasks/pending")
+def get_pending_tasks(device_id: int, db=Depends(db_instance.get_db)):
+    """Return pending tasks assigned to a device. Called by the IoT server."""
+    conn, curr = db
+
+    try:
+        curr.execute("""
+            SELECT task_id, user_id, device_id, problem
+            FROM task_logs
+            WHERE device_id = %s AND status = 'pending'
+            ORDER BY timestamp ASC;
+        """, (device_id,))
+
+        rows = curr.fetchall()
+
+        tasks = [
+            {
+                "task_id": row[0],
+                "user_id": row[1],
+                "device_id": row[2],
+                "problem": row[3],
+            }
+            for row in rows
+        ]
+
+        return {"tasks": tasks}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.put("/tasks/{task_id}/result")
+def submit_task_result(task_id: int, request: TaskResultRequest, db=Depends(db_instance.get_db)):
+    """Called by the IoT server when a client returns a task result."""
+    conn, curr = db
+
+    try:
+        curr.execute("""
+            UPDATE task_logs
+            SET status = %s
+            WHERE task_id = %s
+            RETURNING device_id;
+        """, ("done" if request.success else "failed", task_id))
+
+        row = curr.fetchone()
+        if not row:
+            raise HTTPException(status_code=404, detail="Task not found")
+
+        device_id = row[0]
+
+        curr.execute("""
+            INSERT INTO task_result_logs (task_id, device_id, result, success, error_message)
+            VALUES (%s, %s, %s, %s, %s)
+            ON CONFLICT (task_id) DO UPDATE
+                SET result        = EXCLUDED.result,
+                    success       = EXCLUDED.success,
+                    error_message = EXCLUDED.error_message,
+                    timestamp     = NOW();
+        """, (
+            task_id,
+            device_id,
+            request.result,
+            request.success,
+            request.error_message,
+        ))
+
+        conn.commit()
+
+        return {"message": "Result saved", "task_id": task_id}
+
+    except HTTPException:
+        raise
+
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.post("/add/users")
 def add_user(request: AdminUserCreate, db=Depends(db_instance.get_db)):

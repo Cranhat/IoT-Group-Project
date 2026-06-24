@@ -67,6 +67,7 @@ class Database:
             self.sendQuery(devices_device_name_migration, conn, curr)
             self.sendQuery(task_logs_initialization, conn, curr)
             self.sendQuery(task_result_logs_initialization, conn, curr)
+            self.sendQuery(task_result_logs_unique_migration, conn, curr)
             self.sendQuery(http_logs_initialization, conn, curr)
             self.sendQuery(packet_sniffer_logs_initialization, conn, curr)
 
