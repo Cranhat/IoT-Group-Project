@@ -94,6 +94,7 @@ def create_device_container(
 
     create_cmd = [
         "docker", "create",
+        "-i", "-t",
         "--name", container_name,
         "--network", network,
         "--restart", "unless-stopped",

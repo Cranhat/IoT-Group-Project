@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Backend - IoT Group Project Documentation</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../assets/mkdocs_puml/puml.css" rel="stylesheet">
         <link href="../assets/mkdocs_puml/interaction.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -24,7 +28,7 @@
             <div class="container">
                 <a class="navbar-brand" href="..">IoT Group Project Documentation</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -32,34 +36,43 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href=".." class="nav-link">Info</a>
                             </li>
-                            <li class="navitem active">
-                                <a href="./" class="nav-link">Backend</a>
+                            <li class="nav-item">
+                                <a href="../architecture/" class="nav-link">Architecture</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
+                                <a href="../docker/" class="nav-link">Docker</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Backend</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="../frontend/" class="nav-link">Frontend</a>
                             </li>
-                            <li class="navitem">
-                                <a href="../contribution/" class="nav-link">Contribution</a>
+                            <li class="nav-item">
+                                <a href="../communication/" class="nav-link">Communication</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
+                                <a href="../tests/" class="nav-link">Tests</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="../cicd/" class="nav-link">CICD</a>
                             </li>
-                            <li class="navitem">
-                                <a href="../tests/" class="nav-link">Tests</a>
+                            <li class="nav-item">
+                                <a href="../contribution/" class="nav-link">Contribution</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href=".." class="nav-link">
+                                <a rel="prev" href="../docker/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
@@ -75,19 +88,39 @@
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="2"><a href="#backend" class="nav-link">Backend</a>
+            <li class="nav-item" data-bs-level="1"><a href="#backend" class="nav-link">Backend</a>
               <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#uruchomienie-lokalne" class="nav-link">Uruchomienie lokalne</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#struktura" class="nav-link">Struktura</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#baza-danych" class="nav-link">Baza danych</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#endpointy-api" class="nav-link">Endpointy API</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#zaleznosci" class="nav-link">Zależności</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -95,20 +128,251 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h2 id="backend">Backend</h2>
-<pre><code>Rest API:
-Language: Python
-Framework: FastAPI
+<h1 id="backend">Backend</h1>
+<p>REST API w Pythonie (FastAPI) z warstwą dostępu do PostgreSQL.</p>
+<h2 id="uruchomienie-lokalne">Uruchomienie lokalne</h2>
+<pre><code class="language-bash">cd backend/database
+python -m venv venv
+source venv/bin/activate   # Linux
+pip install -r ../requirements.txt
 
-Database:
-PostgreSQL
-
-Communication protocol:
-HTTP
-
-Security:
-Encryption
-</code></pre></div>
+# Ustaw zmienne POSTGRES_* i DB_HOST=localhost
+uvicorn api.app:app --reload --app-dir ../
+</code></pre>
+<p>W Dockerze backend startuje automatycznie jako <code>iot_fastapi</code>.</p>
+<h2 id="struktura">Struktura</h2>
+<pre><code>backend/
+├── api/
+│   ├── app.py        # Aplikacja FastAPI, CORS, startup
+│   ├── users.py      # CRUD użytkowników
+│   ├── tasks.py      # Zadania użytkowników
+│   ├── devices.py    # CRUD urządzeń
+│   ├── agent.py      # Proxy do agenta (provisioning)
+│   ├── sniffer.py    # Odczyt logów sniffera
+│   └── tables.py     # Generyczny dostęp do tabel
+└── database/
+    └── src/
+        ├── database.py   # Połączenie, inicjalizacja tabel
+        ├── db_init.py    # DDL tabel
+        ├── db_fetch.py
+        ├── db_insert.py
+        ├── db_update.py
+        └── objects.py    # Modele Pydantic
+</code></pre>
+<h2 id="baza-danych">Baza danych</h2>
+<p>Tabele tworzone przy starcie (<code>initializeTables</code>):</p>
+<table>
+<thead>
+<tr>
+<th>Tabela</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>users</code></td>
+<td>Użytkownicy (<code>name</code>, <code>privilege_type</code>)</td>
+</tr>
+<tr>
+<td><code>passwords</code></td>
+<td>Hasła powiązane z <code>user_id</code></td>
+</tr>
+<tr>
+<td><code>devices</code></td>
+<td>Urządzenia IoT (<code>status</code>, <code>ip_address</code>, <code>container_name</code>, <code>device_name</code>)</td>
+</tr>
+<tr>
+<td><code>task_logs</code></td>
+<td>Zadania wysłane z dashboardu</td>
+</tr>
+<tr>
+<td><code>task_result_logs</code></td>
+<td>Wyniki wykonania zadań</td>
+</tr>
+<tr>
+<td><code>http_logs</code></td>
+<td>Logi żądań HTTP</td>
+</tr>
+<tr>
+<td><code>packet_sniffer_logs</code></td>
+<td>Przechwycone payloady TCP</td>
+</tr>
+</tbody>
+</table>
+<p>Domyślny administrator (gdy baza pusta): <code>admin</code> / <code>1234</code>.</p>
+<h2 id="endpointy-api">Endpointy API</h2>
+<h3 id="autoryzacja">Autoryzacja</h3>
+<table>
+<thead>
+<tr>
+<th>Metoda</th>
+<th>Ścieżka</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/login</code></td>
+<td>Logowanie (<code>username</code>, <code>passcode</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="uzytkownicy">Użytkownicy</h3>
+<table>
+<thead>
+<tr>
+<th>Metoda</th>
+<th>Ścieżka</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/users</code></td>
+<td>Lista użytkowników</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/add/users</code></td>
+<td>Dodaj użytkownika</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/delete/users/{user_id}</code></td>
+<td>Usuń użytkownika</td>
+</tr>
+</tbody>
+</table>
+<h3 id="zadania">Zadania</h3>
+<table>
+<thead>
+<tr>
+<th>Metoda</th>
+<th>Ścieżka</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/tasks?user_id=</code></td>
+<td>Zadania użytkownika</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/tasks</code></td>
+<td>Utwórz zadanie (<code>user_id</code>, <code>problem</code>)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="urzadzenia">Urządzenia</h3>
+<table>
+<thead>
+<tr>
+<th>Metoda</th>
+<th>Ścieżka</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/devices</code></td>
+<td>Lista urządzeń</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/add/devices</code></td>
+<td>Dodaj urządzenie</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td><code>/update/devices/{device_id}</code></td>
+<td>Aktualizuj urządzenie</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/delete/devices/{device_id}</code></td>
+<td>Usuń urządzenie (+ kontener przez agenta)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="agent-proxy">Agent (proxy)</h3>
+<table>
+<thead>
+<tr>
+<th>Metoda</th>
+<th>Ścieżka</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POST</code></td>
+<td><code>/devices/provision</code></td>
+<td>Provisionuj urządzenie Docker</td>
+</tr>
+<tr>
+<td><code>GET</code></td>
+<td><code>/devices/provision/{container_name}/status</code></td>
+<td>Status provisioningu</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td><code>/devices/provision/{container_name}</code></td>
+<td>Deprovisionuj urządzenie</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sniffer">Sniffer</h3>
+<table>
+<thead>
+<tr>
+<th>Metoda</th>
+<th>Ścieżka</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/sniffer/logs?limit=&amp;sort=&amp;port=</code></td>
+<td>Logi pakietów</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tabele-generyczne">Tabele (generyczne)</h3>
+<table>
+<thead>
+<tr>
+<th>Metoda</th>
+<th>Ścieżka</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET</code></td>
+<td><code>/tables/{table}</code></td>
+<td>Odczyt tabeli</td>
+</tr>
+<tr>
+<td><code>POST</code></td>
+<td><code>/tables/{table}</code></td>
+<td>Wstaw wiersz</td>
+</tr>
+<tr>
+<td><code>PUT</code></td>
+<td><code>/tables/{table}/{id}</code></td>
+<td>Aktualizuj wiersz</td>
+</tr>
+</tbody>
+</table>
+<p>Dozwolone tabele: <code>users</code>, <code>passwords</code>, <code>devices</code>, <code>task_logs</code>, <code>task_result_logs</code>, <code>http_logs</code>, <code>packet_sniffer_logs</code>.</p>
+<h2 id="zaleznosci">Zależności</h2>
+<p>Plik <code>backend/requirements.txt</code>: FastAPI, Uvicorn, psycopg2-binary, httpx, pydantic, pytest, scapy.</p></div>
             </div>
         </div>
 
@@ -116,8 +380,7 @@ Encryption
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../js/jquery-3.6.0.min.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -133,7 +396,7 @@ Encryption
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -153,7 +416,7 @@ Encryption
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">

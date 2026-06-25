@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Docker - IoT Group Project Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../assets/mkdocs_puml/puml.css" rel="stylesheet">
+        <link href="../assets/mkdocs_puml/interaction.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">IoT Group Project Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Info</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../architecture/" class="nav-link">Architecture</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Docker</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../backend/" class="nav-link">Backend</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../frontend/" class="nav-link">Frontend</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../communication/" class="nav-link">Communication</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../tests/" class="nav-link">Tests</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../cicd/" class="nav-link">CICD</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../contribution/" class="nav-link">Contribution</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href="../architecture/" class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../backend/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#docker" class="nav-link">Docker</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#serwisy" class="nav-link">Serwisy</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#kolejnosc-startu" class="nav-link">Kolejność startu</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#zmienne-srodowiskowe-env" class="nav-link">Zmienne środowiskowe (.env)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#interakcja-z-serwerem-i-klientem" class="nav-link">Interakcja z serwerem i klientem</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#provisioning-urzadzenia" class="nav-link">Provisioning urządzenia</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#certyfikaty-tls" class="nav-link">Certyfikaty TLS</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="docker">Docker</h1>
+<p>Pełny stack uruchamia się jednym poleceniem:</p>
+<pre><code class="language-bash">cp .env.example .env
+docker compose up --build
+</code></pre>
+<h2 id="serwisy">Serwisy</h2>
+<table>
+<thead>
+<tr>
+<th>Serwis</th>
+<th>Kontener</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>db</code></td>
+<td><code>iot_postgres</code></td>
+<td>PostgreSQL 16, wolumen <code>pgdata</code></td>
+</tr>
+<tr>
+<td><code>backend</code></td>
+<td><code>iot_fastapi</code></td>
+<td>FastAPI na porcie 8000, hot-reload</td>
+</tr>
+<tr>
+<td><code>frontend</code></td>
+<td><code>iot_frontend</code></td>
+<td>Vue dev server na porcie 5173</td>
+</tr>
+<tr>
+<td><code>cert_gen</code></td>
+<td><code>iot_cert_gen</code></td>
+<td>Jednorazowe generowanie certyfikatów TLS</td>
+</tr>
+<tr>
+<td><code>server</code></td>
+<td><code>iot_server</code></td>
+<td>Serwer IoT (port 5000), tryb interaktywny</td>
+</tr>
+<tr>
+<td><code>client</code></td>
+<td><code>iot_client</code></td>
+<td>Domyślny klient urządzenia</td>
+</tr>
+<tr>
+<td><code>agent</code></td>
+<td><code>iot_agent</code></td>
+<td>Provisioning kontenerów (port 9000)</td>
+</tr>
+<tr>
+<td><code>backend_sniffer</code></td>
+<td><code>iot_backend_sniffer</code></td>
+<td>Sniffer ruchu backendu</td>
+</tr>
+<tr>
+<td><code>server_sniffer</code></td>
+<td><code>iot_server_sniffer</code></td>
+<td>Sniffer ruchu serwera</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kolejnosc-startu">Kolejność startu</h2>
+<ol>
+<li><code>cert_gen</code> generuje certyfikaty TLS i kończy działanie.</li>
+<li><code>db</code> przechodzi healthcheck (<code>pg_isready</code>).</li>
+<li><code>backend</code> startuje po zdrowej bazie, inicjalizuje tabele.</li>
+<li><code>server</code> i <code>client</code> startują po <code>cert_gen</code>.</li>
+<li><code>agent</code>, sniffery i <code>frontend</code> startują po backendzie.</li>
+</ol>
+<h2 id="zmienne-srodowiskowe-env">Zmienne środowiskowe (<code>.env</code>)</h2>
+<table>
+<thead>
+<tr>
+<th>Zmienna</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>POSTGRES_USER</code>, <code>POSTGRES_PASSWORD</code>, <code>POSTGRES_DB</code></td>
+<td>Dane PostgreSQL (wymagane)</td>
+</tr>
+<tr>
+<td><code>HOST_PORT_FRONTEND</code></td>
+<td>Port frontendu na hoście (domyślnie 5173)</td>
+</tr>
+<tr>
+<td><code>HOST_PORT_BACKEND</code></td>
+<td>Port backendu na hoście (domyślnie 8000)</td>
+</tr>
+<tr>
+<td><code>HOST_PORT_AGENT</code></td>
+<td>Port agenta na hoście (domyślnie 9000)</td>
+</tr>
+<tr>
+<td><code>AGENT_URL</code></td>
+<td>URL agenta z perspektywy backendu</td>
+</tr>
+<tr>
+<td><code>DOCKER_NETWORK</code></td>
+<td>Sieć Docker (auto-wykrywana przez agenta, opcjonalna)</td>
+</tr>
+<tr>
+<td><code>PROVISION_MOCK</code></td>
+<td><code>true</code> — provisioning bez tworzenia kontenera</td>
+</tr>
+<tr>
+<td><code>SERVER_PORT</code></td>
+<td>Port serwera IoT (domyślnie 5000)</td>
+</tr>
+<tr>
+<td><code>USE_TLS</code></td>
+<td>Włączenie TLS między server a client</td>
+</tr>
+<tr>
+<td><code>TLS_SERVER_HOSTNAME</code></td>
+<td>CN certyfikatu serwera (domyślnie <code>serv</code>)</td>
+</tr>
+<tr>
+<td><code>MONITORED_PORT</code>, <code>SNIFFER_TIMEOUT</code></td>
+<td>Konfiguracja sniffera</td>
+</tr>
+</tbody>
+</table>
+<h2 id="interakcja-z-serwerem-i-klientem">Interakcja z serwerem i klientem</h2>
+<pre><code class="language-bash">docker attach iot_server   # CLI serwera (send, file, status, quit)
+docker attach iot_client     # logi klienta
+</code></pre>
+<p>Polecenia serwera:</p>
+<table>
+<thead>
+<tr>
+<th>Polecenie</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>send &lt;code&gt;</code></td>
+<td>Wyślij jednolinijkowy skrypt Python</td>
+</tr>
+<tr>
+<td><code>file &lt;path&gt;</code></td>
+<td>Wyślij plik <code>.py</code> (ścieżka względem <code>server/src/</code>)</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>Pokaż ostatni stan klienta</td>
+</tr>
+<tr>
+<td><code>quit</code></td>
+<td>Zakończ serwer</td>
+</tr>
+</tbody>
+</table>
+<h2 id="provisioning-urzadzenia">Provisioning urządzenia</h2>
+<p><strong>Z UI:</strong> Admin Panel → <strong>Provision Docker Device</strong>.</p>
+<p><strong>CLI:</strong></p>
+<pre><code class="language-bash">docker compose exec agent python scripts/provision_device.py sensor-01
+</code></pre>
+<p><strong>Tryb mock (bez nowego kontenera):</strong></p>
+<pre><code class="language-bash">docker compose exec -e PROVISION_MOCK=true agent python scripts/provision_device.py sensor-01
+</code></pre>
+<h2 id="certyfikaty-tls">Certyfikaty TLS</h2>
+<p>Generowane automatycznie przez serwis <code>cert_gen</code> przy pierwszym <code>docker compose up</code>. Pliki trafiają do katalogu <code>communication/</code> (montowany jako <code>/certs</code> w kontenerach).</p>
+<p>Ręczna regeneracja (poza Dockerem):</p>
+<pre><code class="language-bash">python3 communication/make_certs.py
+</code></pre></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+        <script src="../assets/mkdocs_puml/puml.js"></script>
+        <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+        <script src="../assets/mkdocs_puml/interaction.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

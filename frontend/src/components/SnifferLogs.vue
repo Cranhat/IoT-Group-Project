@@ -1,22 +1,34 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, watch } from 'vue'
 
-defineProps({
+const props = defineProps({
   user: {
+    type: Object,
+    required: true,
+  },
+  filters: {
     type: Object,
     required: true,
   },
 })
 
-const emit = defineEmits(['go-admin', 'view-log'])
+const emit = defineEmits(['go-admin', 'view-log', 'update-filters'])
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000'
 
 const logs = ref([])
-const limit = ref(10)
-const sort = ref('desc')
-const portFilter = ref('')
+const limit = ref(props.filters.limit ?? 10)
+const sort = ref(props.filters.sort ?? 'desc')
+const portFilter = ref(props.filters.port ?? '')
 const message = ref('')
+
+watch([limit, sort, portFilter], () => {
+  emit('update-filters', {
+    limit: limit.value,
+    sort: sort.value,
+    port: portFilter.value,
+  })
+})
 
 async function fetchLogs() {
   message.value = ''

@@ -88,3 +88,4 @@ packet_sniffer_logs_initialization = """
         log TEXT,
         timestamp TIMESTAMP DEFAULT NOW()
     ); """
+

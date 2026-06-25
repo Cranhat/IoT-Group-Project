@@ -23,9 +23,9 @@ class SecureClient:
         ctx = ssl.create_default_context()
         cert_dir = Path(__file__).resolve().parent
 
-        cert_path = cert_dir / "client0.crt"
-        key_path = cert_dir / "client0.key"
-        ca_path = cert_dir / "ca.pem"
+        cert_path = Path(os.environ.get("CLIENT_CERT", str(cert_dir / "client0.crt")))
+        key_path = Path(os.environ.get("CLIENT_KEY", str(cert_dir / "client0.key")))
+        ca_path = Path(os.environ.get("CA_CERT", str(cert_dir / "ca.pem")))
 
         missing = [str(p) for p in (cert_path, key_path, ca_path) if not p.exists()]
         if missing:

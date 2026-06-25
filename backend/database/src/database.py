@@ -88,6 +88,15 @@ class Database:
                     VALUES (%s, %s)
                 """, (admin_id, "1234"))
 
+            # Register the default client container device if not already registered
+            curr.execute("SELECT COUNT(*) FROM devices WHERE ip_address = 'pi-node-01'")
+            device_count = curr.fetchone()[0]
+            if device_count == 0:
+                curr.execute("""
+                    INSERT INTO devices (status, ip_address, container_name, device_name)
+                    VALUES (%s, %s, %s, %s)
+                """, ("online", "pi-node-01", "iot_client", "Default Client"))
+
             conn.commit()
         except Exception as e:
             conn.rollback()

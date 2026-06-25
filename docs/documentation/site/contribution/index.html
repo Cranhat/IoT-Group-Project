@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-bs-theme="light">
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,9 +10,13 @@
         <link rel="shortcut icon" href="../img/favicon.ico">
         <title>Contribution - IoT Group Project Documentation</title>
         <link href="../css/bootstrap.min.css" rel="stylesheet">
-        <link href="../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
         <link href="../css/base.css" rel="stylesheet">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
         <link href="../assets/mkdocs_puml/puml.css" rel="stylesheet">
         <link href="../assets/mkdocs_puml/interaction.css" rel="stylesheet">
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
@@ -24,7 +28,7 @@
             <div class="container">
                 <a class="navbar-brand" href="..">IoT Group Project Documentation</a>
                 <!-- Expander button -->
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbar-collapse">
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -32,39 +36,48 @@
                 <div id="navbar-collapse" class="navbar-collapse collapse">
                         <!-- Main navigation -->
                         <ul class="nav navbar-nav">
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href=".." class="nav-link">Info</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
+                                <a href="../architecture/" class="nav-link">Architecture</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../docker/" class="nav-link">Docker</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="../backend/" class="nav-link">Backend</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
                                 <a href="../frontend/" class="nav-link">Frontend</a>
                             </li>
-                            <li class="navitem active">
-                                <a href="./" class="nav-link">Contribution</a>
+                            <li class="nav-item">
+                                <a href="../communication/" class="nav-link">Communication</a>
                             </li>
-                            <li class="navitem">
+                            <li class="nav-item">
+                                <a href="../tests/" class="nav-link">Tests</a>
+                            </li>
+                            <li class="nav-item">
                                 <a href="../cicd/" class="nav-link">CICD</a>
                             </li>
-                            <li class="navitem">
-                                <a href="../tests/" class="nav-link">Tests</a>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Contribution</a>
                             </li>
                         </ul>
 
-                    <ul class="nav navbar-nav ml-auto">
+                    <ul class="nav navbar-nav ms-md-auto">
                         <li class="nav-item">
-                            <a href="#" class="nav-link" data-toggle="modal" data-target="#mkdocs_search_modal">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
                                 <i class="fa fa-search"></i> Search
                             </a>
                         </li>
                             <li class="nav-item">
-                                <a rel="prev" href="../frontend/" class="nav-link">
+                                <a rel="prev" href="../cicd/" class="nav-link">
                                     <i class="fa fa-arrow-left"></i> Previous
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a rel="next" href="../cicd/" class="nav-link">
+                                <a rel="next" class="nav-link disabled">
                                     Next <i class="fa fa-arrow-right"></i>
                                 </a>
                             </li>
@@ -75,24 +88,39 @@
 
         <div class="container">
             <div class="row">
-                    <div class="col-md-3"><div class="navbar-light navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
     <div class="navbar-header">
-        <button type="button" class="navbar-toggler collapsed" data-toggle="collapse" data-target="#toc-collapse" title="Table of Contents">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
             <span class="fa fa-angle-down"></span>
         </button>
     </div>
 
     
-    <div id="toc-collapse" class="navbar-collapse collapse card bg-light">
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
         <ul class="nav flex-column">
             
-            <li class="nav-item" data-level="2"><a href="#commit" class="nav-link">Commit</a>
+            <li class="nav-item" data-bs-level="1"><a href="#contribution" class="nav-link">Contribution</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#pull-requesty" class="nav-link">Pull requesty</a>
               <ul class="nav flex-column">
               </ul>
             </li>
-            
-            <li class="nav-item" data-level="2"><a href="#commit-message" class="nav-link">Commit message</a>
+            <li class="nav-item" data-bs-level="2"><a href="#format-commit-message" class="nav-link">Format commit message</a>
               <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#konwencje-kodu" class="nav-link">Konwencje kodu</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#lokalne-sprawdzenie-przed-pr" class="nav-link">Lokalne sprawdzenie przed PR</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#gaezie" class="nav-link">Gałęzie</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
               </ul>
             </li>
         </ul>
@@ -100,13 +128,39 @@
 </div></div>
                     <div class="col-md-9" role="main">
 
-<h2 id="commit">Commit</h2>
-<p>Contributing to this repository will be made with approval of at leat one member and technical leader via pull requests.</p>
-<h2 id="commit-message">Commit message</h2>
+<h1 id="contribution">Contribution</h1>
+<h2 id="pull-requesty">Pull requesty</h2>
+<p>Zmiany w repozytorium wprowadzamy przez <strong>pull requesty</strong>. Każdy PR wymaga zatwierdzenia co najmniej jednego członka zespołu oraz Technical Leadera.</p>
+<h2 id="format-commit-message">Format commit message</h2>
 <pre><code>[Topic]
 Why: [Why the change is being submitted]
 What: [What are the changes]
-</code></pre></div>
+</code></pre>
+<p>Przykład:</p>
+<pre><code>[backend] Add sniffer log pagination
+Why: Admin panel loads too many rows at once
+What: Add limit/sort query params to GET /sniffer/logs
+</code></pre>
+<h2 id="konwencje-kodu">Konwencje kodu</h2>
+<ul>
+<li><strong>Python:</strong> zgodność z istniejącym stylem modułów (<code>backend/</code>, <code>agent/</code>, <code>server/</code>, <code>client/</code>).</li>
+<li><strong>Frontend:</strong> Vue 3 Composition API (<code>&lt;script setup&gt;</code>), spójny styl CSS w komponentach.</li>
+<li><strong>Testy:</strong> nowa logika w backendzie/database — dodaj testy pytest w odpowiednim katalogu <code>tests/</code>.</li>
+<li><strong>Dokumentacja:</strong> aktualizuj pliki w <code>docs/documentation/docs/</code> przy zmianach API lub architektury.</li>
+</ul>
+<h2 id="lokalne-sprawdzenie-przed-pr">Lokalne sprawdzenie przed PR</h2>
+<pre><code class="language-bash"># Testy Python
+pip install -r backend/requirements.txt
+PYTHONPATH=backend:. python -m pytest
+
+# Frontend (opcjonalnie)
+cd frontend &amp;&amp; npm install &amp;&amp; npm run build
+
+# Stack Docker (opcjonalnie)
+docker compose up --build
+</code></pre>
+<h2 id="gaezie">Gałęzie</h2>
+<p>Pracuj na osobnych branchach feature/fix. Nie commituj plików z <code>.env</code>, certyfikatów TLS ani kluczy prywatnych.</p></div>
             </div>
         </div>
 
@@ -114,8 +168,7 @@ What: [What are the changes]
             <hr>
             <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
         </footer>
-        <script src="../js/jquery-3.6.0.min.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
+        <script src="../js/bootstrap.bundle.min.js"></script>
         <script>
             var base_url = "..",
                 shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
@@ -131,7 +184,7 @@ What: [What are the changes]
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="searchModalLabel">Search</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <p>From here you can search these documents. Enter your search terms below.</p>
@@ -151,7 +204,7 @@ What: [What are the changes]
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
-                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
               <table class="table">

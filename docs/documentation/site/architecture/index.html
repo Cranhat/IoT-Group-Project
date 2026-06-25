@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../img/favicon.ico">
+        <title>Architecture - IoT Group Project Documentation</title>
+        <link href="../css/bootstrap.min.css" rel="stylesheet">
+        <link href="../css/fontawesome.min.css" rel="stylesheet">
+        <link href="../css/brands.min.css" rel="stylesheet">
+        <link href="../css/solid.min.css" rel="stylesheet">
+        <link href="../css/v4-font-face.min.css" rel="stylesheet">
+        <link href="../css/base.css" rel="stylesheet">
+        <link id="hljs-light" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" >
+        <link id="hljs-dark" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css" disabled>
+        <link href="../assets/mkdocs_puml/puml.css" rel="stylesheet">
+        <link href="../assets/mkdocs_puml/interaction.css" rel="stylesheet">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <script>hljs.highlightAll();</script> 
+    </head>
+
+    <body>
+        <div class="navbar fixed-top navbar-expand-lg navbar-dark bg-primary">
+            <div class="container">
+                <a class="navbar-brand" href="..">IoT Group Project Documentation</a>
+                <!-- Expander button -->
+                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- Expanded navigation -->
+                <div id="navbar-collapse" class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li class="nav-item">
+                                <a href=".." class="nav-link">Info</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="./" class="nav-link active" aria-current="page">Architecture</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../docker/" class="nav-link">Docker</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../backend/" class="nav-link">Backend</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../frontend/" class="nav-link">Frontend</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../communication/" class="nav-link">Communication</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../tests/" class="nav-link">Tests</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../cicd/" class="nav-link">CICD</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="../contribution/" class="nav-link">Contribution</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav ms-md-auto">
+                        <li class="nav-item">
+                            <a href="#" class="nav-link" data-bs-toggle="modal" data-bs-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                            <li class="nav-item">
+                                <a rel="prev" href=".." class="nav-link">
+                                    <i class="fa fa-arrow-left"></i> Previous
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a rel="next" href="../docker/" class="nav-link">
+                                    Next <i class="fa fa-arrow-right"></i>
+                                </a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="row">
+                    <div class="col-md-3"><div class="navbar-expand-md bs-sidebar hidden-print affix" role="complementary">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#toc-collapse" title="Table of Contents">
+            <span class="fa fa-angle-down"></span>
+        </button>
+    </div>
+
+    
+    <div id="toc-collapse" class="navbar-collapse collapse card bg-body-tertiary">
+        <ul class="nav flex-column">
+            
+            <li class="nav-item" data-bs-level="1"><a href="#architecture" class="nav-link">Architecture</a>
+              <ul class="nav flex-column">
+            <li class="nav-item" data-bs-level="2"><a href="#przeglad-systemu" class="nav-link">Przegląd systemu</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#przepyw-logowania" class="nav-link">Przepływ logowania</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#przepyw-zadan-dashboard" class="nav-link">Przepływ zadań (dashboard)</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#przepyw-provisioningu-urzadzenia" class="nav-link">Przepływ provisioningu urządzenia</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#protoko-server-client" class="nav-link">Protokół server ↔ client</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#sniffer-pakietow" class="nav-link">Sniffer pakietów</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+            <li class="nav-item" data-bs-level="2"><a href="#bezpieczenstwo" class="nav-link">Bezpieczeństwo</a>
+              <ul class="nav flex-column">
+              </ul>
+            </li>
+              </ul>
+            </li>
+        </ul>
+    </div>
+</div></div>
+                    <div class="col-md-9" role="main">
+
+<h1 id="architecture">Architecture</h1>
+<h2 id="przeglad-systemu">Przegląd systemu</h2>
+<p>System składa się z warstwy webowej (frontend + backend), warstwy IoT (server + client) oraz usług wspierających (agent, sniffer, cert_gen).</p>
+<pre><code class="language-mermaid">flowchart TB
+    subgraph Web
+        FE[Frontend Vue 3]
+        BE[Backend FastAPI]
+        DB[(PostgreSQL)]
+    end
+
+    subgraph IoT
+        SRV[Server TLS :5000]
+        CL[Client / urządzenie]
+    end
+
+    subgraph Support
+        AG[Agent :9000]
+        CG[cert_gen]
+        BS[backend_sniffer]
+        SS[server_sniffer]
+    end
+
+    FE --&gt;|REST| BE
+    BE --&gt; DB
+    BE --&gt;|provision| AG
+    AG --&gt;|docker create/start| CL
+    CL &lt;--&gt;|mTLS JSON| SRV
+    CG --&gt; SRV
+    CG --&gt; CL
+    BS --&gt;|POST logów| BE
+    SS --&gt;|POST logów| BE
+</code></pre>
+<h2 id="przepyw-logowania">Przepływ logowania</h2>
+<ol>
+<li>Użytkownik wysyła <code>POST /login</code> z <code>username</code> i <code>passcode</code>.</li>
+<li>Backend weryfikuje dane w tabelach <code>users</code> i <code>passwords</code>.</li>
+<li>Frontend przechowuje <code>user_id</code>, <code>name</code>, <code>privilege_type</code> w stanie aplikacji.</li>
+<li>Administratorzy widzą przycisk do panelu admina.</li>
+</ol>
+<h2 id="przepyw-zadan-dashboard">Przepływ zadań (dashboard)</h2>
+<ol>
+<li>Użytkownik wysyła problem z dashboardu → <code>POST /tasks</code>.</li>
+<li>Backend wybiera pierwsze urządzenie ze statusem <code>online</code>.</li>
+<li>Wpis trafia do <code>task_logs</code> ze statusem <code>pending</code>.</li>
+<li>Wynik wykonania (gdy dostępny) jest zapisywany w <code>task_result_logs</code>.</li>
+</ol>
+<p><strong>Uwaga:</strong> Kanał server↔client (<code>send</code> / <code>file</code> w CLI serwera) działa niezależnie od API zadań. Integracja obu ścieżek jest planowanym krokiem rozwojowym.</p>
+<h2 id="przepyw-provisioningu-urzadzenia">Przepływ provisioningu urządzenia</h2>
+<ol>
+<li>Admin klika <strong>Provision Docker Device</strong> → <code>POST /devices/provision</code> (backend).</li>
+<li>Backend przekazuje żądanie do agenta → <code>POST /provision</code>.</li>
+<li>Agent:</li>
+<li>generuje unikalny <code>device_id</code> i certyfikat klienta TLS,</li>
+<li>tworzy kontener z obrazu <code>iot-client:latest</code>,</li>
+<li>kopiuje certyfikaty do <code>/certs/</code> w kontenerze,</li>
+<li>uruchamia kontener,</li>
+<li>rejestruje urządzenie w backendzie (<code>POST /add/devices</code>).</li>
+<li>Klient łączy się z serwerem przez TLS i nasłuchuje zadań.</li>
+</ol>
+<h2 id="protoko-server-client">Protokół server ↔ client</h2>
+<p>Komunikacja odbywa się po TCP (opcjonalnie TLS z wzajemną weryfikacją certyfikatów). Każda wiadomość to obiekt JSON zakończony znakiem nowej linii.</p>
+<p>Typy wiadomości:</p>
+<table>
+<thead>
+<tr>
+<th><code>kind</code></th>
+<th>Kierunek</th>
+<th>Opis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>task</code></td>
+<td>server → client</td>
+<td>Kod Python do wykonania</td>
+</tr>
+<tr>
+<td><code>result</code></td>
+<td>client → server</td>
+<td>stdout, stderr, exit_code</td>
+</tr>
+<tr>
+<td><code>status</code></td>
+<td>client → server</td>
+<td>Stan urządzenia (CPU, pamięć)</td>
+</tr>
+</tbody>
+</table>
+<p>Pliki: <code>server/src/protocol.py</code>, <code>client/src/protocol.py</code>.</p>
+<h2 id="sniffer-pakietow">Sniffer pakietów</h2>
+<p>Dwa kontenery sniffera (<code>backend_sniffer</code>, <code>server_sniffer</code>) używają <code>network_mode: service:backend/server</code>, aby widzieć ruch na monitorowanych portach. Przechwycone payloady TCP są wysyłane do <code>POST /tables/packet_sniffer_logs</code> i dostępne w panelu admina.</p>
+<h2 id="bezpieczenstwo">Bezpieczeństwo</h2>
+<ul>
+<li><strong>Transport IoT:</strong> TLS z <code>CERT_REQUIRED</code> — serwer i klient muszą przedstawić ważne certyfikaty.</li>
+<li><strong>CA:</strong> generowana przez <code>cert_gen</code> / <code>communication/make_certs.py</code>.</li>
+<li><strong>Certy per urządzenie:</strong> agent generuje osobny certyfikat klienta przy provisioningu.</li>
+<li><strong>API webowe:</strong> obecnie bez tokenów sesji — endpointy admina nie wymagają ponownej autoryzacji po stronie serwera (ograniczenie do poprawy w przyszłości).</li>
+</ul></div>
+            </div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script src="../js/bootstrap.bundle.min.js"></script>
+        <script>
+            var base_url = "..",
+                shortcuts = {"help": 191, "next": 78, "previous": 80, "search": 83};
+        </script>
+        <script src="../js/base.js"></script>
+        <script src="../search/main.js"></script>
+        <script src="../assets/mkdocs_puml/puml.js"></script>
+        <script src="https://unpkg.com/@panzoom/panzoom@4.5.1/dist/panzoom.min.js"></script>
+        <script src="../assets/mkdocs_puml/interaction.js"></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="searchModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="searchModalLabel">Search</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>From here you can search these documents. Enter your search terms below.</p>
+                <form>
+                    <div class="form-group">
+                        <input type="search" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results" data-no-results-text="No results found"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="keyboardModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="keyboardModalLabel">Keyboard Shortcuts</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>

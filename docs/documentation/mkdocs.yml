@@ -9,8 +9,11 @@ plugins:
 
 nav:
   - Info: index.md
+  - Architecture: architecture.md
+  - Docker: docker.md
   - Backend: backend.md
   - Frontend: frontend.md
-  - Contribution: contribution.md
-  - CICD: cicd.md
+  - Communication: communication.md
   - Tests: tests.md
+  - CICD: cicd.md
+  - Contribution: contribution.md

@@ -13,6 +13,7 @@ db_instance = Database()
 class TaskRequest(BaseModel):
     user_id: int
     problem: str
+    device_id: int | None = None
 
 
 class TaskResultRequest(BaseModel):
@@ -77,20 +78,31 @@ def create_task(request: TaskRequest, db=Depends(db_instance.get_db)):
     conn, curr = db
 
     try:
-        curr.execute("""
-            SELECT device_id
-            FROM devices
-            WHERE status = 'online'
-            ORDER BY device_id
-            LIMIT 1;
-        """)
+        if request.device_id:
+            curr.execute("""
+                SELECT device_id, ip_address
+                FROM devices
+                WHERE device_id = %s
+                    AND status = 'online';
+            """, (request.device_id,))
+        else:
+            curr.execute("""
+                SELECT device_id, ip_address
+                FROM devices
+                WHERE status = 'online'
+                ORDER BY device_id
+                LIMIT 1;
+            """)
 
         device = curr.fetchone()
 
         if not device:
+            if request.device_id:
+                raise HTTPException(status_code=400, detail="Selected device is not online")
+
             raise HTTPException(status_code=503, detail="No online devices available")
 
-        device_id = device[0]
+        device_id, device_ip_address = device
 
         curr.execute("""
             INSERT INTO task_logs (user_id, device_id, problem, status)
@@ -106,6 +118,24 @@ def create_task(request: TaskRequest, db=Depends(db_instance.get_db)):
         task_id, timestamp = curr.fetchone()
 
         conn.commit()
+
+        # Forward task to socket server HTTP endpoint
+        try:
+            import urllib.request
+            import json
+            req = urllib.request.Request(
+                "http://server:8080/task",
+                data=json.dumps({
+                    "task_id": str(task_id),
+                    "code": request.problem,
+                    "device_name": device_ip_address
+                }).encode(),
+                headers={"Content-Type": "application/json"}
+            )
+            with urllib.request.urlopen(req, timeout=2.0) as resp:
+                pass
+        except Exception as e:
+            print(f"Error forwarding task to socket server: {e}")
 
         return {
             "message": "Task created successfully",
@@ -203,6 +233,43 @@ def submit_task_result(task_id: int, request: TaskResultRequest, db=Depends(db_i
     except HTTPException:
         raise
 
+    except Exception as e:
+        conn.rollback()
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+class TaskResultRequest(BaseModel):
+    device_id: int
+    result: str
+    success: bool
+    error_message: str
+
+@router.post("/tasks/{task_id}/result")
+def save_task_result(task_id: int, request: TaskResultRequest, db=Depends(db_instance.get_db)):
+    conn, curr = db
+    try:
+        # Insert into task_result_logs
+        curr.execute("""
+            INSERT INTO task_result_logs (task_id, device_id, result, success, error_message)
+            VALUES (%s, %s, %s, %s, %s);
+        """, (
+            task_id,
+            request.device_id,
+            request.result,
+            request.success,
+            request.error_message
+        ))
+        
+        # Update task_logs status
+        status = "completed" if request.success else "failed"
+        curr.execute("""
+            UPDATE task_logs
+            SET status = %s
+            WHERE task_id = %s;
+        """, (status, task_id))
+        
+        conn.commit()
+        return {"message": "Task result saved successfully"}
     except Exception as e:
         conn.rollback()
         raise HTTPException(status_code=500, detail=str(e))
