@@ -74,8 +74,8 @@
               </td>
               <td>{{ task.device_id || 'Waiting' }}</td>
               <td>
-                <span v-if="task.status === 'completed'">
-                  {{ task.result }}
+                <span v-if="task.status === 'done'">
+                  {{ task.result ?? '—' }}
                 </span>
                 <span v-else-if="task.status === 'failed'">
                   {{ task.error_message || 'Error' }}
